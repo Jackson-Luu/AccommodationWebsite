@@ -1,0 +1,15 @@
+========== Week 1 ==========
+
+*	Our group was formed. The group's group chat on Facebook Messenger was formed and I joined the group's GitHub repo and Trello.
+*	We chose a project began working on the project proposal
+*	I helped with the formation of some initial epic stories
+
+========== Week 2 ==========
+
+*	We continued working on the project proposal
+*	I helped research some extension features for our project
+*	We began discussing which development libraries to use
+
+========== Week 3 ==========
+
+*	
