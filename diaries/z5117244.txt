@@ -1,1 +1,7 @@
+Week 1
 
+Week 1 began with the formation of our group during the tutorial session as well as a lengthy discussion regarding which project concept to choose for our group project. Based off of interests and each person's expertise areas we came to the mutual decision of choosing project 3, the accommodation web portal, as our project blueprint. We then did some further brainstorming to come up an idea and vision for our project that would differentiate it from the standard proposal and the real-life examples that already exist. We also set up our Trello board during this tutorial as well as a communication channel in the form of facebook messenger.
+
+Week 2
+
+Week 2 saw the release of the project proposal template and the course github details. This allowed us to begin working on the project proposal which we were able to collaboratively work on using Google Docs. Early on in the week, we spent some time going through the technical scope of the project and ironing out the tech stack that we would use such as finding an appropriate cloud platform and deciding on a web API. We also spent some time discussing the specifics of our project proposal and debating some good alternative ideas we had, before deciding on the best one for us and start shaping the project proposal around it. We had planned to finish the project proposal by Week 3's tutorial and by the end of the week, most of the proposal had been fleshed out. Our goal for next week will be to get a basic functioning website running in time for the Week 4 tutorial.
