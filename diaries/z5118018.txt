@@ -12,4 +12,8 @@
 
 ========== Week 3 ==========
 
-*	
+*	We began coming up with the project design and finalised the project proposal
+*	I designed the database and normalised it to 3nf. I created its ER diagram
+*	I also helped with the UML class diagram
+
+========== Week 3 ==========
