@@ -18,9 +18,15 @@ class User(models.Model):
 #     text = models.TextField()
 
 class Property(models.Model):
-    # property_id = models.IntegerField(primary_key=True, blank=False, unique=True)
-    title = models.TextField()
-    size = models.DecimalField(max_digits=15, decimal_places=2)
+    property_id = models.PositiveIntegerField(primary_key=True, null=False, blank=False, unique=True)
+    host_id = models.ForeignKey('User', to_field='user_id', on_delete=models.CASCADE, null=False, blank=False, default=-1)
+    name = models.TextField(null=True, blank=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    location = models.TextField(null=True, blank=True)
+    size = models.PositiveSmallIntegerField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    bookable = models.BooleanField(null=False, blank=False, default=False)
+
 
 # class Booking(models.Model):
 #
