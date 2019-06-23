@@ -5,9 +5,19 @@
     <header class="jumbotron my-4">
         <h1 class="display-3">A Warm Welcome!</h1>
         <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>
-        <a href="#" class="btn btn-primary btn-lg">Search</a>
     </header>
 
+    <div class="search_form">
+        <form method="post">
+            {% csrf_token %}
+            <p class="lead"> Location:
+            <input type="text" name="location"><br>
+            {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+            </p>
+            <input type="submit" value="Search" class="btn btn-primary btn-lg">
+        </form>
+    </div>
 </div>
+
 
 {% endblock %}
