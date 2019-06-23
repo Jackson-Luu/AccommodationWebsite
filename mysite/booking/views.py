@@ -10,7 +10,6 @@ def search_view(request, *args, **kwargs):
         location = request.POST['location']
         print(location)
         if not location:
-            print("WTF")
             return render(request, 'search.html', {
                 'error_message': "Invalid location.",
             })
