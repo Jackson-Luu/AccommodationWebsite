@@ -11,7 +11,7 @@ def search_view(request, *args, **kwargs):
         print(location)
         if not location:
             return render(request, 'search.html', {
-                'error_message': "Invalid location.",
+                'location_error': "Invalid location.",
             })
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a

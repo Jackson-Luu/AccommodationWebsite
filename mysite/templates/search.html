@@ -13,14 +13,14 @@
             <p class="lead"> Location:
             <input type="text" name="location"><br>
             </p>
-            {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+            {% if location_error %}<p><strong>{{ location_error }}</strong></p>{% endif %}
             <p class="lead"> Check-in:
             <input type="date" name="check_in" id="check_in">
             Check-out:
             <input type="date" name="check_out" id="check_out"><br>
             </p>
 
-            <!-- Set minimum check in date to today-->
+            <!-- Set minimum check in/out dates to today-->
             <script>
                 var today = new Date();
                 var dd = today.getDate();
