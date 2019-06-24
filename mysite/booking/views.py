@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, PropertyCreationForm
 # Create your views here.
 def register_view(request):
     if request.method == 'POST':
@@ -13,7 +13,7 @@ def register_view(request):
             return redirect('home')
 
     else: 
-        print('NOT VALID')
+        #print('NOT VALID')
         form = CustomUserCreationForm()
     return render(request, 'register.html',{'form':form})
 
@@ -33,4 +33,17 @@ def search_view(request, *args, **kwargs):
         # user hits the Back button.
         return HttpResponseRedirect('search')
     return render(request, 'search.html', {})
+
+def add_property_view(request):
+    if request.method == 'POST':
+        form = PropertyCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Property listed!')
+            return redirect('home')
+
+    else: 
+        print('NOT VALID')
+        form = PropertyCreationForm()
+    return render(request,'add_property.html',{'form':form})
 
