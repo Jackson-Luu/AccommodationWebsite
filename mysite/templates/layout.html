@@ -48,10 +48,10 @@
                         <a class="nav-link" href="#">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Services</a>
+                        <a class="nav-link" href="/search">Search for Accommodation</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
+                        <a class="nav-link" href="/register">Sign Up</a>
                     </li>
                 </ul>
             </div>
@@ -59,6 +59,13 @@
     </nav>
 
     <div id="content_block">
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
 
         {% block content %}
 

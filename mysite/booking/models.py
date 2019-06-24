@@ -1,15 +1,22 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
-class User(models.Model):
-    user_id = models.PositiveIntegerField(primary_key=True, null=False, blank=False, unique=True)
-    username = models.TextField(unique=True, null=False, blank=False)
-    password_hash = models.TextField(null=False, blank=False)
-    first_name = models.TextField(null=False, blank=False)
-    last_name = models.TextField(null=False, blank=False)
-    birthday = models.DateField()
-    description = models.TextField()
+class CustomUser(AbstractUser):
+    pass
+    birthday = models.DateField(null=True)
+    description = models.TextField(null=True)
+    user_id = models.AutoField(primary_key=True)
+
+# class User(models.Model):
+#     user_id = models.PositiveIntegerField(primary_key=True, null=False, blank=False, unique=True)
+#     username = models.TextField(unique=True, null=False, blank=False)
+#     password_hash = models.TextField(null=False, blank=False)
+#     first_name = models.TextField(null=False, blank=False)
+#     last_name = models.TextField(null=False, blank=False)
+#     birthday = models.DateField()
+#     description = models.TextField()
 
 # class UserReviews(models.Model):
 #     reviewer = models.ForeignKey('User', to_field='user_id', on_delete=models.CASCADE)
@@ -19,7 +26,7 @@ class User(models.Model):
 
 class Property(models.Model):
     property_id = models.PositiveIntegerField(primary_key=True, null=False, blank=False, unique=True)
-    host_id = models.ForeignKey('User', to_field='user_id', on_delete=models.CASCADE, null=False, blank=False, default=-1)
+    host_id = models.ForeignKey('CustomUser', to_field='user_id', on_delete=models.CASCADE, null=False, blank=False, default=-1)
     name = models.TextField(null=True, blank=True)
     price = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
     location = models.TextField(null=True, blank=True)
