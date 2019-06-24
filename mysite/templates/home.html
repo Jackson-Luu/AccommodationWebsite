@@ -32,58 +32,62 @@
   
     <!-- Page Features -->
     <div class="row text-center">
-  
+     {% if properties.0 %} 
     <div class="col-lg-3 col-md-6 mb-4">
         <div class="card h-100">
         <img class="card-img-top" src="https://images.unsplash.com/photo-1475855581690-80accde3ae2b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80" alt="">
         <div class="card-body">
-            <h4 class="card-title">Card title</h4>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+            <h4 class="card-title">{{ properties.0.name }}</h4>
+            <p class="card-text">{{ properties.0.location }}<br />${{ properties.0.price}}</p>
         </div>
         <div class="card-footer">
             <a href="#" class="btn btn-primary">Find Out More!</a>
         </div>
         </div>
     </div>
-  
+    {% endif %}
+    {% if properties.1 %} 
     <div class="col-lg-3 col-md-6 mb-4">
         <div class="card h-100">
         <img class="card-img-top" src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" alt="">
         <div class="card-body">
-            <h4 class="card-title">Card title</h4>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo magni sapiente, tempore debitis beatae culpa natus architecto.</p>
+            <h4 class="card-title">{{ properties.1.name }}</h4>
+            <p class="card-text">{{ properties.1.location }}<br />${{ properties.1.price}}</p>
         </div>
         <div class="card-footer">
             <a href="#" class="btn btn-primary">Find Out More!</a>
         </div>
         </div>
     </div>
-  
+    {% endif %}
+    {% if properties.2 %}
     <div class="col-lg-3 col-md-6 mb-4">
         <div class="card h-100">
         <img class="card-img-top" src="https://images.unsplash.com/photo-1533667586627-9f5ddbd42539?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" alt="">
         <div class="card-body">
-            <h4 class="card-title">Card title</h4>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+            <h4 class="card-title">{{ properties.2.name }}</h4>
+            <p class="card-text">{{ properties.2.location }}<br />${{ properties.2.price}}</p>
         </div>
         <div class="card-footer">
             <a href="#" class="btn btn-primary">Find Out More!</a>
         </div>
         </div>
     </div>
-  
+    {% endif %}
+    {% if properties.3 %}
     <div class="col-lg-3 col-md-6 mb-4">
         <div class="card h-100">
         <img class="card-img-top" src="https://images.unsplash.com/photo-1513584684374-8bab748fbf90?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1346&q=80" alt="">
         <div class="card-body">
-            <h4 class="card-title">Card title</h4>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo magni sapiente, tempore debitis beatae culpa natus architecto.</p>
+            <h4 class="card-title">{{ properties.3.name }}</h4>
+            <p class="card-text">{{ properties.3.location }}<br />${{ properties.3.price}}</p>
         </div>
         <div class="card-footer">
             <a href="#" class="btn btn-primary">Find Out More!</a>
         </div>
         </div>
     </div>
+    {% endif %}
   
     </div>
     <!-- /.row -->

@@ -18,6 +18,23 @@
         body {
             padding-top: 56px;
         }
+        * {
+            margin: 0;
+        }
+
+        html, body {
+            height: 100%;
+        }
+        .wrapper {
+            min-height: 100%;
+            height: auto !important;
+            height: 100%;
+            margin: 0 auto -122px; /* the bottom margin is the negative value of the footer's height */
+        }
+
+        .py-5, .push {
+            height: 122px; /* .push must be the same height as .footer */
+        }
     </style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -58,7 +75,7 @@
         </div>
     </nav>
 
-    <div id="content_block">
+    <div id="content_block" class="wrapper">
         {% if messages %}
             {% for message in messages %}
             <div class="alert alert-{{ message.tags }}">
@@ -70,7 +87,7 @@
         {% block content %}
 
         {% endblock %}
-
+        <div class="push"></div>
     </div>
 
     <!-- Footer -->
