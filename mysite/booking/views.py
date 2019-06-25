@@ -1,24 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
-from .forms import CustomUserCreationForm, PropertyCreationForm
+from .forms import PropertyCreationForm
 from django.urls import reverse
 from .models import Property
 
 # Create your views here.
-def register_view(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            #username = form.cleaned_data.get('username')
-            messages.success(request,'Account created!')
-            return redirect('home')
-
-    else: 
-        #print('NOT VALID')
-        form = CustomUserCreationForm()
-    return render(request, 'register.html',{'form':form})
 
 def home_view(request,*args, **kwargs):
     properties = Property.objects.all()

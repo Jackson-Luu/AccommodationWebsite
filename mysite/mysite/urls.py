@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from booking.views import *
+from user_manager.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,5 +24,5 @@ urlpatterns = [
     path('search/', search_view),
     path('register/', register_view),
     path('addproperty/', add_property_view),
-    path('search/results/', search_results_view)
+    path('search/results/', search_results_view),
 ]
