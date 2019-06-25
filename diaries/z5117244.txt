@@ -5,3 +5,11 @@ Week 1 began with the formation of our group during the tutorial session as well
 Week 2
 
 Week 2 saw the release of the project proposal template and the course github details. This allowed us to begin working on the project proposal which we were able to collaboratively work on using Google Docs. Early on in the week, we spent some time going through the technical scope of the project and ironing out the tech stack that we would use such as finding an appropriate cloud platform and deciding on a web API. We also spent some time discussing the specifics of our project proposal and debating some good alternative ideas we had, before deciding on the best one for us and start shaping the project proposal around it. We had planned to finish the project proposal by Week 3's tutorial and by the end of the week, most of the proposal had been fleshed out. Our goal for next week will be to get a basic functioning website running in time for the Week 4 tutorial.
+
+Week 3
+
+For the first half of the week, I worked on finishing some of the remaining parts of our project proposal such as the forum epic and the software architecture diagram. Following that, we began writing some code to get some basic functionality running for our first iteration. I mostly focused on writing code for the UI such as the home page and search page.
+
+Week 4
+
+Continuing to focus on basic functionality for this week, I decided to work on giving visitors the ability to search for properties in a specified location and allowing property owners to add their properties that will come up in the search.
