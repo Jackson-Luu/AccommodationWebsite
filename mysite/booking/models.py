@@ -29,7 +29,7 @@ class Property(models.Model):
     #host_id = models.ForeignKey('CustomUser', to_field='user_id', on_delete=models.CASCADE, null=True, blank=True, default=-1) 
     #change back to null=false , blank=false
     name = models.TextField(null=True, blank=True)
-    price = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     location = models.TextField(null=True, blank=True)
     size = models.PositiveSmallIntegerField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
