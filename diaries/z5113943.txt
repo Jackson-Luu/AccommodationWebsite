@@ -1,0 +1,39 @@
+Week 1
+	* chose project, epic stories, came up with idea, draft UML, created a Trello board, a google doc, group messaging chat. Decided on meet up times and goals
+
+Week 2
+	* Set up github, discussed project - technical details etc. Decided on using PostgreSQL as the database as well as Amazon Web Services' cloud platforms. Decided on using python & Django for back-end implementation. Started project proposal.
+
+Week 2 - Week 3
+	* Worked on project proposal
+	* Friday 14/06/19: Uploaded a basic project skeleton to github
+	* Saturday 15/06/19: Group discussed and brainstormed ideas on the project. Wrote the aim, analysed expedia.com.au along with group members who worked on background, analysis of other sites
+	* Sunday 16/06/19: Wrote epics: Search, property view, booking, profile page, advertising properties
+	* Monday 17/06/19: Continued writing epics. Today I wrote: Review page, settings, user account and the schedule. Other group members wrote about the scope/technical background and team skill set.
+
+Week 3 stand-up (group meeting) Tuesday 18/06/19
+	* Discussed and brainstormed ER diagram
+	* Discussed and brainstormed UML diagram
+	* allocated remaining tasks for project proposal
+	* discussed our project proposal
+	* organised additional meeting times
+	* began creation of classes/ implementing basic functionality 
+	* familiarized ourselves with Django
+
+Week 3 Thursday
+	* worked on project proposal
+	* finalized UML diagram
+	* finalized ER diagram
+	* did a website flow chart
+
+Week 3 Friday 
+	* proofread proposal
+	* submitted proposal
+
+Week 3 Saturday
+	* 12pm meeting
+	* Property and User models 
+	* bootstrap template 
+	* basic url/views
+
+
