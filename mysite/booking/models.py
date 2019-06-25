@@ -20,7 +20,8 @@ class CustomUser(AbstractUser):
 
 class Property(models.Model):
     property_id = models.AutoField(primary_key=True)
-    host_id = models.ForeignKey('CustomUser', to_field='user_id', on_delete=models.CASCADE, default=-1)
+    # uncomment when user login implemented
+    # host_id = models.ForeignKey('CustomUser', to_field='user_id', on_delete=models.CASCADE, default=-1)
     name = models.TextField(null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     location = models.TextField(null=True, blank=True)
