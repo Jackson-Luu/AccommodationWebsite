@@ -8,3 +8,6 @@ Creat a simple ER diagram and add all entities on it.
 
 2019/06/20
 fix some problems of UML diagram.(Other things need to argue with team)
+
+2019/06/25
+start search engine
