@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+#from user_manager.models import CustomUser
 # Create your models here.
 # class CustomUser(AbstractUser):
 #     pass
@@ -28,37 +29,37 @@ class Property(models.Model):
     description = models.TextField(null=True, blank=True)
     bookable = models.BooleanField(null=False, blank=False, default=False)
 
-class Room(models.Model):
-    room_id = models.AutoField(primary_key=True)
-    property_id = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
-    room_number = models.IntegerField(null=True, blank=True)
+# class Room(models.Model):
+#     room_id = models.AutoField(primary_key=True)
+#     property_id = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
+#     room_number = models.IntegerField(null=True, blank=True)
 
-class Booking(models.Model):
-    booking_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey('CustomUser', to_field='user_id', on_delete=models.CASCADE)
-    start_date = models.DateField()
-    end_date = models.DateField()
+# class Booking(models.Model):
+#     booking_id = models.AutoField(primary_key=True)
+#     user_id = models.ForeignKey('CustomUser', to_field='user_id', on_delete=models.CASCADE)
+#     start_date = models.DateField()
+#     end_date = models.DateField()
 
-class UserReviews(models.Model):
-    reviewer = models.ForeignKey('CustomUser', to_field='user_id', on_delete=models.CASCADE, related_name='reviewer')
-    reviewee = models.ForeignKey('CustomUser', to_field='user_id', on_delete=models.CASCADE, related_name='reviewee')
-    rating = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=False, blank=False)
-    text = models.TextField(null=True, blank=True)
+# class UserReviews(models.Model):
+#     reviewer = models.ForeignKey('CustomUser', to_field='user_id', on_delete=models.CASCADE, related_name='reviewer')
+#     reviewee = models.ForeignKey('CustomUser', to_field='user_id', on_delete=models.CASCADE, related_name='reviewee')
+#     rating = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=False, blank=False)
+#     text = models.TextField(null=True, blank=True)
 
-class PropertyReviews(models.Model):
-    reviewer = models.ForeignKey('CustomUser', to_field='user_id', on_delete=models.CASCADE)
-    reviewee = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
-    rating = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=False,blank=False)
-    text = models.TextField(null=True, blank=True)
+# class PropertyReviews(models.Model):
+#     reviewer = models.ForeignKey('CustomUser', to_field='user_id', on_delete=models.CASCADE)
+#     reviewee = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
+#     rating = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=False,blank=False)
+#     text = models.TextField(null=True, blank=True)
 
-class PropertyOwnership(models.Model):
-    owner = models.ForeignKey('CustomUser', to_field='user_id', on_delete=models.CASCADE)
-    property = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
+# class PropertyOwnership(models.Model):
+#     owner = models.ForeignKey('CustomUser', to_field='user_id', on_delete=models.CASCADE)
+#     property = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
 
-class PropertyFavourites(models.Model):
-    user = models.ForeignKey('CustomUser', to_field='user_id', on_delete=models.CASCADE)
-    property = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
+# class PropertyFavourites(models.Model):
+#     user = models.ForeignKey('CustomUser', to_field='user_id', on_delete=models.CASCADE)
+#     property = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
 
-class BookingTable(models.Model):
-    booking = models.ForeignKey('Booking', to_field='booking_id', on_delete=models.CASCADE)
-    room = models.ForeignKey('Room', to_field='room_id', on_delete=models.CASCADE)
+# class BookingTable(models.Model):
+#     booking = models.ForeignKey('Booking', to_field='booking_id', on_delete=models.CASCADE)
+#     room = models.ForeignKey('Room', to_field='room_id', on_delete=models.CASCADE)
