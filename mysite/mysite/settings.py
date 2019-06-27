@@ -25,7 +25,7 @@ SECRET_KEY = '_uqvrpushrm@50_59^n4^%=+@_(e4%^5d^upagkau&85xv2il*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'accommodationwebsite-env.ru2xmdc33p.us-east-1.elasticbeanstalk.com']
 
 
 # Application definition
@@ -78,17 +78,28 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'accomm_db',
-        'USER': 'postgres',
-        'PASSWORD': 'password',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+if 'aagx86jimxaitq.cddcv5mrluqa.us-east-1.rds.amazonaws.com' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'ebdb',
+            'USER': 'postgres',
+            'PASSWORD': 'password',
+            'HOST': 'aagx86jimxaitq.cddcv5mrluqa.us-east-1.rds.amazonaws.com',
+            'PORT': '5432',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'accomm_db',
+            'USER': 'postgres',
+            'PASSWORD': 'password',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+        }
+    }
 
 
 # Password validation
