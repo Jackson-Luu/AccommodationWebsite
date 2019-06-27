@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'booking',
     'forum',
     'review',
+    'user_manager',
 ]
 
 MIDDLEWARE = [
@@ -136,5 +137,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-AUTH_USER_MODEL = 'booking.CustomUser'
+AUTH_USER_MODEL = 'user_manager.CustomUser'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
