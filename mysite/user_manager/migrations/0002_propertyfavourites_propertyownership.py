@@ -6,27 +6,26 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
+	dependencies = [
+		('booking', '0003_auto_20190629_0413'),
+		('user_manager', '0001_initial'),
+	]
 
-    dependencies = [
-        ('booking', '0003_auto_20190629_0413'),
-        ('user_manager', '0001_initial'),
-    ]
-
-    operations = [
-        migrations.CreateModel(
-            name='PropertyOwnership',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('property', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='booking.Property')),
-            ],
-        ),
-        migrations.CreateModel(
-            name='PropertyFavourites',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('property', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='booking.Property')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-            ],
-        ),
-    ]
+	operations = [
+		migrations.CreateModel(
+			name='PropertyOwnership',
+			fields=[
+				('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+				('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+				('property', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='booking.Property')),
+			],
+		),
+		migrations.CreateModel(
+			name='PropertyFavourites',
+			fields=[
+				('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+				('property', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='booking.Property')),
+				('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+			],
+		),
+	]
