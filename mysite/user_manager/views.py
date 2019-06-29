@@ -4,7 +4,6 @@ from django.contrib import messages
 from .forms import CustomUserCreationForm
 from django.urls import reverse
 
-
 # Create your views here.
 def register_view(request):
 	if request.method == 'POST':
