@@ -32,14 +32,6 @@ class Booking(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
 
-class PropertyOwnership(models.Model):
-    owner = models.ForeignKey('user_manager.CustomUser', to_field='user_id', on_delete=models.CASCADE)
-    property = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
-
-class PropertyFavourites(models.Model):
-    user = models.ForeignKey('user_manager.CustomUser', to_field='user_id', on_delete=models.CASCADE)
-    property = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
-
 class BookingTable(models.Model):
     booking = models.ForeignKey('Booking', to_field='booking_id', on_delete=models.CASCADE)
     room = models.ForeignKey('Room', to_field='room_id', on_delete=models.CASCADE)
