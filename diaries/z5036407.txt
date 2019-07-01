@@ -11,3 +11,4 @@ fix some problems of UML diagram.(Other things need to argue with team)
 start search engine
 
 week4
+learning django tutorial and review the MVC model and be familiar with how each part working
