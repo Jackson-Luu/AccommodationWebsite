@@ -4,8 +4,8 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class CustomUser(AbstractUser):
 	pass
-	birthday = models.DateField(null=True)
-	description = models.TextField(null=True)
+	birthday = models.DateField(null=True, blank=True)
+	description = models.TextField(null=True, blank=True)
 	user_id = models.AutoField(primary_key=True)
 
 class PropertyOwnership(models.Model):
