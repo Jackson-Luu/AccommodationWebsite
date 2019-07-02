@@ -73,14 +73,14 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-if 'aagx86jimxaitq.cddcv5mrluqa.us-east-1.rds.amazonaws.com' in os.environ:
+if 'accomm-db.cddcv5mrluqa.us-east-1.rds.amazonaws.com' in os.environ:
 	DATABASES = {
 		'default': {
 			'ENGINE': 'django.db.backends.postgresql',
-			'NAME': 'ebdb',
+			'NAME': 'accomm_db',
 			'USER': 'postgres',
 			'PASSWORD': 'password',
-			'HOST': 'aagx86jimxaitq.cddcv5mrluqa.us-east-1.rds.amazonaws.com',
+			'HOST': 'accomm-db.cddcv5mrluqa.us-east-1.rds.amazonaws.com',
 			'PORT': '5432',
 		}
 	}
