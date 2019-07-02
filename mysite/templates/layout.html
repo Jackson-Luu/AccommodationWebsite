@@ -67,12 +67,19 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/search">Search</a>
                     </li>
-                    <li>
-                        <a class="nav-link" href="/login">Login</a>
-                    </li>
+                    {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/register">Sign Up</a>
+                        <b><a class="nav-link">{{request.user.username}}</a></b>
+                        <a class="nav-link" href="/logout">Logout</a>
                     </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/register">Sign Up</a>
+                        </li>
+                    {% endif%}
                 </ul>
             </div>
         </div>
