@@ -16,4 +16,12 @@
 *	I designed the database and normalised it to 3nf. I created its ER diagram
 *	I also helped with the UML class diagram
 
-========== Week 3 ==========
+========== Week 4 ==========
+
+*	I worked on splitting up some of the models clumped up in one app into their own apps
+*	Began working on the user_manager app and user creation feature
+*	I changed some templates
+
+========== Week 5 ==========
+
+*	
