@@ -133,3 +133,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'user_manager.CustomUser'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
