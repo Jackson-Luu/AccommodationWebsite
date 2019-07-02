@@ -19,10 +19,10 @@ from booking.views import *
 from user_manager.views import *
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', home_view, name='home'),
-    path('search/', search_view),
-    path('register/', register_view),
-    path('addproperty/', add_property_view),
-    path('search/results/', search_results_view),
+	path('admin/', admin.site.urls),
+	path('', home_view, name='home'),
+	path('search/', search_view),
+	path('register/', register_view),
+	path('addproperty/', add_property_view),
+	path('search/results/', search_results_view),
 ]

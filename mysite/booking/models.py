@@ -1,6 +1,5 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
-from user_manager.models import CustomUser
+# from user_manager.models import CustomUser
 
 # class User(models.Model):
 #     user_id = models.PositiveIntegerField(primary_key=True, null=False, blank=False, unique=True)
@@ -32,26 +31,6 @@ class Booking(models.Model):
     user_id = models.ForeignKey('user_manager.CustomUser', to_field='user_id', on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
-
-class UserReviews(models.Model):
-    reviewer = models.ForeignKey('user_manager.CustomUser', to_field='user_id', on_delete=models.CASCADE, related_name='reviewer')
-    reviewee = models.ForeignKey('user_manager.CustomUser', to_field='user_id', on_delete=models.CASCADE, related_name='reviewee')
-    rating = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=False, blank=False)
-    text = models.TextField(null=True, blank=True)
-
-class PropertyReviews(models.Model):
-    reviewer = models.ForeignKey('user_manager.CustomUser', to_field='user_id', on_delete=models.CASCADE)
-    reviewee = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
-    rating = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=False,blank=False)
-    text = models.TextField(null=True, blank=True)
-
-class PropertyOwnership(models.Model):
-    owner = models.ForeignKey('user_manager.CustomUser', to_field='user_id', on_delete=models.CASCADE)
-    property = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
-
-class PropertyFavourites(models.Model):
-    user = models.ForeignKey('user_manager.CustomUser', to_field='user_id', on_delete=models.CASCADE)
-    property = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
 
 class BookingTable(models.Model):
     booking = models.ForeignKey('Booking', to_field='booking_id', on_delete=models.CASCADE)
