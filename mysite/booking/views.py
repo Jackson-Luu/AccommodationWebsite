@@ -15,13 +15,13 @@ def home_view(request,*args, **kwargs):
 def search_view(request, *args, **kwargs):
     if request.method == 'POST':
         location = request.POST['location']
-        print(location)
+        guests = request.POST['guests']
         if not location:
             return render(request, 'search.html', {
                 'location_error': "Invalid location.",
             })
 
-        properties = Property.objects.filter(location=location, bookable=True)
+        properties = Property.objects.filter(location=location, size__gte=guests)
 
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
