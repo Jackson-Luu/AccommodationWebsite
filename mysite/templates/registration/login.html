@@ -3,38 +3,38 @@
 {% block content %}
 
 {% if form.errors %}
-  <p>Your username and password didn't match. Please try again.</p>
+	<p>Your username and password didn't match. Please try again.</p>
 {% endif %}
 
 {% if next %}
-  {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-  {% else %}
-    <p>Please login to see this page.</p>
-  {% endif %}
+	{% if user.is_authenticated %}
+		<p>Your account doesn't have access to this page. To proceed,
+			please login with an account that has access.</p>
+	{% else %}
+		<p>Please login to see this page.</p>
+	{% endif %}
 {% endif %}
 
 <div class="container">
-  <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    <div class="form-group">
-      <label>{{ form.username.label_tag }}</label>
-      <div class="input-group">
-        <input class="form-control" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" type="text" />
-      </div>
-      <label>{{ form.password.label_tag }}</label>
-      <div class="input-group">
-        <input class="form-control" id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}" type="password" />
-      </div>
-      <button type="submit" class="btn btn-primary">Login</button>
-      <input type="hidden" name="next" value="{{ next }}" />
-    </div>
-  </form>
+	<form method="post" action="{% url 'login' %}">
+		{% csrf_token %}
+		<div class="form-group">
+			<label>{{ form.username.label_tag }}</label>
+			<div class="input-group">
+				<input class="form-control" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" type="text" />
+			</div>
+			<label>{{ form.password.label_tag }}</label>
+			<div class="input-group">
+				<input class="form-control" id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}" type="password" />
+			</div>
+			<button type="submit" class="btn btn-primary">Login</button>
+			<input type="hidden" name="next" value="{{ next }}" />
+		</div>
+	</form>
+	
+	{# Assumes you setup the password_reset view in your URLconf #}
+	<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
 
-  {# Assumes you setup the password_reset view in your URLconf #}
-  <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-  
 </div>
 {% endblock %}
 

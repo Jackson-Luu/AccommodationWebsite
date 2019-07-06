@@ -18,3 +18,10 @@ def register_view(request):
 		# print('NOT VALID')
 		form = CustomUserCreationForm()
 	return render(request, 'register.html', {'form': form})
+
+def profile_view(request):
+	if request.method == 'GET':
+		# TODO
+		return render(request, 'profile.html')
+	else:
+		return True
