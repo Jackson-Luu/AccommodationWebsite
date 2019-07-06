@@ -2,30 +2,46 @@
 
 {% block content %}
 
-{% if form.errors %}
-	<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
-
-{% if next %}
-	{% if user.is_authenticated %}
-		<p>Your account doesn't have access to this page. To proceed,
-			please login with an account that has access.</p>
-	{% else %}
-		<p>Please login to see this page.</p>
-	{% endif %}
-{% endif %}
-
 <div class="container">
+	{% if form.errors %}
+		<div class="alert alert-warning alert-dismissible fade show" role="alert">
+			Your username and password didn't match. Please try again.
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			    <span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	{% endif %}
+	
+	{% if next %}
+		{% if user.is_authenticated %}
+			<div class="alert alert-warning alert-dismissible fade show" role="alert">
+				Your account doesn't have access to this page. To proceed, please login with an account that has access.
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				    <span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		{% else %}
+			<div class="alert alert-warning alert-dismissible fade show" role="alert">
+				Please login to see this page.
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				    <span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		{% endif %}
+	{% endif %}
+	
 	<form method="post" action="{% url 'login' %}">
 		{% csrf_token %}
 		<div class="form-group">
 			<label>{{ form.username.label_tag }}</label>
 			<div class="input-group">
 				<input class="form-control" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" type="text" />
+<!--				{{ form.username.errors }}-->
 			</div>
 			<label>{{ form.password.label_tag }}</label>
 			<div class="input-group">
 				<input class="form-control" id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}" type="password" />
+<!--				{{ form.password.errors }}-->
 			</div>
 			<button type="submit" class="btn btn-primary">Login</button>
 			<input type="hidden" name="next" value="{{ next }}" />
