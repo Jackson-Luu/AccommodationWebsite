@@ -62,29 +62,29 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/addproperty">List Property</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="/search">Search</a>
                     </li>
                     {% if user.is_authenticated %}
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <button class="btn btn-primary dropdown-toggle" type="button" id="user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{request.user.username}}
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="user">
-                                    <a class="dropdown-item" href="/logout">Logout</a>
-                                </div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/addproperty">List Property</a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{request.user.username}}
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="user">
+                                <a class="dropdown-item" href="/logout">Logout</a>
                             </div>
-                        </li>
+                        </div>
+                    </li>
                     {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="/login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/register">Sign Up</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Sign Up</a>
+                    </li>
                     {% endif%}
                 </ul>
             </div>

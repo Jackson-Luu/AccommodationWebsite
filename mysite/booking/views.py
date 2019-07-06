@@ -4,6 +4,7 @@ from django.contrib import messages
 from .forms import PropertyCreationForm
 from django.urls import reverse
 from .models import Property
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -28,6 +29,7 @@ def search_view(request, *args, **kwargs):
         return render(request, 'search_results.html', {'properties':properties, 'location':location})
     return render(request, 'search.html', {})
 
+@login_required(login_url='/login')
 def add_property_view(request):
     if request.method == 'POST':
         form = PropertyCreationForm(request.POST)
