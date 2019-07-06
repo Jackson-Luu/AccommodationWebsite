@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from .forms import CustomUserCreationForm
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def register_view(request):
@@ -19,6 +20,7 @@ def register_view(request):
 		form = CustomUserCreationForm()
 	return render(request, 'register.html', {'form': form})
 
+@login_required(login_url='/login')
 def profile_view(request):
 	if request.method == 'GET':
 		# TODO
