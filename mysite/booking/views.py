@@ -43,6 +43,6 @@ def add_property_view(request):
         form = PropertyCreationForm()
     return render(request,'add_property.html',{'form':form})
 
-def search_results_view(request):
-    return render(request, 'search_results.html', {})
+def property_view(request, property_id):
+    return render(request, 'property_view.html', {})
 
