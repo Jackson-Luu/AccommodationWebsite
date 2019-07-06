@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
-from .forms import PropertyCreationForm
+from .forms import *
 from django.urls import reverse
-from .models import Property
+from .models import *
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -31,10 +31,13 @@ def search_view(request, *args, **kwargs):
 
 @login_required(login_url='/login')
 def add_property_view(request):
+    user = request.user
     if request.method == 'POST':
         form = PropertyCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            a = form.save(commit=False)
+            a.host_id = user
+            a.save()
             messages.success(request,'Property listed!')
             return redirect('home')
 
@@ -44,5 +47,22 @@ def add_property_view(request):
     return render(request,'add_property.html',{'form':form})
 
 def property_view(request, property_id):
-    return render(request, 'property_view.html', {})
+    return render(request, 'property_view.html', {'property_id':property_id})
 
+@login_required(login_url='/login')
+def book_property_view(request, property_id):
+    user = request.user
+    p = Property.objects.get(property_id=property_id)
+    if request.method == 'POST':
+        form = BookingCreationForm(request.POST)
+        if form.is_valid():
+            a = form.save(commit=False)
+            a.user_id = user
+            a.save()
+            messages.success(request,'Property Booked!')
+            return redirect('home')
+
+    else: 
+        print('NOT VALID')
+        form = BookingCreationForm()
+    return render(request, 'property_booking.html', {'form':form})

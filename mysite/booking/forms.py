@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import Property
+from .models import Property, Booking
 
 
 
@@ -15,3 +15,11 @@ class PropertyCreationForm(forms.ModelForm):
     class Meta(forms.ModelForm):
         model = Property
         fields = ['name','price','location','size','description','bookable']
+
+class BookingCreationForm(forms.ModelForm):
+    start_date = forms.DateField(label='Start Date', widget=forms.SelectDateWidget())
+    end_date = forms.DateField(label='End Date', widget=forms.SelectDateWidget())
+    class Meta(forms.ModelForm):
+        model = Booking
+        fields = ['start_date','end_date']
+   
