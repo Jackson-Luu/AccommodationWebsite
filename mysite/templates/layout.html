@@ -68,10 +68,16 @@
                         <a class="nav-link" href="/search">Search</a>
                     </li>
                     {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <b><a class="nav-link">{{request.user.username}}</a></b>
-                        <a class="nav-link" href="/logout">Logout</a>
-                    </li>
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{request.user.username}}
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="user">
+                                    <a class="dropdown-item" href="/logout">Logout</a>
+                                </div>
+                            </div>
+                        </li>
                     {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="/login">Login</a>
