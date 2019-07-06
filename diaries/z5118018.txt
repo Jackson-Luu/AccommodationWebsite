@@ -19,9 +19,9 @@
 ========== Week 4 ==========
 
 *	I worked on splitting up some of the models clumped up in one app into their own apps
-*	Began working on the user_manager app and user creation feature
+*	Began working on the user_manager app
 *	I changed some templates
 
 ========== Week 5 ==========
 
-*	
+*	I changed some templates and added user login and logout
