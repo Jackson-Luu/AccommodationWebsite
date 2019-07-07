@@ -33,6 +33,7 @@ class Booking(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     num_guests = models.IntegerField(blank=False, default=1)
+    property_id = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
 
 class BookingTable(models.Model):
     booking = models.ForeignKey('Booking', to_field='booking_id', on_delete=models.CASCADE)

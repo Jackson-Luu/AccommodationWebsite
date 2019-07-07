@@ -6,6 +6,7 @@ from django.urls import reverse
 from .models import *
 from .forms import *
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
 
 # Create your views here.
 
@@ -21,13 +22,37 @@ def search_view(request, *args, **kwargs):
             return render(request, 'search.html', {
                 'location_error': "Invalid location.",
             })
-
+        
         properties = Property.objects.filter(location=location, size__gte=guests)
+
+        try:
+            check_in = datetime.strptime(request.POST['check_in'], '%Y-%m-%d').date()
+            check_out = datetime.strptime(request.POST['check_out'], '%Y-%m-%d').date()
+            valid_prop = []
+            guests = int(guests)
+
+            for p in properties:
+                bookings = Booking.objects.filter(property_id=p.property_id)
+                total_guests = 0
+                max = p.size
+                for b in bookings:
+                    if b.end_date < check_in:
+                        continue
+                    elif b.start_date > check_out:
+                        continue
+                    else:
+                        total_guests += b.num_guests
+                        if total_guests >= max:
+                            break
+                if total_guests + guests <= max:
+                    valid_prop.append(p)
+        except ValueError:
+            valid_prop = properties
 
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-        return render(request, 'search_results.html', {'properties':properties, 'location':location})
+        return render(request, 'search_results.html', {'properties':valid_prop, 'location':location})
     return render(request, 'search.html', {})
 
 @login_required(login_url='/login')
@@ -73,7 +98,7 @@ def book_property_view(request, property_id):
             end_date = booking_form.cleaned_data['end_date']
             num_guests = booking_form.cleaned_data['num_guests']
             
-            booking = Booking(user_id=user,start_date=start_date, end_date=end_date, num_guests=num_guests)
+            booking = Booking(user_id=user,start_date=start_date, end_date=end_date, num_guests=num_guests, property_id=p)
             booking.save()
             booking_table = BookingTable(booking=booking, room=room)
             booking_table.save()
