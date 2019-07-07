@@ -16,10 +16,17 @@ class PropertyCreationForm(forms.ModelForm):
         model = Property
         fields = ['name','price','location','size','description','bookable']
 
-class BookingCreationForm(forms.ModelForm):
+class BookingCreationForm(forms.Form):
+    room_number = forms.IntegerField(label='Room Number')
     start_date = forms.DateField(label='Start Date', widget=forms.SelectDateWidget())
     end_date = forms.DateField(label='End Date', widget=forms.SelectDateWidget())
-    class Meta(forms.ModelForm):
-        model = Booking
-        fields = ['start_date','end_date']
-   
+    # class Meta(forms.ModelForm):
+    #     model = Booking
+    #     fields = ['start_date','end_date']
+
+# class BookingTableCreationForm(form.ModelForm):
+#     room = forms.IntegerField()
+#     class Meta(forms.ModelForm):
+#         model = BookingTable
+#         fields = ['room']
+

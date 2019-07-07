@@ -37,8 +37,20 @@
   </a>
 </div>
 <header>
-    House Name
-    <a href="{% url 'book_property' property_id %}" class="btn btn-primary">Book Property</a>
+    {{ property.name }}
+    <a href="{% url 'book_property' property.property_id %}" class="btn btn-primary">Book Property</a>
 </header>
+<div>
+  {% for r in rooms %}
+    <li> Room {{r.room_id}}</li>
+  {% endfor %}
+</div>
+<div>
+  <h>Property Description:</h>
+  <p>
+    {{property.description}}
+  </p>
+  
+</div>
 
 {% endblock %}

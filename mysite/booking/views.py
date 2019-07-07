@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
-from .forms import *
+
 from django.urls import reverse
 from .models import *
+from .forms import *
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -38,6 +39,11 @@ def add_property_view(request):
             a = form.save(commit=False)
             a.host_id = user
             a.save()
+
+            #room creation
+            property_id = a
+            create_rooms(property_id)
+
             messages.success(request,'Property listed!')
             return redirect('home')
 
@@ -47,22 +53,43 @@ def add_property_view(request):
     return render(request,'add_property.html',{'form':form})
 
 def property_view(request, property_id):
-    return render(request, 'property_view.html', {'property_id':property_id})
+    property = Property.objects.get(property_id=property_id)
+    rooms = Room.objects.filter(property_id=property_id)
+    return render(request, 'property_view.html', {'property':property,'rooms':rooms})
 
 @login_required(login_url='/login')
 def book_property_view(request, property_id):
     user = request.user
     p = Property.objects.get(property_id=property_id)
     if request.method == 'POST':
-        form = BookingCreationForm(request.POST)
-        if form.is_valid():
-            a = form.save(commit=False)
-            a.user_id = user
-            a.save()
+        booking_form = BookingCreationForm(request.POST)
+       # print(booking_form.room_number)
+
+        if booking_form.is_valid():
+            room_number = booking_form.cleaned_data['room_number']
+            room = Room.objects.get(property_id=property_id, room_number=room_number)
+
+            start_date = booking_form.cleaned_data['start_date']
+            end_date = booking_form.cleaned_data['end_date']
+            
+            booking = Booking(user_id=user,start_date=start_date, end_date=end_date)
+            booking.save()
+            booking_table = BookingTable(booking=booking, room=room)
+            booking_table.save()
+           
             messages.success(request,'Property Booked!')
             return redirect('home')
 
     else: 
         print('NOT VALID')
-        form = BookingCreationForm()
-    return render(request, 'property_booking.html', {'form':form})
+        booking_form = BookingCreationForm()
+        
+    return render(request, 'property_booking.html', {'booking_form':booking_form})
+
+
+#creating rooms
+def create_rooms(property):
+    size = property.size
+    for i in range(size):
+        r = Room(room_number=(i+1),property_id=property)
+        r.save()
