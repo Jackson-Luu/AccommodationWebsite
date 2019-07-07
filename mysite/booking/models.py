@@ -32,6 +32,7 @@ class Booking(models.Model):
     user_id = models.ForeignKey('user_manager.CustomUser', to_field='user_id', on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
+    num_guests = models.IntegerField(blank=False, default=1)
 
 class BookingTable(models.Model):
     booking = models.ForeignKey('Booking', to_field='booking_id', on_delete=models.CASCADE)

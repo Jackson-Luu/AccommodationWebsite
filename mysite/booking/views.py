@@ -71,8 +71,9 @@ def book_property_view(request, property_id):
 
             start_date = booking_form.cleaned_data['start_date']
             end_date = booking_form.cleaned_data['end_date']
+            num_guests = booking_form.cleaned_data['num_guests']
             
-            booking = Booking(user_id=user,start_date=start_date, end_date=end_date)
+            booking = Booking(user_id=user,start_date=start_date, end_date=end_date, num_guests=num_guests)
             booking.save()
             booking_table = BookingTable(booking=booking, room=room)
             booking_table.save()
