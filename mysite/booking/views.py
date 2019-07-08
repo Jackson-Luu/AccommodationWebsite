@@ -88,21 +88,12 @@ def book_property_view(request, property_id):
     p = Property.objects.get(property_id=property_id)
     if request.method == 'POST':
         booking_form = BookingCreationForm(request.POST)
-       # print(booking_form.room_number)
 
-        if booking_form.is_valid():
-            room_number = booking_form.cleaned_data['room_number']
-            room = Room.objects.get(property_id=property_id, room_number=room_number)
-
-            start_date = booking_form.cleaned_data['start_date']
-            end_date = booking_form.cleaned_data['end_date']
-            num_guests = booking_form.cleaned_data['num_guests']
-            
-            booking = Booking(user_id=user,start_date=start_date, end_date=end_date, num_guests=num_guests, property_id=p)
-            booking.save()
-            booking_table = BookingTable(booking=booking, room=room)
-            booking_table.save()
-           
+        if booking_form.is_valid():    
+            a = booking_form.save(commit=False)
+            a.user_id = user
+            a.property_id = p
+            a.save()
             messages.success(request,'Property Booked!')
             return redirect('home')
 
