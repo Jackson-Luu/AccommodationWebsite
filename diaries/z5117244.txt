@@ -12,4 +12,9 @@ For the first half of the week, I worked on finishing some of the remaining part
 
 Week 4
 
-Continuing to focus on basic functionality for this week, I decided to work on giving visitors the ability to search for properties in a specified location and allowing property owners to add their properties that will come up in the search.
+Continuing to focus on basic functionality for this week, I decided to work on giving visitors the ability to search for properties in a specified location and allowing property owners to add their properties that will come up in the search. For the second half of this week I worked on researching the AWS platform and setting up cloud integration for the server and database.
+
+Week 5
+
+Expanded the search function to support check-in and check-out dates. The search results will now only display properties that have availability for the input dates with space for the requested number of guests. Also added a property view page for users to view a properties details and place a booking.
+
