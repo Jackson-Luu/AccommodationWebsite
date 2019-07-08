@@ -31,9 +31,12 @@ Week 3 Friday
 	* submitted proposal
 
 Week 3 Saturday
-	* 12pm meeting
 	* Property and User models 
 	* bootstrap template 
 	* basic url/views
 
-
+Weeks 4 & 5
+	* created bookingsCreationForm
+	* form updates room, booking and bookingTable tables
+	* removed room and bookingTable 
+	* basic property view page 
