@@ -12,3 +12,9 @@ start search engine
 
 week4
 learning django tutorial and review the MVC model and be familiar with how each part working
+
+week5 
+Fix the database connection bugs and clear the old database.
+
+week6
+Design the model and temeplate files for the user profile when user log in. Try to help the group solve the problem of multiple people booking.
