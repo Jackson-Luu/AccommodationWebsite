@@ -24,4 +24,12 @@
 
 ========== Week 5 ==========
 
-*	I changed some templates and added user login and logout
+*	I changed some templates and fixed some CSS
+*	I added user login and logout
+*	I added login restrictions to some views
+*	I started work on user profiles
+
+
+========== Week 6 ==========
+
+*	
