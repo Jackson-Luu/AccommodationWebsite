@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container">
+        <form method="POST">
+            {% csrf_token%}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Add Room</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <di class="form-group"v>
+                <button class="btn btn-outline-info" type="submit">Add Rooms</button>
+
+            </div>
+        </form>
+    </div>
+{% endblock %}

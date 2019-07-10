@@ -25,7 +25,9 @@ class Property(models.Model):
 class Room(models.Model):
     room_id = models.AutoField(primary_key=True)
     property_id = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
-    room_number = models.IntegerField(null=True, blank=True)
+    num_guests = models.IntegerField(null=True, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
 
 class Booking(models.Model):
     booking_id = models.AutoField(primary_key=True)
@@ -33,6 +35,7 @@ class Booking(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     num_guests = models.IntegerField(blank=False, default=1)
+    num_rooms = models.IntegerField(blank=False, default=1)
     property_id = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
 
 class BookingTable(models.Model):

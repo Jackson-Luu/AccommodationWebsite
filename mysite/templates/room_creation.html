@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+	<form method="POST">
+		{% csrf_token%}
+		<fieldset class="form-group">
+			<legend class="border-bottom mb-4">Add Rooms</legend>
+            <!-- {{ room_creation_form|crispy }} -->
+            {{ room_creation_form.management_form }}  
+            {{ room_creation_form.errors }}
+            {{ room_creation_form.non_field_errors }} 
+            {% for form in room_creation_form %}
+                <head>Room: {{forloop.counter}}</head>
+                {{form|crispy}}
+
+
+
+            {% endfor %}
+        
+		</fieldset>
+		<di class="form-group"v>
+			<button class="btn btn-outline-info" type="submit">Add Rooms</button>
+	
+	</form>
+
+{% endblock %}

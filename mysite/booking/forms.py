@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import Property, Booking
+from .models import Property, Booking, Room
 
 class PropertyCreationForm(forms.ModelForm):
     name = forms.CharField(label='Property Name')
@@ -13,19 +13,38 @@ class PropertyCreationForm(forms.ModelForm):
         model = Property
         fields = ['name','price','location','size','description','bookable']
 
-class BookingCreationForm(forms.ModelForm):
-    # room_number = forms.IntegerField(label='Room Number')
-    num_guests = forms.IntegerField(label='Number of Guests')
+# class BookingCreationForm(forms.ModelForm):
+#     # room_number = forms.IntegerField(label='Room Number')
+#     num_guests = forms.IntegerField(label='Number of Guests')
+#     start_date = forms.DateField(label='Start Date', required=True,widget=forms.SelectDateWidget)
+#     end_date = forms.DateField(label='End Date', required=True,widget=forms.SelectDateWidget)
+#     class Meta(forms.ModelForm):
+#        model = Booking
+#        fields = ['start_date','end_date', 'num_guests']
+
+class BookingCreationForm(forms.Form):
+    
+    def __init__(self,*args,room_ids,**kwargs):
+        super(BookingCreationForm,self).__init__(*args,**kwargs)
+        options=[]
+        i = 1
+        for r in room_ids:
+            option = (r,'Room '+str(i))
+            i=i+1
+            
+        self.fields['rooms'].choices = options
+
+    rooms = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
     start_date = forms.DateField(label='Start Date', required=True,widget=forms.SelectDateWidget)
     end_date = forms.DateField(label='End Date', required=True,widget=forms.SelectDateWidget)
-    class Meta(forms.ModelForm):
-       model = Booking
-       fields = ['start_date','end_date', 'num_guests']
-       
+    num_guests = forms.IntegerField(label='Number of Guests')
 
-# class BookingTableCreationForm(form.ModelForm):
-#     room = forms.IntegerField()
-#     class Meta(forms.ModelForm):
-#         model = BookingTable
-#         fields = ['room']
+
+
+       
+class RoomCreationForm(forms.ModelForm):
+    class Meta(forms.ModelForm):
+        model = Room
+        fields = ['num_guests','price','description']
+
 

@@ -67,15 +67,28 @@ def add_property_view(request):
 
             #room creation
             property_id = a
-            create_rooms(property_id)
+            # create_rooms(property_id)
 
             messages.success(request,'Property listed!')
+            # add_room_view(request)
             return redirect('home')
 
     else: 
-        print('NOT VALID')
         form = PropertyCreationForm()
     return render(request,'add_property.html',{'form':form})
+
+@login_required(login_url='/login')
+def add_room_view(request,property_id):
+    p = Property.objects.get(property_id=property_id)
+    if request.method == 'POST':
+        form = RoomCreationForm(request.POST)
+        instance = form.save(commit=False)
+        instance.property_id = p
+        instance.save()
+        return redirect('property',p.property_id) # redirect to user's property list
+    else:
+        form = RoomCreationForm()
+    return render(request,'add_room.html',{'form':form})
 
 def property_view(request, property_id):
     property = Property.objects.get(property_id=property_id)
@@ -86,27 +99,47 @@ def property_view(request, property_id):
 def book_property_view(request, property_id):
     user = request.user
     p = Property.objects.get(property_id=property_id)
+    room_list = Room.objects.filter(property_id=property_id)
+    room_ids = []
+    for r in room_list:
+        room_ids.append(r.room_id)
+    room_num = p.size
+    print(room_num)
+    
     if request.method == 'POST':
-        booking_form = BookingCreationForm(request.POST)
-
+        
+        booking_form = BookingCreationForm(request.POST,room_ids=room_ids)
+        
         if booking_form.is_valid():    
-            a = booking_form.save(commit=False)
-            a.user_id = user
-            a.property_id = p
-            a.save()
+        
+            start_date = booking_form.cleaned_data['start_date']
+            end_date = booking_form.cleaned_data['end_date']
+            num_guests = booking_form.cleaned_data['num_guests']
+            rooms = booking_form.cleaned_data['rooms']
+            print(rooms)
+            num_rooms = len(rooms)
+
+            booking_instance = Booking(user_id=user,start_date=start_date, end_date=end_date,property_id=p,num_guests=num_guests,num_rooms=num_rooms)
+            booking_instance.save()
+            #make booking
+            #make booking_table
+            for r in rooms:
+                room_obj = Room.objects.get(room_id=int(r))
+                booking_table_instance = BookingTable(room=room_obj,booking=booking_instance)
+                booking_table_instance.save()
+
             messages.success(request,'Property Booked!')
             return redirect('home')
 
     else: 
-        print('NOT VALID')
-        booking_form = BookingCreationForm()
+        booking_form = BookingCreationForm(room_ids=room_ids)
         
     return render(request, 'property_booking.html', {'booking_form':booking_form})
 
 
-#creating rooms
-def create_rooms(property):
-    size = property.size
-    for i in range(size):
-        r = Room(room_number=(i+1),property_id=property)
-        r.save()
+# #creating rooms
+# def create_rooms(property):
+#     size = property.size
+#     for i in range(size):
+#         r = Room(room_number=(i+1),property_id=property)
+#         r.save()

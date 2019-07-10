@@ -28,4 +28,5 @@ urlpatterns = [
 	path('', include('django.contrib.auth.urls')),
 	path('profile/', profile_view),
     path('bookproperty/<int:property_id>/', book_property_view, name='book_property'),
+    path('addroom/<int:property_id>/', add_room_view, name='add_room'),
 ]
