@@ -16,9 +16,9 @@ class Property(models.Model):
     # uncomment when user login implemented
     host_id = models.ForeignKey('user_manager.CustomUser', to_field='user_id', on_delete=models.CASCADE, default=-1)
     name = models.TextField(null=True, blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, default=0)
     location = models.TextField(null=True, blank=True)
-    size = models.PositiveSmallIntegerField(null=True, blank=True)
+    size = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
     description = models.TextField(null=True, blank=True)
     bookable = models.BooleanField(null=False, blank=False, default=False)
 

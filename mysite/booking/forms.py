@@ -4,14 +4,14 @@ from .models import Property, Booking, Room
 
 class PropertyCreationForm(forms.ModelForm):
     name = forms.CharField(label='Property Name')
-    price = forms.DecimalField(widget=forms.NumberInput(attrs={'step': 0.25}))
+    # price = forms.DecimalField(widget=forms.NumberInput(attrs={'step': 0.25}))
     location = forms.CharField()
-    size = forms.IntegerField()
+    # size = forms.IntegerField()
     description = forms.CharField(widget=forms.Textarea)
     bookable = forms.BooleanField()
     class Meta(forms.ModelForm):
         model = Property
-        fields = ['name','price','location','size','description','bookable']
+        fields = ['name','location','description','bookable']
 
 # class BookingCreationForm(forms.ModelForm):
 #     # room_number = forms.IntegerField(label='Room Number')
@@ -46,5 +46,3 @@ class RoomCreationForm(forms.ModelForm):
     class Meta(forms.ModelForm):
         model = Room
         fields = ['num_guests','price','description']
-
-
