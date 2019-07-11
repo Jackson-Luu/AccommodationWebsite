@@ -4,6 +4,7 @@ from django.contrib import messages
 from .forms import CustomUserCreationForm
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from booking.models import Booking, Property
 
 # Create your views here.
 def register_view(request):
@@ -27,3 +28,9 @@ def profile_view(request):
 		return render(request, 'profile.html')
 	else:
 		return True
+
+@login_required(login_url='/login')
+def user_properties_view(request):
+	user = request.user
+	user_properties = Property.objects.filter(host_id=user)
+	return render(request, 'user_properties.html', {'user_properties':user_properties})

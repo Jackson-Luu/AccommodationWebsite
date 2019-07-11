@@ -90,7 +90,7 @@ def add_room_view(request,property_id):
         new_size = p.size + 1
         #updating property total price
         Property.objects.filter(property_id=property_id).update(price=new_price,size=new_size)
-        return redirect('property',p.property_id) # redirect to user's property list
+        return redirect('my_properties') # redirect to user's property list
     else:
         form = RoomCreationForm()
     return render(request,'add_room.html',{'form':form})
