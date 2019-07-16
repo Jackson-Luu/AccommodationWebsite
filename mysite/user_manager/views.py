@@ -32,5 +32,6 @@ def profile_view(request):
 @login_required(login_url='/login')
 def user_properties_view(request):
 	user = request.user
-	user_properties = Property.objects.filter(host_id=user)
-	return render(request, 'user_properties.html', {'user_properties':user_properties})
+	user_properties_shareable = Property.objects.filter(host_id=user,shareable=True)
+	user_properties_unshareable = Property.objects.filter(host_id=user,shareable=False)
+	return render(request, 'user_properties.html', {'user_properties_shareable':user_properties_shareable,'user_properties_unshareable':user_properties_unshareable})
