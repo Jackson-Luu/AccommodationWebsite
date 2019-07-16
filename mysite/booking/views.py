@@ -70,12 +70,12 @@ def add_shareable_property_view(request):
             a.save()
 
             #room creation
-            property_id = a
+            property_id = a.property_id
             # create_rooms(property_id)
 
             messages.success(request,'Property listed!')
             # add_room_view(request)
-            return redirect('home')
+            return redirect('add_room',property_id)
 
     else: 
         form = ShareablePropertyCreationForm()
