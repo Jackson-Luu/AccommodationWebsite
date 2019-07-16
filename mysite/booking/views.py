@@ -59,13 +59,38 @@ def search_view(request, *args, **kwargs):
     return render(request, 'search.html', {})
 
 @login_required(login_url='/login')
-def add_property_view(request):
+def add_shareable_property_view(request):
     user = request.user
     if request.method == 'POST':
-        form = PropertyCreationForm(request.POST)
+        form = ShareablePropertyCreationForm(request.POST)
         if form.is_valid():
             a = form.save(commit=False)
             a.host_id = user
+            a.shareable = True
+            a.save()
+
+            #room creation
+            property_id = a.property_id
+            # create_rooms(property_id)
+
+            messages.success(request,'Property listed!')
+            # add_room_view(request)
+            return redirect('add_room',property_id)
+
+    else: 
+        form = ShareablePropertyCreationForm()
+    return render(request,'add_property.html',{'form':form})
+
+
+@login_required(login_url='/login')
+def add_unshareable_property_view(request):
+    user = request.user
+    if request.method == 'POST':
+        form = UnshareablePropertyCreationForm(request.POST)
+        if form.is_valid():
+            a = form.save(commit=False)
+            a.host_id = user
+            a.shareable = False
             a.save()
 
             #room creation
@@ -77,7 +102,7 @@ def add_property_view(request):
             return redirect('home')
 
     else: 
-        form = PropertyCreationForm()
+        form = UnshareablePropertyCreationForm()
     return render(request,'add_property.html',{'form':form})
 
 @login_required(login_url='/login')
@@ -143,4 +168,26 @@ def book_property_view(request, property_id):
         booking_form = BookingCreationForm(room_ids=room_ids)
         
     return render(request, 'property_booking.html', {'booking_form':booking_form})
+
+@login_required(login_url='/login')
+def select_property_type_view(request):
+
+    if request.method == 'POST':
+        selection_form = SelectPropertyTypeForm(request.POST)
+        if selection_form.is_valid():
+            selection = selection_form.cleaned_data['shareable']
+            print(selection)
+
+            if selection == 'True':
+                return redirect('add_shareable_property')
+            elif selection == 'False':
+                 return redirect('add_unshareable_property')
+            return redirect('home')
+    else:
+        selection_form = SelectPropertyTypeForm()
+    # selection = selection_form.cleaned_data['shareable']
+    # print(selection)
+   
+
+    return render(request, 'select_property_type.html', {'selection_form':selection_form})
 

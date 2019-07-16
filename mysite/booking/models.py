@@ -20,7 +20,7 @@ class Property(models.Model):
     location = models.TextField(null=True, blank=True)
     size = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
     description = models.TextField(null=True, blank=True)
-    bookable = models.BooleanField(null=False, blank=False, default=False)
+    shareable = models.BooleanField(null=False, blank=False, default=True)
 
 class Room(models.Model):
     room_id = models.AutoField(primary_key=True)
@@ -42,10 +42,10 @@ class BookingTable(models.Model):
     booking = models.ForeignKey('Booking', to_field='booking_id', on_delete=models.CASCADE)
     room = models.ForeignKey('Room', to_field='room_id', on_delete=models.CASCADE)
 
-class Amenities(models.Model):
+class Amenity(models.Model):
     amenity_id = models.AutoField(primary_key=True)
     amenity_name = models.TextField(null=True, blank=True)
 
 class PropertyAmenities(models.Model):
     property = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
-    amenity = models.ForeignKey('Amenities', to_field='amenity_id', on_delete=models.CASCADE)
+    amenity = models.ForeignKey('Amenity', to_field='amenity_id', on_delete=models.CASCADE)
