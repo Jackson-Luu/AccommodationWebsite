@@ -22,8 +22,11 @@ def search_view(request, *args, **kwargs):
             return render(request, 'search.html', {
                 'location_error': "Invalid location.",
             })
-        
-        properties = Property.objects.filter(location=location, size__gte=guests)
+
+        if not guests:
+            properties = Property.objects.filter(location=location)
+        else:        
+            properties = Property.objects.filter(location=location, size__gte=guests)
 
         try:
             check_in = datetime.strptime(request.POST['check_in'], '%Y-%m-%d').date()
