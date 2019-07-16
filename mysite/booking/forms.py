@@ -2,16 +2,28 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import Property, Booking, Room
 
-class PropertyCreationForm(forms.ModelForm):
-    name = forms.CharField(label='Property Name')
-    # price = forms.DecimalField(widget=forms.NumberInput(attrs={'step': 0.25}))
-    location = forms.CharField()
-    # size = forms.IntegerField()
-    description = forms.CharField(widget=forms.Textarea)
-    bookable = forms.BooleanField()
-    class Meta(forms.ModelForm):
-        model = Property
-        fields = ['name','location','description','bookable']
+class DateInput(forms.DateInput):
+	input_type = 'date'
+
+class ShareablePropertyCreationForm(forms.ModelForm):
+	name = forms.CharField(label='Property Name')
+	# price = forms.DecimalField(widget=forms.NumberInput(attrs={'step': 0.25}))
+	location = forms.CharField()
+	# size = forms.IntegerField()
+	description = forms.CharField(widget=forms.Textarea)
+	class Meta(forms.ModelForm):
+		model = Property
+		fields = ['name','location','description']
+
+class UnshareablePropertyCreationForm(forms.ModelForm):
+	name = forms.CharField(label='Property Name')
+	price = forms.DecimalField(widget=forms.NumberInput(attrs={'step': 0.25}))
+	location = forms.CharField()
+	size = forms.IntegerField()
+	description = forms.CharField(widget=forms.Textarea)
+	class Meta(forms.ModelForm):
+		model = Property
+		fields = ['name','location','description','price','size']
 
 # class BookingCreationForm(forms.ModelForm):
 #     # room_number = forms.IntegerField(label='Room Number')
@@ -23,26 +35,32 @@ class PropertyCreationForm(forms.ModelForm):
 #        fields = ['start_date','end_date', 'num_guests']
 
 class BookingCreationForm(forms.Form):
-    
-    def __init__(self,*args,room_ids,**kwargs):
-        super(BookingCreationForm,self).__init__(*args,**kwargs)
-        options=[]
-        i = 1
-        for r in room_ids:
-            option = (r,'Room '+str(i))
-            i=i+1
-            
-        self.fields['rooms'].choices = options
 
-    rooms = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
-    start_date = forms.DateField(label='Start Date', required=True,widget=forms.SelectDateWidget)
-    end_date = forms.DateField(label='End Date', required=True,widget=forms.SelectDateWidget)
-    num_guests = forms.IntegerField(label='Number of Guests')
+	def __init__(self,*args,room_ids,**kwargs):
+		super(BookingCreationForm,self).__init__(*args,**kwargs)
+		options=[]
+		i = 1
+		for r in room_ids:
+			options.append((r,'Room ' + str(i)))
+			i=i+1
+
+		self.fields['rooms'].choices = options
+
+	rooms = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+	start_date = forms.DateField(label='Start Date', required=True,widget=DateInput())
+	end_date = forms.DateField(label='End Date', required=True,widget=DateInput())
+	num_guests = forms.IntegerField(label='Number of Guests')
 
 
 
-       
+
 class RoomCreationForm(forms.ModelForm):
     class Meta(forms.ModelForm):
         model = Room
         fields = ['num_guests','price','description']
+
+class SelectPropertyTypeForm(forms.Form):
+    CHOICES = [('True','Yes'),('False','No')]
+    shareable = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES, required=True, label='Do you want this property to be shareable?')
+    # def __init__(self,*args,**kwargs):
+    #     super(SelectPropertyTypeForm,self).__init__(*args,**kwargs)

@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h1>My Bookings</h1>
+    {% for booking in user_bookings %}
+    <li>
+        <h2>Booking {{forloop.counter}}</h2>
+        <!-- <p>{{property.description}}</p>
+        <p>Rooms: {{property.size}}</p>
+        <p>Total property price: ${{property.price}}</p> -->
+        <!-- <h3>Property Room Details</h3> -->
+        <!-- <a href="#" class="btn btn-primary">Edit Property</a>
+        <a href="{% url 'add_room' property_id=property.property_id %}" class="btn btn-primary">Add Rooms</a>
+        <a href="{% url 'property' property_id=property.property_id %}" class="btn btn-primary">View Property</a> -->
+    </li>
+    
+    {% endfor %}
+</div>
+
+{% endblock %}
