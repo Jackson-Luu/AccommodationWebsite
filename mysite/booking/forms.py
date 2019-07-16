@@ -46,3 +46,9 @@ class RoomCreationForm(forms.ModelForm):
     class Meta(forms.ModelForm):
         model = Room
         fields = ['num_guests','price','description']
+
+class SelectPropertyTypeForm(forms.Form):
+    CHOICES = [('True','Yes'),('False','No')]
+    shareable = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES, required=True, label='Do you want this property to be shareable?')
+    # def __init__(self,*args,**kwargs):
+    #     super(SelectPropertyTypeForm,self).__init__(*args,**kwargs)
