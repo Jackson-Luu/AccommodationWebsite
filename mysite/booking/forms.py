@@ -5,16 +5,25 @@ from .models import Property, Booking, Room
 class DateInput(forms.DateInput):
 	input_type = 'date'
 
-class PropertyCreationForm(forms.ModelForm):
+class ShareablePropertyCreationForm(forms.ModelForm):
 	name = forms.CharField(label='Property Name')
 	# price = forms.DecimalField(widget=forms.NumberInput(attrs={'step': 0.25}))
 	location = forms.CharField()
 	# size = forms.IntegerField()
 	description = forms.CharField(widget=forms.Textarea)
-	bookable = forms.BooleanField()
 	class Meta(forms.ModelForm):
 		model = Property
-		fields = ['name','location','description','bookable']
+		fields = ['name','location','description']
+
+class UnshareablePropertyCreationForm(forms.ModelForm):
+	name = forms.CharField(label='Property Name')
+	price = forms.DecimalField(widget=forms.NumberInput(attrs={'step': 0.25}))
+	location = forms.CharField()
+	size = forms.IntegerField()
+	description = forms.CharField(widget=forms.Textarea)
+	class Meta(forms.ModelForm):
+		model = Property
+		fields = ['name','location','description','price','size']
 
 # class BookingCreationForm(forms.ModelForm):
 #     # room_number = forms.IntegerField(label='Room Number')

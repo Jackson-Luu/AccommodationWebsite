@@ -62,10 +62,11 @@ def search_view(request, *args, **kwargs):
 def add_shareable_property_view(request):
     user = request.user
     if request.method == 'POST':
-        form = PropertyCreationForm(request.POST)
+        form = ShareablePropertyCreationForm(request.POST)
         if form.is_valid():
             a = form.save(commit=False)
             a.host_id = user
+            a.shareable = True
             a.save()
 
             #room creation
@@ -77,7 +78,31 @@ def add_shareable_property_view(request):
             return redirect('home')
 
     else: 
-        form = PropertyCreationForm()
+        form = ShareablePropertyCreationForm()
+    return render(request,'add_property.html',{'form':form})
+
+
+@login_required(login_url='/login')
+def add_unshareable_property_view(request):
+    user = request.user
+    if request.method == 'POST':
+        form = UnshareablePropertyCreationForm(request.POST)
+        if form.is_valid():
+            a = form.save(commit=False)
+            a.host_id = user
+            a.shareable = False
+            a.save()
+
+            #room creation
+            property_id = a
+            # create_rooms(property_id)
+
+            messages.success(request,'Property listed!')
+            # add_room_view(request)
+            return redirect('home')
+
+    else: 
+        form = UnshareablePropertyCreationForm()
     return render(request,'add_property.html',{'form':form})
 
 @login_required(login_url='/login')
@@ -156,7 +181,7 @@ def select_property_type_view(request):
             if selection == 'True':
                 return redirect('add_shareable_property')
             elif selection == 'False':
-                 print('selection is false')
+                 return redirect('add_unshareable_property')
             return redirect('home')
     else:
         selection_form = SelectPropertyTypeForm()
