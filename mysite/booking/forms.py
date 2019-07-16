@@ -29,7 +29,7 @@ class BookingCreationForm(forms.Form):
         options=[]
         i = 1
         for r in room_ids:
-            option = (r,'Room '+str(i))
+            options.append((r,'Room ' + str(i)))
             i=i+1
             
         self.fields['rooms'].choices = options
