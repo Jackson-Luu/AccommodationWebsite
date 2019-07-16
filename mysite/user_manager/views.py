@@ -5,6 +5,7 @@ from .forms import CustomUserCreationForm
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from booking.models import Booking, Property
+from user_manager.models import CustomUser
 
 # Create your views here.
 def register_view(request):
@@ -25,7 +26,9 @@ def register_view(request):
 def profile_view(request):
 	if request.method == 'GET':
 		# TODO
-		return render(request, 'profile.html')
+		user = request.user
+		user_data = CustomUser.objects.filter(user_id = user.user_id)
+		return render(request, 'profile.html', {'user_data':user_data})
 	else:
 		return True
 
