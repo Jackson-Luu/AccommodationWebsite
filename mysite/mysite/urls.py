@@ -32,4 +32,5 @@ urlpatterns = [
     path('addroom/<int:property_id>/', add_room_view, name='add_room'),
     path('profile/myproperties', user_properties_view, name='my_properties'),
     path('selectpropertytype/',select_property_type_view, name='select_property_type'),
+    path('changeproperty/<int:property_id>/',edit_property_view, name='edit_property'),
 ]
