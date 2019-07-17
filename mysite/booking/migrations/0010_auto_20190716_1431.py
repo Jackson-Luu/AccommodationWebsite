@@ -31,7 +31,7 @@ def forwards_func(apps, schema_editor):
     ])
 
 def reverse_func(apps, schema_editor):
-    # forwards_func() creates two Country instances,
+    # forwards_func() creates Amenity instances,
     # so reverse_func() should delete them.
     Amenity = apps.get_model("booking", "Amenity")
     db_alias = schema_editor.connection.alias

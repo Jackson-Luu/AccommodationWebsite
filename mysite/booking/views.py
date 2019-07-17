@@ -7,8 +7,15 @@ from .models import *
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+import json
+import decimal
 
 # Create your views here.
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, decimal.Decimal):
+            return float(o)
+        return super(DecimalEncoder, self).default(o)
 
 def home_view(request,*args, **kwargs):
     properties = Property.objects.all()
@@ -52,10 +59,13 @@ def search_view(request, *args, **kwargs):
         except ValueError:
             valid_prop = properties
 
+        amenities = Amenity.objects.all()
+        prop_json = json.dumps(list(valid_prop.values()), cls=DecimalEncoder)
+
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-        return render(request, 'search_results.html', {'properties':valid_prop, 'location':location})
+        return render(request, 'search_results.html', {'properties':valid_prop, 'location':location, 'amenities':amenities, 'prop_json':prop_json})
     return render(request, 'search.html', {})
 
 @login_required(login_url='/login')
