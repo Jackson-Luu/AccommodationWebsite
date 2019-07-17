@@ -7,9 +7,7 @@ class DateInput(forms.DateInput):
 
 class ShareablePropertyCreationForm(forms.ModelForm):
 	name = forms.CharField(label='Property Name')
-	# price = forms.DecimalField(widget=forms.NumberInput(attrs={'step': 0.25}))
 	location = forms.CharField()
-	# size = forms.IntegerField()
 	description = forms.CharField(widget=forms.Textarea)
 	class Meta(forms.ModelForm):
 		model = Property

@@ -201,3 +201,15 @@ def select_property_type_view(request):
 
     return render(request, 'select_property_type.html', {'selection_form':selection_form})
 
+@login_required(login_url='/login')
+def edit_property_view(request,property_id):
+    property = Property.objects.get(property_id=property_id)
+    if request.method == 'POST':
+        edited_form = UnshareablePropertyCreationForm(request.POST,instance=property)
+        if edited_form.is_valid():
+            edited_form.save()
+            return redirect('home')
+    else:
+        edited_form = UnshareablePropertyCreationForm(instance=property)
+    return render(request,'edit_property.html',{'edited_form':edited_form})
+
