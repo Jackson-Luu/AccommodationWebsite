@@ -33,15 +33,15 @@ def search_view(request, *args, **kwargs):
 
         if not guests:
             properties = Property.objects.filter(location=location)
+            guests = 0
         else:        
             properties = Property.objects.filter(location=location, size__gte=guests)
+            guests = int(guests)
 
+        valid_prop = []
         try:
             check_in = datetime.strptime(request.POST['check_in'], '%Y-%m-%d').date()
             check_out = datetime.strptime(request.POST['check_out'], '%Y-%m-%d').date()
-            valid_prop = []
-            am_list = []
-            guests = int(guests)
 
             for p in properties:
                 bookings = Booking.objects.filter(property_id=p.property_id)
@@ -57,16 +57,29 @@ def search_view(request, *args, **kwargs):
                         if total_guests >= max:
                             break
                 if total_guests + guests <= max:
+                    am_list = []
                     prop_am = PropertyAmenities.objects.filter(property=p.property_id)
                     for am in prop_am:
                         am_list.append(am.amenity.amenity_name)
                     p_dict = model_to_dict(p)
                     p_dict['amenities'] = am_list
                     valid_prop.append(p_dict)
-        except ValueError:
-            valid_prop = properties.values()
 
+        # if no dates entered by user
+        except ValueError:
+            for p in properties:
+                am_list = []
+                prop_am = PropertyAmenities.objects.filter(property=p.property_id)
+                for am in prop_am:
+                    am_list.append(am.amenity.amenity_name)
+                p_dict = model_to_dict(p)
+                p_dict['amenities'] = am_list
+                valid_prop.append(p_dict)
+        
+        # Pass list of all amenities to html
         amenities = Amenity.objects.all()
+
+        # Convert list of properties results from Python to JavaScript Object Notation (JSON)
         prop_json = json.dumps(list(valid_prop), cls=DecimalEncoder)
 
         # Always return an HttpResponseRedirect after successfully dealing
