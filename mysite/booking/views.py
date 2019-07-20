@@ -72,7 +72,7 @@ def search_view(request, *args, **kwargs):
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-        return render(request, 'search_results.html', {'properties':valid_prop, 'location':location, 'amenities':amenities, 'prop_json':prop_json})
+        return render(request, 'search_results.html', {'properties':valid_prop, 'location':location, 'amenities':amenities, 'prop_json':prop_json, 'check_in':check_in,'check_out':check_out})
     return render(request, 'search.html', {})
 
 @login_required(login_url='/login')
@@ -150,13 +150,13 @@ def add_room_view(request,property_id):
         form = RoomCreationForm()
     return render(request,'add_room.html',{'form':form})
 
-def property_view(request, property_id):
+def property_view(request, property_id, check_in=None, check_out=None):
     property = Property.objects.get(property_id=property_id)
     rooms = Room.objects.filter(property_id=property_id)
-    return render(request, 'property_view.html', {'property':property,'rooms':rooms})
+    return render(request, 'property_view.html', {'property':property,'rooms':rooms, 'check_in':check_in, 'check_out':check_out})
 
 @login_required(login_url='/login')
-def book_property_view(request, property_id):
+def book_property_view(request, property_id, check_in=None, check_out=None):
     user = request.user
     p = Property.objects.get(property_id=property_id)
     room_list = Room.objects.filter(property_id=property_id)
@@ -168,7 +168,7 @@ def book_property_view(request, property_id):
     
     if request.method == 'POST':
         
-        booking_form = BookingCreationForm(request.POST,room_ids=room_ids)
+        booking_form = BookingCreationForm(request.POST,room_ids=room_ids,check_in=check_in)
         
         if booking_form.is_valid():    
         
@@ -192,9 +192,53 @@ def book_property_view(request, property_id):
             return redirect('home')
 
     else: 
-        booking_form = BookingCreationForm(room_ids=room_ids)
+        booking_form = BookingCreationForm(room_ids=room_ids,check_in=check_in)
         
     return render(request, 'property_booking.html', {'booking_form':booking_form})
+
+@login_required(login_url='/login')
+def booking_view(request, property_id, check_in=None, check_out=None):
+    user = request.user
+    p = Property.objects.get(property_id=property_id)
+    room_list = Room.objects.filter(property_id=property_id)
+    if check_in:
+        check_in = str(check_in)
+    if check_out:
+        check_out = str(check_out)
+    
+    if request.method == 'POST':
+        check_in_date = request.POST.get('check_in_date') 
+        check_out_date = request.POST.get('check_out_date') 
+        if check_in:
+            check_in_date = datetime.strptime(check_in_date, '%Y-%m-%d').date()
+        else:
+            return render(request, 'booking.html', {
+            'check_in_error': "Invalid check in date.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+            }) 
+        if check_out_date:
+            check_out_date = datetime.strptime(check_out_date, '%Y-%m-%d').date()
+        else:
+            return render(request, 'booking.html', {
+            'check_in_error': "Invalid check out date.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+            })   
+        
+        # num_guests = booking_form.cleaned_data['num_guests']
+        rooms = request.POST.getlist('rooms')
+        num_guests = request.POST.get('num_guests')
+        # print(rooms)
+        booking_instance = Booking(user_id=user,start_date=check_in_date, end_date=check_out_date,property_id=p,num_guests=num_guests,num_rooms=len(rooms))
+        booking_instance.save()
+        #make booking
+        #make booking_table
+        for r in rooms:
+            room_obj = Room.objects.get(room_id=int(r))
+            booking_table_instance = BookingTable(room=room_obj,booking=booking_instance)
+            booking_table_instance.save()
+
+        messages.success(request,'Property Booked!')
+        return redirect('home')
+    return render(request, 'booking.html', {"property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out })
+
 
 @login_required(login_url='/login')
 def select_property_type_view(request):

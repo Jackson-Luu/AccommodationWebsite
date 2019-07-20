@@ -26,11 +26,16 @@ urlpatterns = [
 	path('addshareableproperty/', add_shareable_property_view,name='add_shareable_property'),
     path('addunshareableproperty/', add_unshareable_property_view,name='add_unshareable_property'),
     path('property/<int:property_id>/', property_view, name='property'),
+    path('property/<int:property_id>/<check_in>/<check_out>/', property_view, name='property'),
 	path('', include('django.contrib.auth.urls')),
 	path('profile/', profile_view),
     path('bookproperty/<int:property_id>/', book_property_view, name='book_property'),
+    path('bookproperty/<int:property_id>/<check_in><check_out>', book_property_view, name='book_property'),
     path('addroom/<int:property_id>/', add_room_view, name='add_room'),
     path('profile/myproperties', user_properties_view, name='my_properties'),
     path('selectpropertytype/',select_property_type_view, name='select_property_type'),
     path('changeproperty/<int:property_id>/',edit_property_view, name='edit_property'),
+
+    path('book/<int:property_id>/', booking_view, name='booking'),
+    path('book/<int:property_id>/<check_in>/<check_out>/', booking_view, name='booking'),
 ]

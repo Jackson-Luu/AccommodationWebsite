@@ -36,22 +36,25 @@ class UnshareablePropertyCreationForm(forms.ModelForm):
 #        model = Booking
 #        fields = ['start_date','end_date', 'num_guests']
 
-class BookingCreationForm(forms.Form):
+# class BookingCreationForm(forms.Form):
 
-	def __init__(self,*args,room_ids,**kwargs):
-		super(BookingCreationForm,self).__init__(*args,**kwargs)
-		options=[]
-		i = 1
-		for r in room_ids:
-			options.append((r,'Room ' + str(i)))
-			i=i+1
-
-		self.fields['rooms'].choices = options
-
-	rooms = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
-	start_date = forms.DateField(label='Start Date', required=True,widget=DateInput())
-	end_date = forms.DateField(label='End Date', required=True,widget=DateInput())
-	num_guests = forms.IntegerField(label='Number of Guests')
+# 	def __init__(self,room_ids,check_in,*args,**kwargs):
+# 		super(BookingCreationForm,self).__init__() 
+# 		options=[]
+# 		i = 1
+# 		for r in room_ids:
+# 			options.append((r,'Room ' + str(i)))
+# 			i=i+1
+           
+#         # print(check_in)
+#         # print(kwargs)
+#         # self.a = 2
+# 		self.fields['rooms'].choices = options
+        
+# 	rooms = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+# 	start_date = forms.DateField(label='Start Date', required=True,widget=DateInput())
+# 	end_date = forms.DateField(label='End Date', required=True,widget=DateInput())
+# 	num_guests = forms.IntegerField(label='Number of Guests')
 
 
 
