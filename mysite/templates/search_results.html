@@ -10,7 +10,6 @@
     .share-check {
         margin-left: 5px;
     }
-
 </style>
 <div class="container">
     <header class="jumbotron my-4">
@@ -79,7 +78,7 @@
 
     <!-- Property results -->
     {% for p in properties %}
-    <div class="container">
+    <div class="container list">
         <div id="prop_list" class="card" style="width:1050px">
             <div class="row">
                 <div class="col-sm-6">
@@ -115,8 +114,8 @@
                 </div>
             </div>
         </div>
+        <br />
     </div>
-    <br />
     {% empty %}
     No properties found.
     {% endfor %}
@@ -137,7 +136,7 @@
             price = document.getElementById("priceRange").value;
             amenities = document.getElementsByClassName("form-check-input");
             validAmen = [];
-            tr = document.getElementsByClassName("row");
+            tr = document.getElementsByClassName("list");
             // Convert property list to JSON
             var pstring = '{{ prop_json|safe }}';
             var plist = JSON.parse(pstring);
@@ -188,7 +187,7 @@
         // Reset filters
         function resetProperties() {
             var tr;
-            tr = document.getElementsByClassName("row");
+            tr = document.getElementsByClassName("list");
             // Convert property list to JSON
             var pstring = '{{ prop_json|safe }}';
             var plist = JSON.parse(pstring);
