@@ -38,7 +38,7 @@
 </div>
 <header>
     {{ property.name }}
-    <a href="{% url 'book_property' property.property_id %}" class="btn btn-primary">Book Property</a>
+    <a href="{% url 'booking' property.property_id check_in check_out %}" class="btn btn-primary">Book Property</a>
 </header>
 <div>
   {% for r in rooms %}
