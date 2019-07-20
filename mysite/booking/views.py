@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 import json
 import decimal
+from django.forms.models import model_to_dict
 
 # Create your views here.
 class DecimalEncoder(json.JSONEncoder):
@@ -39,6 +40,7 @@ def search_view(request, *args, **kwargs):
             check_in = datetime.strptime(request.POST['check_in'], '%Y-%m-%d').date()
             check_out = datetime.strptime(request.POST['check_out'], '%Y-%m-%d').date()
             valid_prop = []
+            am_list = []
             guests = int(guests)
 
             for p in properties:
@@ -55,12 +57,17 @@ def search_view(request, *args, **kwargs):
                         if total_guests >= max:
                             break
                 if total_guests + guests <= max:
-                    valid_prop.append(p)
+                    prop_am = PropertyAmenities.objects.filter(property=p.property_id)
+                    for am in prop_am:
+                        am_list.append(am.amenity.amenity_name)
+                    p_dict = model_to_dict(p)
+                    p_dict['amenities'] = am_list
+                    valid_prop.append(p_dict)
         except ValueError:
-            valid_prop = properties
+            valid_prop = properties.values()
 
         amenities = Amenity.objects.all()
-        prop_json = json.dumps(list(valid_prop.values()), cls=DecimalEncoder)
+        prop_json = json.dumps(list(valid_prop), cls=DecimalEncoder)
 
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
@@ -78,6 +85,10 @@ def add_shareable_property_view(request):
             a.host_id = user
             a.shareable = True
             a.save()
+
+            for am in form.cleaned_data['amenities']:
+                aobj = Amenity.objects.get(amenity_name = am)
+                PropertyAmenities(property=a, amenity=aobj).save()
 
             #room creation
             property_id = a.property_id
@@ -100,8 +111,14 @@ def add_unshareable_property_view(request):
         if form.is_valid():
             a = form.save(commit=False)
             a.host_id = user
+            a.size = form.cleaned_data['size']
+            a.price = form.cleaned_data['price']
             a.shareable = False
             a.save()
+
+            for am in form.cleaned_data['amenities']:
+                aobj = Amenity.objects.get(amenity_name = am)
+                PropertyAmenities(property=a, amenity=aobj).save()
 
             #room creation
             property_id = a

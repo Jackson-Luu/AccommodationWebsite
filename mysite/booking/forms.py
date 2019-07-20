@@ -1,27 +1,31 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import Property, Booking, Room
+from .models import Property, Booking, Room, Amenity
 
 class DateInput(forms.DateInput):
 	input_type = 'date'
 
 class ShareablePropertyCreationForm(forms.ModelForm):
-	name = forms.CharField(label='Property Name')
-	location = forms.CharField()
-	description = forms.CharField(widget=forms.Textarea)
-	class Meta(forms.ModelForm):
-		model = Property
-		fields = ['name','location','description']
+    name = forms.CharField(label='Property Name')
+    location = forms.CharField()
+    description = forms.CharField(widget=forms.Textarea)
+    amenities = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                      choices=zip(list(Amenity.objects.all().values_list('amenity_name', flat=True)), Amenity.objects.all().values_list('amenity_name', flat=True)))
+    class Meta(forms.ModelForm):
+        model = Property
+        fields = ['name','location','description']
 
 class UnshareablePropertyCreationForm(forms.ModelForm):
-	name = forms.CharField(label='Property Name')
-	price = forms.DecimalField(widget=forms.NumberInput(attrs={'step': 0.25}))
-	location = forms.CharField()
-	size = forms.IntegerField()
-	description = forms.CharField(widget=forms.Textarea)
-	class Meta(forms.ModelForm):
-		model = Property
-		fields = ['name','location','description','price','size']
+    name = forms.CharField(label='Property Name')
+    price = forms.DecimalField(widget=forms.NumberInput(attrs={'step': 0.25}))
+    location = forms.CharField()
+    size = forms.IntegerField()
+    description = forms.CharField(widget=forms.Textarea)
+    amenities = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                      choices=zip(list(Amenity.objects.all().values_list('amenity_name', flat=True)), Amenity.objects.all().values_list('amenity_name', flat=True)))
+    class Meta(forms.ModelForm):
+        model = Property
+        fields = ['name','location','description']
 
 # class BookingCreationForm(forms.ModelForm):
 #     # room_number = forms.IntegerField(label='Room Number')

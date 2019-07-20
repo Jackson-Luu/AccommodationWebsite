@@ -13,6 +13,7 @@
         <h1 class="display-3">Places in {{ location }} </h1>
     </header>
 
+    <!-- Filter dropdown menu -->
     <div id="accordion">
         <div class="card">
             <div class="card-header" id="headingOne">
@@ -24,8 +25,12 @@
             </div>
             <div id="collapseOne" class="collapse hide" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
+
+                    <!-- Guests input box -->
                     <b> No. of Guests <br /></b>
                     <input type="number" id="num_guests" class="form-control form-control-sm" value="1" min="1">
+
+                    <!-- Price slider -->
                     <b> Maximum Price <br /></b>
                     <span id="priceDisplay"></span>
                     <input type="range" class="custom-range" id="priceRange" max="999">
@@ -38,6 +43,8 @@
                             output.innerHTML = this.value;
                         }
                     </script>
+
+                    <!-- Amenities checkboxes -->
                     <b> Amenities<br /></b>
                     {% for a in amenities %}
                     <div class="form-check form-check-inline">
@@ -48,12 +55,14 @@
                     <br />
                     <br />
                     <button class="btn btn-primary" id="filter" onclick="filterProperties()">Apply</button>
+                    <button class="btn btn-primary" id="reset" onclick="resetProperties()">Reset</button>
                 </div>
             </div>
         </div>
     </div>
     <br />
 
+    <!-- Property results -->
     {% for p in properties %}
     <div class="container">
         <div id="prop_list" class="card" style="width:1050px">
@@ -68,6 +77,15 @@
                             Location: {{ p.location }}<br />
                             Room for: {{ p.size }} people<br />
                             Price: ${{ p.price }}<br />
+                            Amenities:
+                            {% for a in p.amenities %}
+                                {% if not forloop.last %}
+                                    {{ a }},
+                                {% else %}
+                                    {{ a }}
+                                {% endif %}
+                            {% endfor %}
+                            <br />
                             {{ p.description }}
                         </p>
                         <a href="{% url 'property' p.property_id %}" class="btn btn-primary">Book</a>
@@ -80,10 +98,11 @@
     {% empty %}
     No properties found.
     {% endfor %}
+    <!-- Jscript functions for filtering -->
     <script>
         function filterProperties() {
             // Declare variables for filter requests and the property list
-            var tr, i;
+            var tr;
             num_guests = document.getElementById("num_guests").value;
             price = document.getElementById("priceRange").value;
             amenities = document.getElementsByClassName("form-check-input");
@@ -93,24 +112,55 @@
             var pstring = '{{ prop_json|safe }}';
             var plist = JSON.parse(pstring);
 
+            var a;
             // Detect selected amenities
             for (a of amenities) {
-                if (a.checked) {
-                    validAmen.append(a);
+                if (a.checked === true) {
+                    validAmen.push(a.value);
                 }
             }
 
             // Hide properties that do not satisfy filters
             for (var i = 0; i < plist.length; i++) {
+
+                // check prop size > filter size, none = hidden
                 if (plist[i].size < num_guests) {
                     tr[i].style.display = "none";
                 } else {
+
+                    // check prop price < filter price
                     if (plist[i].price > price) {
                         tr[i].style.display = "none";
                     } else {
-                        tr[i].style.display = "";
+                        var flag = true;
+
+                        // check prop has filter amenities
+                        for (am of validAmen) {
+                            if (!plist[i].amenities.includes(am)) {
+                                flag = false;
+                                tr[i].style.display = "none";
+                                break;
+                            }
+                        }
+                        if (flag === true) {
+                            tr[i].style.display = "";
+                        }
                     }
                 }
+            }
+        }
+
+        // Reset filters
+        function resetProperties() {
+            var tr;
+            tr = document.getElementsByClassName("row");
+            // Convert property list to JSON
+            var pstring = '{{ prop_json|safe }}';
+            var plist = JSON.parse(pstring);
+
+            // Set properties to visible
+            for (var i = 0; i < plist.length; i++) {
+                tr[i].style.display = "";
             }
         }
     </script>
