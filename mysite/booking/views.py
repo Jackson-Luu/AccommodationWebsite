@@ -349,3 +349,52 @@ def edit_property_view(request,property_id):
         edited_form = UnshareablePropertyCreationForm(instance=property)
     return render(request,'edit_property.html',{'edited_form':edited_form})
 
+@login_required(login_url='/login')
+def get_data_view(request):
+
+    rooms = Room.objects.all().values_list('description')
+    print('get data vuew')
+    
+    check_in_date = request.GET.get('check_in_data')
+    check_out_date = request.GET.get('check_out_data')
+    room_ids = json.loads(request.GET.get('room_ids'))
+    # print(check_in_date)
+    # print(check_out_date)
+
+    if check_in_date is not None and check_out_date is not None:
+        check_in = datetime.strptime(check_in_date, '%Y-%m-%d').date()
+        check_out = datetime.strptime(check_out_date, '%Y-%m-%d').date()
+        
+        room_attr_list = []
+        
+        for id in room_ids:
+            int_id = int(id)
+        
+            room_attr = {'room_id':int_id,'availability':True,'booked_user':None}
+            room_bookings = BookingTable.objects.filter(room=int_id)
+            for rb in room_bookings:
+                b = Booking.objects.get(booking_id=rb.booking.booking_id)
+                if b.end_date < check_in:
+                        continue
+                elif b.start_date > check_out:
+                        continue
+                else:
+                    booked_user_id = b.user_id.user_id
+                    room_attr['availability'] = False
+                    room_attr['booked_user'] = booked_user_id
+                    break
+            room_attr_list.append(room_attr)
+        
+    else:
+        print('dates are None')
+    print(room_attr_list)
+    response_data = {}
+    try:
+        response_data['result'] = 'Success'
+        response_data['message'] = room_attr_list
+    except:
+        response_data['result'] = 'Oh no'
+        response_data['message'] = 'subprocess module did not run the script correctly'
+    data = json.dumps(response_data)
+    # print(data)
+    return HttpResponse(data)

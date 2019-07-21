@@ -38,4 +38,5 @@ urlpatterns = [
 
     path('book/<int:property_id>/', booking_view, name='booking'),
     path('book/<int:property_id>/<check_in>/<check_out>/', booking_view, name='booking'),
+    path('getdata/', get_data_view, name='getdata'),
 ]
