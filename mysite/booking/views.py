@@ -230,46 +230,46 @@ def property_view(request, property_id, check_in=None, check_out=None):
     rooms = Room.objects.filter(property_id=property_id)
     return render(request, 'property_view.html', {'property':property,'rooms':rooms, 'check_in':check_in, 'check_out':check_out})
 
-@login_required(login_url='/login')
-def book_property_view(request, property_id, check_in=None, check_out=None):
-    user = request.user
-    p = Property.objects.get(property_id=property_id)
-    room_list = Room.objects.filter(property_id=property_id)
-    room_ids = []
-    for r in room_list:
-        room_ids.append(r.room_id)
-    room_num = p.size
-    print(room_num)
+# @login_required(login_url='/login')
+# def book_property_view(request, property_id, check_in=None, check_out=None):
+#     user = request.user
+#     p = Property.objects.get(property_id=property_id)
+#     room_list = Room.objects.filter(property_id=property_id)
+#     room_ids = []
+#     for r in room_list:
+#         room_ids.append(r.room_id)
+#     room_num = p.size
+#     print(room_num)
     
-    if request.method == 'POST':
+#     if request.method == 'POST':
         
-        booking_form = BookingCreationForm(request.POST,room_ids=room_ids,check_in=check_in)
+#         booking_form = BookingCreationForm(request.POST,room_ids=room_ids,check_in=check_in)
         
-        if booking_form.is_valid():    
+#         if booking_form.is_valid():    
         
-            start_date = booking_form.cleaned_data['start_date']
-            end_date = booking_form.cleaned_data['end_date']
-            num_guests = booking_form.cleaned_data['num_guests']
-            rooms = booking_form.cleaned_data['rooms']
-            print(rooms)
-            num_rooms = len(rooms)
+#             start_date = booking_form.cleaned_data['start_date']
+#             end_date = booking_form.cleaned_data['end_date']
+#             num_guests = booking_form.cleaned_data['num_guests']
+#             rooms = booking_form.cleaned_data['rooms']
+#             print(rooms)
+#             num_rooms = len(rooms)
 
-            booking_instance = Booking(user_id=user,start_date=start_date, end_date=end_date,property_id=p,num_guests=num_guests,num_rooms=num_rooms)
-            booking_instance.save()
-            #make booking
-            #make booking_table
-            for r in rooms:
-                room_obj = Room.objects.get(room_id=int(r))
-                booking_table_instance = BookingTable(room=room_obj,booking=booking_instance)
-                booking_table_instance.save()
+#             booking_instance = Booking(user_id=user,start_date=start_date, end_date=end_date,property_id=p,num_guests=num_guests,num_rooms=num_rooms)
+#             booking_instance.save()
+#             #make booking
+#             #make booking_table
+#             for r in rooms:
+#                 room_obj = Room.objects.get(room_id=int(r))
+#                 booking_table_instance = BookingTable(room=room_obj,booking=booking_instance)
+#                 booking_table_instance.save()
 
-            messages.success(request,'Property Booked!')
-            return redirect('home')
+#             messages.success(request,'Property Booked!')
+#             return redirect('home')
 
-    else: 
-        booking_form = BookingCreationForm(room_ids=room_ids,check_in=check_in)
+#     else: 
+#         booking_form = BookingCreationForm(room_ids=room_ids,check_in=check_in)
         
-    return render(request, 'property_booking.html', {'booking_form':booking_form})
+#     return render(request, 'property_booking.html', {'booking_form':booking_form})
 
 @login_required(login_url='/login')
 def booking_view(request, property_id, check_in=None, check_out=None):
@@ -284,23 +284,41 @@ def booking_view(request, property_id, check_in=None, check_out=None):
     if request.method == 'POST':
         check_in_date = request.POST.get('check_in_date') 
         check_out_date = request.POST.get('check_out_date') 
-        if check_in:
+        if check_in_date:
             check_in_date = datetime.strptime(check_in_date, '%Y-%m-%d').date()
         else:
             return render(request, 'booking.html', {
-            'check_in_error': "Invalid check in date.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+            'error': "Invalid check in date.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
             }) 
         if check_out_date:
             check_out_date = datetime.strptime(check_out_date, '%Y-%m-%d').date()
         else:
             return render(request, 'booking.html', {
-            'check_in_error': "Invalid check out date.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+            'error': "Invalid check out date.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
             })   
+        if check_in_date and check_out_date:
+            if check_in_date > check_out_date:
+                return render(request, 'booking.html', {
+            'error': "Invalid dates.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+            })
         
-        # num_guests = booking_form.cleaned_data['num_guests']
+        
         rooms = request.POST.getlist('rooms')
         num_guests = request.POST.get('num_guests')
-        # print(rooms)
+        if not rooms or not num_guests:
+            return render(request, 'booking.html', {
+            'error': "Please enter all required fields.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+            })
+       
+        max_guests = 0
+        for r in rooms:
+            room_obj = Room.objects.get(room_id=int(r))
+            max_guests = max_guests + room_obj.num_guests
+
+        if int(num_guests) > max_guests:
+            return render(request, 'booking.html', {
+            'error': "Exceeded maximum number of guests","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+            })
         booking_instance = Booking(user_id=user,start_date=check_in_date, end_date=check_out_date,property_id=p,num_guests=num_guests,num_rooms=len(rooms))
         booking_instance.save()
         #make booking
@@ -349,24 +367,21 @@ def edit_property_view(request,property_id):
         edited_form = UnshareablePropertyCreationForm(instance=property)
     return render(request,'edit_property.html',{'edited_form':edited_form})
 
-@login_required(login_url='/login')
+@login_required(login_url='/login') 
 def get_data_view(request):
 
-    rooms = Room.objects.all().values_list('description')
-    print('get data vuew')
-    
     check_in_date = request.GET.get('check_in_data')
     check_out_date = request.GET.get('check_out_data')
     room_ids = json.loads(request.GET.get('room_ids'))
-    # print(check_in_date)
-    # print(check_out_date)
 
     if check_in_date is not None and check_out_date is not None:
         check_in = datetime.strptime(check_in_date, '%Y-%m-%d').date()
         check_out = datetime.strptime(check_out_date, '%Y-%m-%d').date()
         
         room_attr_list = []
-        
+        # room_attr_list template - 
+        # [{'availability': True, 'room_id': 5, 'booked_user': None}, 
+        # {'availability': True, 'room_id': 6, 'booked_user': None}]
         for id in room_ids:
             int_id = int(id)
         
@@ -386,8 +401,9 @@ def get_data_view(request):
             room_attr_list.append(room_attr)
         
     else:
-        print('dates are None')
-    print(room_attr_list)
+        room_attr_list = []
+        # print('no dates')
+    # print(room_attr_list)
     response_data = {}
     try:
         response_data['result'] = 'Success'
@@ -396,5 +412,5 @@ def get_data_view(request):
         response_data['result'] = 'Oh no'
         response_data['message'] = 'subprocess module did not run the script correctly'
     data = json.dumps(response_data)
-    # print(data)
+    
     return HttpResponse(data)

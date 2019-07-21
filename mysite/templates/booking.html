@@ -5,21 +5,31 @@
 <script>
     $(document).ready(function(){
         get_room_availabilities();
+        var today = get_today_date();
+
+        $("#check_in_date").attr('min',today)
+
+        if( $("#check_in_date").val() != '' ) {
+
+            var checkin = $("#check_in_date").val()
+            $("#check_out_date").attr('min',checkin)
+
+        } else {
+            $("#check_out_date").attr('min',today)
+        }
+        
         $("#check_in_date, #check_out_date").change(function(){
             get_room_availabilities();
         });
     });
 
     function get_room_availabilities(){
-        alert("hello")
         var room_ids = [];
         room_ids = get_room_ids();
         var check_in_data = $('#check_in_date').val()
         var check_out_data = $('#check_out_date').val()
-        // var guest_num =
 
         $.ajax({
-            
             type: "GET",
             url: "/getdata/",
             dataType: "json",
@@ -27,13 +37,10 @@
             data: { csrfmiddlewaretoken: '{{ csrf_token }}', check_in_data : check_in_data,
                         check_out_data : check_out_data, room_ids : JSON.stringify(room_ids),},
             success: function(json) {
-                
-                // $('#output').html(json.message)
                 update_rooms(json.message)
-                // alert(json.message[1].length)
             }
         })
-        // alert("inside")
+
     }
 
     function get_room_ids(){
@@ -48,15 +55,18 @@
 
     function update_rooms(room_attr){
         var i;
-        alert(room_attr.length);
         for(i = 0; i < room_attr.length; i++) {
             room_id = room_attr[i].room_id;
             availability = room_attr[i].availability;
             if (availability == true) {
+                $('#' + room_id).removeAttr('disabled')
+                $('#' + room_id + 'booked_user_profile').removeAttr('href')
+                $('#' + room_id + 'booked_user_profile').text("")
                 $('#' + room_id + 'availability').text("Available")
             }
             else {
                 booked_user = room_attr[i].booked_user;
+                $('#' + room_id).prop("checked", false);
                 $('#' + room_id).attr('disabled', 'disabled')
                 $('#' + room_id + 'availability').text("Not Available")
                 $('#' + room_id + 'booked_user_profile').attr('href','/profile')
@@ -64,6 +74,21 @@
                 $('#' + room_id + 'booked_user_profile').text('profile link')
             }
         }
+    }
+
+    function get_today_date(){
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+        var yyyy = today.getFullYear();
+        if(dd < 10){
+            dd ='0'+ dd;
+        } 
+        if(mm < 10){
+            mm = '0' + mm;
+        } 
+        today = yyyy + '-' + mm + '-' + dd;
+        return today;
     }
 </script>
 
@@ -91,6 +116,7 @@
     .btn-lg {
         position: relative;
     }
+
 </style>
 <!-- Jumbotron Header -->
 <div class="container">
@@ -102,8 +128,8 @@
     <div class="booking_form">
         <form method="post">
             {% csrf_token %}
-            {% if check_in_error %}<p><strong>{{ check_in_error }}</strong></p>{% endif %}
-            {% if check_ou_error %}<p><strong>{{ check_out_error }}</strong></p>{% endif %}
+            {% if error %}<p><strong>{{ error }}</strong></p>{% endif %}
+    
             <div class="form-group lead">
                 <label for="check_in_date">Check In Date:</label>
                 <input type="date" class="form-control" id="check_in_date" name="check_in_date" value={{check_in}}> 
@@ -113,17 +139,18 @@
                 <input type="date" class="form-control" id="check_out_date" name="check_out_date"value={{check_out}}> 
             </div>
 
-            <div class="form-group ead">
+            <div class="form-group lead">
                 <label for="rooms">Select Rooms:</label> 
                     <br>
                     {% for r in rooms %}
             
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id={{r.room_id}} name=rooms value={{r.room_id}}>
+                        <input class="form-check-label" type="checkbox" id={{r.room_id}} name=rooms value={{r.room_id}}>
                         <label class="form-check-label" for={{r.room_id}}>
                             <Strong>Room {{forloop.counter}} </Strong> <br>
                             <div>Description: {{r.description}}</div>
                             <div>Size: {{r.num_guests}}</div>
+                            <div>Price: ${{r.price}} per night</div>
                             <div id={{r.room_id}}availability></div>
                             <a id={{r.room_id}}booked_user_profile></a>
                         </label> <br>
