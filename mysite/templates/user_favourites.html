@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container">
+    <br>
+    <h2>My Favourites</h2>
+    {% for f in favourites %}
+    <div>
+        <strong> {{f.property.name}}</strong>
+        <div> <a href="/property/{{f.property.property_id}}">View Property</a></div><br>
+    </div>
+        
+    {% endfor %}
+</div>
+
+{% endblock %}
