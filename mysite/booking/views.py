@@ -86,6 +86,8 @@ def search_view(request, *args, **kwargs):
     if request.method == 'POST':
         location = request.POST['location']
         guests = request.POST['guests']
+        check_in = None	
+        check_out = None
         if not location:
             return render(request, 'search.html', {
                 'location_error': "Invalid location.",
@@ -138,6 +140,10 @@ def search_view(request, *args, **kwargs):
         
         # Pass list of all amenities to html
         amenities = Amenity.objects.all()
+
+        # Escape special chars for parsing
+        for v in valid_prop:
+            v['description'] = v['description'].replace("/","").replace("\\","").replace("\"","").replace("\'","")
 
         # Convert list of properties results from Python to JavaScript Object Notation (JSON)
         prop_json = json.dumps(list(valid_prop), cls=DecimalEncoder)
