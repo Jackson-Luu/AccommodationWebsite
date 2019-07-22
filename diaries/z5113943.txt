@@ -40,3 +40,21 @@ Weeks 4 & 5
 	* form updates room, booking and bookingTable tables
 	* removed room and bookingTable 
 	* basic property view page 
+
+Week 6
+	* created booking functionality
+	* created user property page
+	* created user bookings page
+	* added rooms and bookingTable again
+	* as a group we decided on how the price of each property was to be calculated
+	* added price attribute to rooms - total price of shareable properties is the sum of the prices of each room
+
+Week 7
+	* separated properties into shareable and unshareable and as such, needed to update property listing form
+	* added property editing functionality
+	* added add room functionality for shareable properties
+	* added favourites functionality
+	* updated bookings again - used ajax to display the availability of the property's rooms, if the room has been booked, a link to the user's profile is displayed
+	* updated the ui of property view, user bookings, user properties
+	* created bookingsCreationForm
+

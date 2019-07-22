@@ -3,18 +3,22 @@
 {% block content %}
 
 <div class="container">
-    <br>
-    <h2>My Bookings</h2>
-    {% for b in bookings %}
-    <div>
-        <strong>Booking {{forloop.counter}}</strong>
-        <div>{{b.start_date}} to {{b.end_date}}</div>
-        <div>{{b.num_rooms}} rooms</div> 
-        <div>{{b.num_guests}} guests</div>
-        <div> <a href="/property/{{b.property_id.property_id}}">View Property</a></div><br>
-    </div>
-        
+    <div class="jumbotron">
+        <br>
+        <h2>My Bookings</h2>
+        <br>
+        {% for b in bookings %}
+        <div>
+            <h4>Booking {{forloop.counter}}</h4>
+            <div>{{b.start_date}} to {{b.end_date}}</div>
+            <div>Number of rooms: {{b.num_rooms}}</div> 
+            <div>Number of guests: {{b.num_guests}}</div>
+            <br>
+            <div> <a class="btn btn-primary" href="/property/{{b.property_id.property_id}}">View Property</a></div><br>
+        </div>
     {% endfor %}
+    </div>
+    
 </div>
 
 {% endblock %}
