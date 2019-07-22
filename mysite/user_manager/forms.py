@@ -15,10 +15,15 @@ class CustomUserCreationForm(UserCreationForm):
 		widgets = {'birthday': DateInput(),}
 
 
-class CustomUserChangeForm(UserChangeForm):
-	birthday = forms.DateField(widget=forms.SelectDateWidget)
-	description = forms.CharField(widget=forms.Textarea)
+# class CustomUserChangeForm(UserChangeForm):
+# 	birthday = forms.DateField(widget=forms.SelectDateWidget)
+# 	description = forms.CharField(widget=forms.Textarea)
+#
+# 	class Meta(UserChangeForm):
+# 		model = CustomUser
+# 		fields = ['birthday', 'description']
 
-	class Meta(UserChangeForm):
+class CustomUserProfileEditForm(forms.ModelForm):
+	class Meta(forms.ModelForm):
 		model = CustomUser
-		fields = ['birthday', 'description']
+		fields = ['first_name', 'last_name', 'birthday', 'description']

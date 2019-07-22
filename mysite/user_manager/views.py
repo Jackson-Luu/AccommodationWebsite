@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
-from .forms import CustomUserCreationForm
+from .forms import *
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from booking.models import Booking, Property
@@ -81,4 +81,11 @@ def add_to_favourites(request):
 	data = json.dumps(response_data)
 	return HttpResponse(data)
 
- 	
+@login_required(login_url='/login')
+def profile_edit_view(request):
+	if request.method == 'POST':
+		return True
+	else:
+		user_data = CustomUser.objects.filter(user_id=request.user.user_id)
+		form = CustomUserProfileEditForm()
+	return render(request, 'edit_profile.html', {'user_data': user_data, 'form': form})

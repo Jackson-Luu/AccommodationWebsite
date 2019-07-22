@@ -3,8 +3,9 @@
 {% block content %}
 
 <div class="container">
+	<a href="/edit_profile">Edit profile</a>
 	<div style="color:rgb(255, 145, 0);">
-		<h1 style="background:#00FF00 url(http://img.sccnn.com/bimg/338/16513.jpg) repeat 0;">Welcome {{ request.user.last_name }}<h1>
+		<h1 style="background:#00FF00 url(http://img.sccnn.com/bimg/338/16513.jpg) repeat 0;">Welcome {{ request.user.last_name }}</h1>
 	</div>
 	<p style="background:#00FF00 url(http://img.sccnn.com/bimg/338/16513.jpg) repeat 0;"> User Account: {{ request.user.username }}</p>
 	<p> User First Name: {{ request.user.first_name }} </p>

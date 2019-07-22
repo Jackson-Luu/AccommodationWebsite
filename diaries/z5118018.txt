@@ -32,4 +32,10 @@
 
 ========== Week 6 ==========
 
-*	
+*	I helped fixed booking not showing rooms
+*	I helped make the user profile page work
+
+
+========== Week 7 ==========
+
+*	I began work on the form, view and template to edit a user's profile details
