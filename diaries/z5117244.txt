@@ -18,3 +18,10 @@ Week 5
 
 Expanded the search function to support check-in and check-out dates. The search results will now only display properties that have availability for the input dates with space for the requested number of guests. Also added a property view page for users to view a properties details and place a booking.
 
+Week 6
+
+Added filters to property search functionality. Added UI dropdown menu for selecting filters. Users can now filter the search results by minimum number of guests, maximum price and house shareability. Fixed a UI bug when filtering search results. Added ability to reset filters.
+
+Week 7
+
+Added amenities tables to the database. Added amenities selection to the property owner's UI. Added amenities filtering to the search functionality. Added support for parsing Airbnb's data.
