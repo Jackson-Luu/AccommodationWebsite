@@ -86,8 +86,6 @@ def search_view(request, *args, **kwargs):
     if request.method == 'POST':
         location = request.POST['location']
         guests = request.POST['guests']
-        check_in = None
-        check_out = None
         if not location:
             return render(request, 'search.html', {
                 'location_error': "Invalid location.",
