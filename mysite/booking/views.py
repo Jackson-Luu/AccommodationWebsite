@@ -29,7 +29,7 @@ def load_csv():
         datareader = csv.DictReader(csvfile)
         for idx, row in enumerate(datareader):
             # Number of properties to parse
-            if idx > 400:
+            if idx > 1000:
                 break
             try:
                 user = CustomUser.objects.create_user(username=(row['host_id']+row['host_name']), password='password', first_name=row['host_name'], description=row['host_about'])
@@ -43,8 +43,6 @@ def load_csv():
                         PropertyAmenities(property=p, amenity=aobj).save()
                     except Amenity.DoesNotExist:
                         continue
-
-                PropertyImages(property=p, image=row['picture_url']).save()
 
             # User already exists
             except IntegrityError:
@@ -62,8 +60,6 @@ def load_csv():
                             PropertyAmenities(property=p, amenity=aobj).save()
                         except Amenity.DoesNotExist:
                             continue
-
-                    PropertyImages(property=p, image=row['picture_url']).save()
             except (DataError, Property.MultipleObjectsReturned):
                 continue
 
@@ -83,6 +79,7 @@ def home_view(request,*args, **kwargs):
     # CSV call, comment out to improve homepage performance
     if not check_csv():
         load_csv()
+<<<<<<< HEAD
     properties = Property.objects.all()[:4]
         
 
@@ -94,6 +91,10 @@ def home_view(request,*args, **kwargs):
         except IndexError:
             imgs.append("https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80")
     return render(request, 'home.html', {'properties':properties, 'images':imgs})
+=======
+    properties = Property.objects.all()
+    return render(request, 'home.html', {'properties':properties})
+>>>>>>> parent of 6736eed... added image parsing
 
 def search_view(request, *args, **kwargs):
     if request.method == 'POST':
@@ -138,8 +139,6 @@ def search_view(request, *args, **kwargs):
                         am_list.append(am.amenity.amenity_name)
                     p_dict = model_to_dict(p)
                     p_dict['amenities'] = am_list
-
-                    p_dict['image'] = list(PropertyImages.objects.filter(property=p.property_id).values_list('image', flat=True))
                     valid_prop.append(p_dict)
 
         # if no dates entered by user
@@ -151,8 +150,6 @@ def search_view(request, *args, **kwargs):
                     am_list.append(am.amenity.amenity_name)
                 p_dict = model_to_dict(p)
                 p_dict['amenities'] = am_list
-
-                p_dict['image'] = list(PropertyImages.objects.filter(property=p.property_id).values_list('image', flat=True))
                 valid_prop.append(p_dict)
         
         # Pass list of all amenities to html
@@ -249,8 +246,7 @@ def add_room_view(request,property_id):
 def property_view(request, property_id, check_in=None, check_out=None):
     property = Property.objects.get(property_id=property_id)
     rooms = Room.objects.filter(property_id=property_id)
-    imgs = list(PropertyImages.objects.filter(property=property_id).values_list('image', flat=True))
-    return render(request, 'property_view.html', {'property':property,'rooms':rooms, 'check_in':check_in, 'check_out':check_out, 'images':imgs})
+    return render(request, 'property_view.html', {'property':property,'rooms':rooms, 'check_in':check_in, 'check_out':check_out})
 
 # @login_required(login_url='/login')
 # def book_property_view(request, property_id, check_in=None, check_out=None):
