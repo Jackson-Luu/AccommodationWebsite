@@ -49,3 +49,7 @@ class Amenity(models.Model):
 class PropertyAmenities(models.Model):
     property = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
     amenity = models.ForeignKey('Amenity', to_field='amenity_id', on_delete=models.CASCADE)
+
+class PropertyImages(models.Model):
+    property = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
+    image = models.URLField(null=True, blank=True, default="https://images.unsplash.com/photo-1475855581690-80accde3ae2b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80")
