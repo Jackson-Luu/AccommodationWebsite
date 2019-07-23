@@ -84,12 +84,15 @@ def home_view(request,*args, **kwargs):
     if not check_csv():
         load_csv()
     properties = Property.objects.all()[:4]
+        
 
     # query an image for each property
     imgs = []
     for p in properties:
-        imgs.append(PropertyImages.objects.filter(property=p.property_id).values_list('image', flat=True)[0])
-
+        try:
+            imgs.append(PropertyImages.objects.filter(property=p.property_id).values_list('image', flat=True)[0])
+        except IndexError:
+            imgs.append("https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80")
     return render(request, 'home.html', {'properties':properties, 'images':imgs})
 
 def search_view(request, *args, **kwargs):
