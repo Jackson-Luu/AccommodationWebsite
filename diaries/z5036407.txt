@@ -18,3 +18,14 @@ Fix the database connection bugs and clear the old database.
 
 week6
 Design the model and temeplate files for the user profile when user log in. Try to help the group solve the problem of multiple people booking.
+
+week7 
+*Add new url for profile page. 
+*Change the format and design of profile.html. 
+*link the html page to our database. 
+*implements the corresponding function in view.py
+
+Doing:
+week8
+*Change the Visual Design for ViewPropery page
+*Create a new group to view the details for each room
