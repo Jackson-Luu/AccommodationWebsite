@@ -366,15 +366,15 @@ def booking_view(request, property_id, check_in=None, check_out=None):
             })
         
         
-        rooms = request.POST.getlist('rooms')
-        num_guests = request.POST.get('num_guests')
-        if not rooms or not num_guests:
+        checked_rooms = request.POST.getlist('rooms')
+        input_num_guests = request.POST.get('num_guests')
+        if not checked_rooms or not input_num_guests:
             return render(request, 'booking.html', {
             'error': "Please enter all required fields.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
             })
        
         max_guests = 0
-        for r in rooms:
+        for r in checked_rooms:
             room_obj = Room.objects.get(room_id=int(r))
             max_guests = max_guests + room_obj.num_guests
 
@@ -386,7 +386,7 @@ def booking_view(request, property_id, check_in=None, check_out=None):
         booking_instance.save()
         #make booking
         #make booking_table
-        for r in rooms:
+        for r in checked_rooms:
             room_obj = Room.objects.get(room_id=int(r))
             booking_table_instance = BookingTable(room=room_obj,booking=booking_instance)
             booking_table_instance.save()
@@ -436,10 +436,11 @@ def get_data_view(request):
     check_in_date = request.GET.get('check_in_data')
     check_out_date = request.GET.get('check_out_data')
     room_ids = json.loads(request.GET.get('room_ids'))
-
-    if check_in_date is not None and check_out_date is not None:
-        check_in = datetime.strptime(check_in_date, '%Y-%m-%d').date()
-        check_out = datetime.strptime(check_out_date, '%Y-%m-%d').date()
+    
+    if check_in_date and check_out_date:
+        
+        check_in = datetime.strptime(str(check_in_date), '%Y-%m-%d').date()
+        check_out = datetime.strptime(str(check_out_date), '%Y-%m-%d').date()
         
         room_attr_list = []
         # room_attr_list template - 

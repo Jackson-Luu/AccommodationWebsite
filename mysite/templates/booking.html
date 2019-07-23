@@ -126,7 +126,7 @@
                 <label for="check_out_date">Check Out Date:</label>
                 <input type="date" class="form-control" id="check_out_date" name="check_out_date"value={{check_out}}> 
             </div>
-            {% if p.shareable is True %}
+            {% if p.shareable is true %}
             <div class="form-group lead">
                 <label for="rooms">Select Rooms:</label> 
                     <br>
@@ -143,8 +143,8 @@
                         </label> <br>
                     </div>
                     {% endfor %}
-             {% endif %}   
-                </div>
+            </div>
+            {% endif %}
             <div class="form-group lead">
                 <label for="num_guests">Number of Guests:</label>
                 <input type="number" class="form-control" id="num_guest" name="num_guests" min="1"> 
