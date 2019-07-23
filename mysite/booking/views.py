@@ -33,7 +33,7 @@ def load_csv():
                 break
             try:
                 user = CustomUser.objects.create_user(username=(row['host_id']+row['host_name']), password='password', first_name=row['host_name'], description=row['host_about'])
-                p = Property(name=row['name'], host_id=user, price=Decimal(row['price'][1:].replace(",", "")), location=row['city'], size=row['accommodates'], description=row['description'], shareable=(random() < 0.5))
+                p = Property(name=row['name'], host_id=user, price=Decimal(row['price'][1:].replace(",", "")), location=row['city'], size=int(row['accommodates']), description=row['description'], shareable=(random() < 0.5))
                 p.save()
 
                 amenities = row['amenities'][1:-1].split(",")
@@ -46,13 +46,22 @@ def load_csv():
 
                 PropertyImages(property=p, image=row['picture_url']).save()
 
+                if p.shareable:
+                    rooms = room_gen(p.size, int(row['bedrooms']))
+                    if not rooms:
+                        p.shareable = False
+                        p.save()
+                    else:
+                        for r in rooms:
+                            Room(property_id=p, num_guests=r, price=((p.price / p.size) * r), description="Room Description").save()
+
             # User already exists
             except IntegrityError:
                 try:
                     Property.objects.get(name=row['name'])
                     continue
                 except Property.DoesNotExist:
-                    p = Property(name=row['name'], host_id=CustomUser.objects.get(username=(row['host_id']+row['host_name'])), price=Decimal(row['price'][1:].replace(",", "")), location=row['city'], size=row['accommodates'], description=row['description'], shareable=(random() < 0.5))
+                    p = Property(name=row['name'], host_id=CustomUser.objects.get(username=(row['host_id']+row['host_name'])), price=Decimal(row['price'][1:].replace(",", "")), location=row['city'], size=int(row['accommodates']), description=row['description'], shareable=(random() < 0.5))
                     p.save()
 
                     amenities = row['amenities'][1:-1].split(",")
@@ -64,6 +73,15 @@ def load_csv():
                             continue
 
                     PropertyImages(property=p, image=row['picture_url']).save()
+
+                    if p.shareable:
+                        rooms = room_gen(p.size, int(row['bedrooms']))
+                        if not rooms:
+                            p.shareable = False
+                            p.save()
+                        else:
+                            for r in rooms:
+                                Room(property_id=p, num_guests=r, price=((p.price / p.size) * r), description="Room Description").save()
             except (DataError, Property.MultipleObjectsReturned):
                 continue
 
@@ -77,6 +95,29 @@ def check_csv():
                 return True
             except Property.DoesNotExist:
                 return False
+
+# Generate rooms for a property
+def room_gen(size, num_rooms):
+    if num_rooms > size or num_rooms == 0:
+        return []
+    rooms = []
+    rands = []
+    r_sum = 0.0
+    for r in range(num_rooms - 1):
+        rand = random()
+        rands.append(rand)
+        r_sum += rand
+    
+    total = size
+    for r in rands:
+        room = int((r / r_sum) * (size - 1))
+        if room == 0:
+            room = 1
+        rooms.append(room)
+        total -= room
+    rooms.append(total) 
+        
+    return rooms
 
 
 def home_view(request,*args, **kwargs):
@@ -107,10 +148,10 @@ def search_view(request, *args, **kwargs):
             })
 
         if not guests:
-            properties = Property.objects.filter(location=location)
+            properties = Property.objects.filter(location__iexact=location)
             guests = 0
         else:        
-            properties = Property.objects.filter(location=location, size__gte=guests)
+            properties = Property.objects.filter(location__iexact=location, size__gte=guests)
             guests = int(guests)
 
         valid_prop = []
