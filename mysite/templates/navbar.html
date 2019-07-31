@@ -1,0 +1,47 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">Accommodation Portal</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">
+                        Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/search">Search</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'select_property_type' %}">List Property</a>
+                </li>
+                <li class="nav-item">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{request.user.username}}
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="user">
+                            <a class="dropdown-item" href="{% url 'profile' user.user_id %}">Profile</a>
+                            <a class="dropdown-item" href="{% url 'my_properties' %}">My Properties</a>
+                            <a class="dropdown-item" href="{% url 'my_bookings' %}">My Bookings</a>
+                            <a class="dropdown-item" href="{% url 'my_favourites' %}">My Favourites</a>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </div>
+                    </div>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/signup">Sign Up</a>
+                </li>
+                {% endif%}
+            </ul>
+        </div>
+    </div>
+</nav>

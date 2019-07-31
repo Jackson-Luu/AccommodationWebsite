@@ -28,7 +28,7 @@ urlpatterns = [
     path('property/<int:property_id>/', property_view, name='property'),
     path('property/<int:property_id>/<check_in>/<check_out>/', property_view, name='property'),
 	path('', include('django.contrib.auth.urls')),
-	path('profile/', profile_view),
+    path('profile/<str:user_id>/', profile_view, name='profile'),
     # path('bookproperty/<int:property_id>/', book_property_view, name='book_property'),
     # path('bookproperty/<int:property_id>/<check_in><check_out>', book_property_view, name='book_property'),
     path('addroom/<int:property_id>/', add_room_view, name='add_room'),

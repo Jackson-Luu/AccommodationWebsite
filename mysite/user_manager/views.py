@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from booking.models import Booking, Property
 from user_manager.models import *
 import json
+from datetime import date
 
 # Create your views here.
 def register_view(request):
@@ -24,14 +25,19 @@ def register_view(request):
 	return render(request, 'register.html', {'form': form})
 
 @login_required(login_url='/login')
-def profile_view(request):
-	if request.method == 'GET':
-		# TODO
-		user = request.user
-		user_data = CustomUser.objects.filter(user_id = user.user_id)
-		return render(request, 'profile.html', {'user_data':user_data})
-	else:
-		return True
+def profile_view(request, user_id):
+    if request.method == 'GET':
+        # If viewing the user's own profile
+        if (request.user.user_id == int(user_id)):
+            return render(request, 'profile.html')
+
+        # Else viewing a stranger's profile
+        else:
+            user_data = CustomUser.objects.get(user_id=user_id)
+            age = date.today().year - user_data.birthday.year
+            return render(request, 'other_profile.html', {'user_data':user_data, 'age':age})
+    else:
+        return True
 
 @login_required(login_url='/login')
 def user_properties_view(request):

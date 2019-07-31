@@ -113,6 +113,11 @@
             height: 400px;
         }
 
+        .carousel-control-next,
+        .carousel-control-prev {
+            filter: invert(100%);
+        }
+
         .d-block {
             max-height: 100%;
             object-fit: contain;
@@ -126,94 +131,87 @@
         .dataTables_wrapper table thead {
             display: none;
         }
+
+        .property-info {
+            padding-top: 30px;
+            padding-bottom: 20px;
+        }
+
+        .property-table {
+            width: 100%;
+        }
+
+        .host-name {
+            font-size: 150%;
+        }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="/">Accommodation Portal</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/">
-                            Home
-                            <span class="sr-only">(current)</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/search">Search</a>
-                    </li>
-                    {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'select_property_type' %}">List Property</a>
-                    </li>
-                    <li class="nav-item">
-                        <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{request.user.username}}
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="user">
-                                <a class="dropdown-item" href="/profile">Profile</a>
-                                <a class="dropdown-item" href="{% url 'my_properties' %}">My Properties</a>
-                                <a class="dropdown-item" href="{% url 'my_bookings' %}">My Bookings</a>
-                                <a class="dropdown-item" href="{% url 'my_favourites' %}">My Favourites</a>
-                                <a class="dropdown-item" href="/logout">Logout</a>
-                            </div>
-                        </div>
-                    </li>
-                    {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/signup">Sign Up</a>
-                    </li>
-                    {% endif%}
-                </ul>
-            </div>
-        </div>
-    </nav>
+    {% include 'navbar.html' %}
     <br />
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="height:400px">
-        <ol class="carousel-indicators">
-            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        </ol>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img class="d-block w-100" src="{{ images.0 }}"
-                     alt="First slide">
-            </div>
-            <div class="carousel-item">
-                <img class="d-block w-100" src="https://images.unsplash.com/photo-1475855581690-80accde3ae2b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80"
-                     alt="Second slide">
-            </div>
-            <div class="carousel-item">
-                <img class="d-block w-100" src="https://kinsman.com.au/wp-content/uploads/2019/02/family-castlecrag-thumb.jpg" alt="Third slide">
-            </div>
-        </div>
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-    </div>
-    <br><br>
     <div class="container">
-        <div class="jumbotron">
-            <div>
-                <h3>{{ property.name }}</h3>
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="height:400px">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img class="d-block w-100" src="{{ images.0 }}"
+                         alt="First slide">
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="https://images.unsplash.com/photo-1475855581690-80accde3ae2b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80"
+                         alt="Second slide">
+                </div>
+                <div class="carousel-item">
+                    <img class="d-block w-100" src="https://kinsman.com.au/wp-content/uploads/2019/02/family-castlecrag-thumb.jpg" alt="Third slide">
+                </div>
             </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+        <br />
+        <div class="jumbotron property-info">
+            <table class="property-table">
+                <tr>
+                    <td>
+                        <h3>{{ property.name }}</h3>
+                        <b>Capacity:</b> {{ property.size }}
+                        {% if property.size == 1 %}
+                        guest
+                        {% else %}
+                        guests
+                        {% endif %}
+                        <br />
+                        <b>Location:</b> {{ property.location }}
+                        <br />
+                        <b>Amenities:</b>
+                        {% for am in amenities %}
+                        {% if not forloop.last %}
+                        {{ am }},
+                        {% else %}
+                        {{ am }}
+                        {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td align="right">
+                        <p class="host-name">Host: <a href="{% url 'profile' user_id=owner.user_id %}">{{ owner.first_name }}</a></p>
+                    </td>
+                </tr>
+            </table>
             <div>
-                {% if property.shareable is True %} {% for r in rooms %}
+                {% if property.shareable is True %}
+                <br />
+                {% for r in rooms %}
 
                 <Strong>Room {{forloop.counter}} </Strong>
                 <br>
@@ -222,7 +220,7 @@
                 <div>Price: ${{r.price}} per night</div>
 
                 {% endfor %} {% endif %}
-                <br>
+                <br />
             </div>
             <div>
                 <strong>Property Description:</strong>
@@ -231,9 +229,10 @@
             <div>
                 {% if property.shareable is False %}
                 <strong>Property Price:</strong>
-                ${{property.price}} per night {% endif %}
+                ${{property.price}} per night
                 <br>
                 <br>
+                {% endif %}
             </div>
 
             <a href="{% url 'booking' property.property_id check_in check_out %}" class="btn btn-primary">Book Property</a>
@@ -246,7 +245,7 @@
             <div class="card">
                 <div class="card-header" id="headingOne">
                     <h5 class="mb-0">
-                        <button class="btn btn-primary" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                             Write a review
                         </button>
                     </h5>
@@ -256,7 +255,7 @@
                     {% if user.is_authenticated %}
                     <form class="review-form" method="post" id="reviewForm">
                         {% csrf_token %}
-                        Rating:
+                        <b>Rating:</b>
                         <br />
                         <div class="rating">
                             <label>
@@ -298,15 +297,17 @@
                         </div>
                     </form>
                     {% else %}
-                        <div align="center">
-                            <a href="/login">Please login to write a review.</a>
-                        </div>
+                    <div align="center">
+                        <a href="/login">Please login to write a review.</a>
+                    </div>
                     {% endif %}
                     <br />
                 </div>
             </div>
         </div>
         <br />
+        <h4>Reviews</h4>
+        <hr>
         <table id="myTable" class="table table-striped">
             <thead>
                 <tr>
@@ -412,3 +413,5 @@
         });
     </script>
 </body>
+</html>
+

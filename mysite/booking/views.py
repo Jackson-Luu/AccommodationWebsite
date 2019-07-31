@@ -6,7 +6,7 @@ from django.urls import reverse
 from .models import *
 from .forms import *
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
+from datetime import datetime, date
 import json
 import decimal
 from django.forms.models import model_to_dict
@@ -36,7 +36,7 @@ def load_csv():
                 if idx > 400:
                     break
                 try:
-                    user = CustomUser.objects.create_user(username=(row['host_id']+row['host_name']), password='password', first_name=row['host_name'], description=row['host_about'])
+                    user = CustomUser.objects.create_user(username=(row['host_id']+row['host_name']), password='password', first_name=row['host_name'], description=row['host_about'], birthday=date(randint(1960,1999), 1, 1))
                     p = Property(name=row['name'], host_id=user, price=Decimal(row['price'][1:].replace(",", "")), location=row['city'], size=int(row['accommodates']), description=row['description'], shareable=(random() < 0.5))
                     p.save()
 
@@ -63,7 +63,7 @@ def load_csv():
                         try:
                             u = CustomUser.objects.filter(first_name=review['reviewer_name'])[:1].get()
                         except CustomUser.DoesNotExist:
-                            u = CustomUser.objects.create_user(username=(review['reviewer_id']+review['reviewer_name']), password='password', first_name=review['reviewer_name'])
+                            u = CustomUser.objects.create_user(username=(review['reviewer_id']+review['reviewer_name']), password='password', first_name=review['reviewer_name'], birthday=date(randint(1960,1999), 1, 1))
 
                         PropertyReviews(reviewer=u, reviewee=p, rating=randint(3, 5), text=review['comments']).save()
                         review = next(revreader)
@@ -308,11 +308,18 @@ def property_view(request, property_id, check_in=None, check_out=None):
     rooms = Room.objects.filter(property_id=property_id)
     imgs = list(PropertyImages.objects.filter(property=property_id).values_list('image', flat=True))
 
+    amenities = []
+    prop_am = PropertyAmenities.objects.filter(property=property)
+    for am in prop_am:
+        amenities.append(am.amenity.amenity_name)
+
     reviews = list(PropertyReviews.objects.filter(reviewee=property_id))
     for i, r in enumerate(reviews):
         reviews[i] = (reviews[i], r.reviewer.first_name)
 
-    return render(request, 'property_view.html', {'property':property,'rooms':rooms, 'check_in':check_in, 'check_out':check_out, 'images':imgs, 'reviews':reviews})
+    owner = CustomUser.objects.get(username=property.host_id)
+
+    return render(request, 'property_view.html', {'property':property,'rooms':rooms, 'amenities':amenities, 'check_in':check_in, 'check_out':check_out, 'images':imgs, 'reviews':reviews, 'owner':owner})
 
 # @login_required(login_url='/login')
 # def book_property_view(request, property_id, check_in=None, check_out=None):
