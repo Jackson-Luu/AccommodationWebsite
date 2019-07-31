@@ -11,8 +11,9 @@ import json
 import decimal
 from django.forms.models import model_to_dict
 import csv
-from random import random
+from random import random, randint
 from .models import CustomUser
+from review.models import PropertyReviews
 from decimal import Decimal
 from django.db import IntegrityError, DataError
 
@@ -27,41 +28,16 @@ class DecimalEncoder(json.JSONEncoder):
 def load_csv():
     with open('data/listings.csv', newline='', encoding="utf-8") as csvfile:
         datareader = csv.DictReader(csvfile)
-        for idx, row in enumerate(datareader):
-            # Number of properties to parse
-            if idx > 400:
-                break
-            try:
-                user = CustomUser.objects.create_user(username=(row['host_id']+row['host_name']), password='password', first_name=row['host_name'], description=row['host_about'])
-                p = Property(name=row['name'], host_id=user, price=Decimal(row['price'][1:].replace(",", "")), location=row['city'], size=int(row['accommodates']), description=row['description'], shareable=(random() < 0.5))
-                p.save()
-
-                amenities = row['amenities'][1:-1].split(",")
-                for am in amenities:
-                    try:
-                        aobj = Amenity.objects.get(amenity_name = am)
-                        PropertyAmenities(property=p, amenity=aobj).save()
-                    except Amenity.DoesNotExist:
-                        continue
-
-                PropertyImages(property=p, image=row['picture_url']).save()
-
-                if p.shareable:
-                    rooms = room_gen(p.size, int(row['bedrooms']))
-                    if not rooms:
-                        p.shareable = False
-                        p.save()
-                    else:
-                        for r in rooms:
-                            Room(property_id=p, num_guests=r, price=((p.price / p.size) * r), description="Room Description").save()
-
-            # User already exists
-            except IntegrityError:
+        with open('data/reviews.csv', newline='', encoding="utf-8") as revfile:
+            revreader = csv.DictReader(revfile)
+            review = next(revreader)
+            for idx, row in enumerate(datareader):
+                # Number of properties to parse
+                if idx > 400:
+                    break
                 try:
-                    Property.objects.get(name=row['name'])
-                    continue
-                except Property.DoesNotExist:
-                    p = Property(name=row['name'], host_id=CustomUser.objects.get(username=(row['host_id']+row['host_name'])), price=Decimal(row['price'][1:].replace(",", "")), location=row['city'], size=int(row['accommodates']), description=row['description'], shareable=(random() < 0.5))
+                    user = CustomUser.objects.create_user(username=(row['host_id']+row['host_name']), password='password', first_name=row['host_name'], description=row['host_about'])
+                    p = Property(name=row['name'], host_id=user, price=Decimal(row['price'][1:].replace(",", "")), location=row['city'], size=int(row['accommodates']), description=row['description'], shareable=(random() < 0.5))
                     p.save()
 
                     amenities = row['amenities'][1:-1].split(",")
@@ -82,8 +58,45 @@ def load_csv():
                         else:
                             for r in rooms:
                                 Room(property_id=p, num_guests=r, price=((p.price / p.size) * r), description="Room Description").save()
-            except (DataError, Property.MultipleObjectsReturned):
-                continue
+
+                    while(review['listing_id'] == row['id']):
+                        try:
+                            u = CustomUser.objects.filter(first_name=review['reviewer_name'])[:1].get()
+                        except CustomUser.DoesNotExist:
+                            u = CustomUser.objects.create_user(username=(review['reviewer_id']+review['reviewer_name']), password='password', first_name=review['reviewer_name'])
+
+                        PropertyReviews(reviewer=u, reviewee=p, rating=randint(3, 5), text=review['comments']).save()
+                        review = next(revreader)
+
+                # User already exists
+                except IntegrityError:
+                    try:
+                        Property.objects.get(name=row['name'])
+                        continue
+                    except Property.DoesNotExist:
+                        p = Property(name=row['name'], host_id=CustomUser.objects.get(username=(row['host_id']+row['host_name'])), price=Decimal(row['price'][1:].replace(",", "")), location=row['city'], size=int(row['accommodates']), description=row['description'], shareable=(random() < 0.5))
+                        p.save()
+
+                        amenities = row['amenities'][1:-1].split(",")
+                        for am in amenities:
+                            try:
+                                aobj = Amenity.objects.get(amenity_name = am)
+                                PropertyAmenities(property=p, amenity=aobj).save()
+                            except Amenity.DoesNotExist:
+                                continue
+
+                        PropertyImages(property=p, image=row['picture_url']).save()
+
+                        if p.shareable:
+                            rooms = room_gen(p.size, int(row['bedrooms']))
+                            if not rooms:
+                                p.shareable = False
+                                p.save()
+                            else:
+                                for r in rooms:
+                                    Room(property_id=p, num_guests=r, price=((p.price / p.size) * r), description="Room Description").save()
+                except (DataError, Property.MultipleObjectsReturned):
+                    continue
 
 # Checks if csv has been loaded yet
 def check_csv():
@@ -125,7 +138,6 @@ def home_view(request,*args, **kwargs):
     if not check_csv():
         load_csv()
     properties = Property.objects.all()[:4]
-        
 
     # query an image for each property
     imgs = []
@@ -289,9 +301,18 @@ def add_room_view(request,property_id):
 
 def property_view(request, property_id, check_in=None, check_out=None):
     property = Property.objects.get(property_id=property_id)
+
+    if request.method == 'POST':
+        PropertyReviews(reviewer=request.user, reviewee=property, rating=request.POST['stars'], text=request.POST['reviewText']).save()
+
     rooms = Room.objects.filter(property_id=property_id)
     imgs = list(PropertyImages.objects.filter(property=property_id).values_list('image', flat=True))
-    return render(request, 'property_view.html', {'property':property,'rooms':rooms, 'check_in':check_in, 'check_out':check_out, 'images':imgs})
+
+    reviews = list(PropertyReviews.objects.filter(reviewee=property_id))
+    for i, r in enumerate(reviews):
+        reviews[i] = (reviews[i], r.reviewer.first_name)
+
+    return render(request, 'property_view.html', {'property':property,'rooms':rooms, 'check_in':check_in, 'check_out':check_out, 'images':imgs, 'reviews':reviews})
 
 # @login_required(login_url='/login')
 # def book_property_view(request, property_id, check_in=None, check_out=None):
