@@ -1,211 +1,60 @@
 {% extends "layout.html" %}
 {% block content %}
-<style>
-    .form-control {
-        margin-top: 5px;
-        max-width: 5%;
-        margin-bottom: 10px;
-        object-fit: contain;
-    }
-    .share-check {
-        margin-left: 5px;
-    }
-    .col-sm-6 {
-        width: 750px;
-        height: 360px;
-        overflow: hidden;
-    }
-    .card-img {
-        height: inherit;
-    }
-</style>
+
 <div class="container">
     <header class="jumbotron my-4">
         <h1 class="display-3">Places in {{ location }} </h1>
     </header>
 
-    <!-- Filter dropdown menu -->
-    <div id="accordion">
-        <div class="card">
-            <div class="card-header" id="headingOne">
-                <h5 class="mb-0">
-                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Filters
-                    </button>
-                </h5>
-            </div>
-            <div id="collapseOne" class="collapse hide" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body">
-
-                    <!-- Shareable check -->
-                    <b> Shareable </b><br />
-                    <input type="checkbox" value="" id="shareTrue">
-                    <label class="form-check-label" for="shareCheck">
-                        Shareable
-                    </label>
-                    <input class="share-check" type="checkbox" value="" id="shareFalse">
-                    <label class="form-check-label" for="shareCheck">
-                        Unshareable
-                    </label><br />
-
-                    <!-- Guests input box -->
-                    <b> No. of Guests <br /></b>
-                    <input type="number" id="num_guests" class="form-control form-control-sm" value="1" min="1">
-
-                    <!-- Price slider -->
-                    <b> Maximum Price <br /></b>
-                    <span id="priceDisplay"></span>
-                    <input type="range" class="custom-range" id="priceRange" max="999">
-                    <script>
-                        var slider = document.getElementById("priceRange");
-                        var output = document.getElementById("priceDisplay");
-                        output.innerHTML = slider.value;
-
-                        slider.oninput = function () {
-                            output.innerHTML = this.value;
-                        }
-                    </script>
-
-                    <!-- Amenities checkboxes -->
-                    <b> Amenities<br /></b>
-                    {% for a in amenities %}
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="{{ a.amenity_name }}">
-                        <label class="form-check-label" for="inlineCheckbox1">{{ a.amenity_name }}</label>
-                    </div>
-                    {% endfor %}
-                    <br />
-                    <br />
-                    <button class="btn btn-primary" id="filter" onclick="filterProperties()">Apply</button>
-                    <button class="btn btn-primary" id="reset" onclick="resetProperties()">Reset</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br />
-
-    <!-- Property results -->
     {% for p in properties %}
-    <div class="container list">
-        <div id="prop_list" class="card" style="width:1050px">
-            <div class="row">
-                <div class="col-sm-6">
-                    <img class="card-img" src="{{ p.image.0 }}" alt="Card image" />
-                </div>
-                <div class="col-sm-6">
-                    <div class="card-body-right">
-                        <h4 class="card-title">{{ p.name }}</h4>
-                        <p class="card-text">
-                            Location: {{ p.location }}<br />
-                            Room for: {{ p.size }} people<br />
-                            Price: ${{ p.price }}<br />
-                            Shareable: 
-                            {% if p.shareable == True %}
-                                Yes
-                            {% else %}
-                                No
-                            {% endif %}
-                            <br />
-                            Amenities:
-                            {% for a in p.amenities %}
-                                {% if not forloop.last %}
-                                    {{ a }},
-                                {% else %}
-                                    {{ a }}
-                                {% endif %}
-                            {% endfor %}
-                            <br />
-                            <!--{{ p.description }}-->
-                        </p>
-                        <a href="{% url 'property' p.property_id check_in check_out%}" class="btn btn-primary">Book</a>
-                    </div>
-                </div>
-            </div>
+    <div class="container">
+    <div class="card" style="width:1050px">
+    <div class="row">
+      <div class="col-sm-6">
+        <img class="card-img" src="https://images.unsplash.com/photo-1475855581690-80accde3ae2b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80" alt="Card image"/>
+      </div>
+      <div class="col-sm-6">
+        <div class="card-body-right">
+          <h4 class="card-title">{{ p.name }}</h4>
+          <p class="card-text">Location: {{ p.location }}<br />
+          Room for: {{ p.size }} people<br />
+          Price: ${{ p.price }}<br />
+          {{ p.description }}
+          </p>
+          <a href="{% url 'property' p.property_id %}" class="btn btn-primary">Book</a>
         </div>
-        <br />
+         </div>
+      </div> 
+      </div>
     </div>
+    <input type="button" value="Filter" class="btn btn-primary" onclick="filterProperties();" />
+    <script>
+      function filterProperties() {
+        pass;
+        // // Declare variables 
+        // var input, filter, table, tr, td, i, txtValue;
+        // input = document.getElementById("myInput");
+        // filter = input.value.toUpperCase();
+        // table = document.getElementById("myTable");
+        // tr = table.getElementsByTagName("tr");
+      
+        // // Loop through all table rows, and hide those who don't match the search query
+        // for (i = 0; i < tr.length; i++) {
+        //   td = tr[i].getElementsByTagName("td")[0];
+        //   if (td) {
+        //     txtValue = td.textContent || td.innerText;
+        //     if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        //       tr[i].style.display = "";
+        //     } else {
+        //       tr[i].style.display = "none";
+        //     }
+        //   } 
+        // }
+      }
+    </script>
     {% empty %}
     No properties found.
     {% endfor %}
-    <!-- Jscript functions for filtering -->
-    <script>
-        function filterProperties() {
-            // Declare variables for filter requests and the property list
-            var tr;
-            shareTrue = document.getElementById("shareTrue").checked;
-            shareFalse = document.getElementById("shareFalse").checked;
-
-            // Check shareable has been selected
-            if (!shareTrue && !shareFalse) {
-                alert("Please check at least one shareable option.")
-                return false;
-            }
-            num_guests = document.getElementById("num_guests").value;
-            price = document.getElementById("priceRange").value;
-            amenities = document.getElementsByClassName("form-check-input");
-            validAmen = [];
-            tr = document.getElementsByClassName("list");
-            // Convert property list to JSON
-            var pstring = '{{ prop_json|safe }}';
-            var plist = JSON.parse(pstring);
-
-            var a;
-            // Detect selected amenities
-            for (a of amenities) {
-                if (a.checked === true) {
-                    validAmen.push(a.value);
-                }
-            }
-
-            // Hide properties that do not satisfy filters
-            for (var i = 0; i < plist.length; i++) {
-
-                // check shareable status
-                if ((plist[i].shareable && !shareTrue) || (!plist[i].shareable && !shareFalse)) {
-                    tr[i].style.display = "none";
-                } else {
-                    // check prop size > filter size, none = hidden
-                    if (plist[i].size < num_guests) {
-                        tr[i].style.display = "none";
-                    } else {
-
-                        // check prop price < filter price
-                        if (plist[i].price > price) {
-                            tr[i].style.display = "none";
-                        } else {
-                            var flag = true;
-
-                            // check prop has filter amenities
-                            for (am of validAmen) {
-                                if (!plist[i].amenities.includes(am)) {
-                                    flag = false;
-                                    tr[i].style.display = "none";
-                                    break;
-                                }
-                            }
-                            if (flag === true) {
-                                tr[i].style.display = "";
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Reset filters
-        function resetProperties() {
-            var tr;
-            tr = document.getElementsByClassName("list");
-            // Convert property list to JSON
-            var pstring = '{{ prop_json|safe }}';
-            var plist = JSON.parse(pstring);
-
-            // Set properties to visible
-            for (var i = 0; i < plist.length; i++) {
-                tr[i].style.display = "";
-            }
-        }
-    </script>
 </div>
 
 {% endblock %}
