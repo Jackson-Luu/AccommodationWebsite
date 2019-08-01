@@ -1,27 +1,23 @@
-<!DOCTYPE HTML>
-<html>
-	<head>
-	
-	</head>
-	<body>
-		{% extends "layout.html" %}
-		{% load crispy_forms_tags %}
-		{% block content %}
-		<div class="container">
-			<form method="POST">
-				{% csrf_token%}
-				<fieldset class="form-group">
-					<legend class="border-bottom mb-4">Profile Edit</legend>
-					{{ form|crispy }}
-				</fieldset>
-				<div class="form-group"v>
-					<button class="btn btn-outline-info" type="submit">Save</button>
-				</div>
-			</form>
+{% extends "layout.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+	<form method="POST">
+		{% csrf_token%}
+		<fieldset class="form-group">
+			<legend class="border-bottom mb-4">Profile Edit</legend>
+			{{ form|crispy }}
+		</fieldset>
+		<div class="form-group">
+			<button class="btn btn-outline-info" type="submit">Save</button>
+			<button class="btn btn-outline-info" id="cancel" type="button">Cancel</button>
 		</div>
-		{% endblock %}
-		<script>
-		
-		</script>
-	</body>
-</html>
+	</form>
+	<script>
+		const cancelButton = document.getElementById("cancel");
+		cancelButton.addEventListener('click', () => {
+			document.location.href = "{% url 'profile' user.user_id %}";
+		});
+	</script>
+</div>
+{% endblock %}
