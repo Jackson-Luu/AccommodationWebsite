@@ -98,7 +98,6 @@ def add_to_favourites(request):
 def profile_edit_view(request):
 	user_data = CustomUser.objects.get(user_id=request.user.user_id)
 	if request.method == 'POST':
-		
 		form = CustomUserProfileEditForm(request.POST, instance=user_data)
 		if form.is_valid():
 			form.save()
