@@ -102,8 +102,7 @@ def profile_edit_view(request):
 		if form.is_valid():
 			form.save()
 			messages.success(request, 'Changes saved')
-			return render(request, 'profile.html')
 	
 	else:
 		form = CustomUserProfileEditForm()
-		return render(request, 'edit_profile.html', {'form': form, 'user_data': user_data})
+	return render(request, 'edit_profile.html', {'form': form, 'user_data': user_data})
