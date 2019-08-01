@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="container">
-	<a href="/edit_profile">Edit profile</a>
+	<a href="{% url 'edit_profile' %}">Edit profile</a>
 	<div style="color:rgb(255, 145, 0);">
 		<h1 style="background:#00FF00 url(http://img.sccnn.com/bimg/338/16513.jpg) repeat 0;">Welcome {{ request.user.first_name }}</h1>
 	</div>

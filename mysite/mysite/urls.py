@@ -43,5 +43,5 @@ urlpatterns = [
     path('getdata/', get_data_view, name='getdata'),
     path('addtofavourites/', add_to_favourites, name='favourites'),
     path('profile/myfavourites',user_favourites_view, name='my_favourites'),
-	path('edit_profile/', profile_edit_view, name='edit_profile'),
+	path('profile/edit', profile_edit_view, name='edit_profile'),
 ]

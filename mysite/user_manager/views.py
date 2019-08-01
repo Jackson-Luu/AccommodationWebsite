@@ -34,8 +34,9 @@ def profile_view(request, user_id):
         # Else viewing a stranger's profile
         else:
             user_data = CustomUser.objects.get(user_id=user_id)
-            age = date.today().year - user_data.birthday.year
-            return render(request, 'other_profile.html', {'user_data':user_data, 'age':age})
+            # age = date.today().year - user_data.birthday.year
+            return render(request, 'other_profile.html', {'user_data':user_data})
+            # return render(request, 'other_profile.html', {'user_data': user_data, 'age': age})
     else:
         return True
 
@@ -90,8 +91,13 @@ def add_to_favourites(request):
 @login_required(login_url='/login')
 def profile_edit_view(request):
 	if request.method == 'POST':
-		return True
+		form = CustomUserProfileEditForm(request.POST)
+		if form.is_valid():
+			form.save()
+			# username = form.cleaned_data.get('username')
+			messages.success(request, 'Changes saved')
+			return redirect('profile')
+
 	else:
-		user_data = CustomUser.objects.filter(user_id=request.user.user_id)
 		form = CustomUserProfileEditForm()
-	return render(request, 'edit_profile.html', {'user_data': user_data, 'form': form})
+		return render(request, 'edit_profile.html', {'form': form})
