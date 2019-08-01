@@ -44,4 +44,5 @@ urlpatterns = [
     path('addtofavourites/', add_to_favourites, name='favourites'),
     path('profile/myfavourites',user_favourites_view, name='my_favourites'),
 	path('profile/edit', profile_edit_view, name='edit_profile'),
+	path('profile/changepassword', password_change_view, name='change_password')
 ]

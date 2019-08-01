@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
+
 from .forms import *
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -8,6 +9,9 @@ from booking.models import Booking, Property
 from user_manager.models import *
 import json
 from datetime import date
+from django.views.generic.edit import UpdateView
+from django.contrib.auth.forms import PasswordChangeForm
+from django.shortcuts import render, redirect
 
 
 # Create your views here.
@@ -106,3 +110,16 @@ def profile_edit_view(request):
 	else:
 		form = CustomUserProfileEditForm()
 	return render(request, 'edit_profile.html', {'form': form, 'user_data': user_data})
+
+
+@login_required(login_url='/login')
+def password_change_view(request):
+	if request.method == 'POST':
+		form = PasswordChangeForm(request.user, request.POST)
+		if form.is_valid():
+			form.save()
+			messages.success(request, 'Password changed')
+			return render(request, 'profile.html')
+	else:
+		form = PasswordChangeForm(request.user)
+	return render(request, 'change_password.html', {'form': form})

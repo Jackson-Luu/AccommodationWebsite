@@ -19,5 +19,10 @@
 	editBtn.addEventListener('click', () => {
 		document.location.href = "{% url 'edit_profile' %}";
 	});
+	
+	const changePwBtn = document.getElementById("pw-change");
+	changePwBtn.addEventListener('click', () => {
+		document.location.href = "{% url 'change_password' %}";
+	});
 </script>
 {% endblock %}
