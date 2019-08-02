@@ -428,52 +428,63 @@ def booking_view(request, property_id, check_in=None, check_out=None):
     if request.method == 'POST':
         check_in_date = request.POST.get('check_in_date') 
         check_out_date = request.POST.get('check_out_date') 
-        if check_in_date:
-            check_in_date = datetime.strptime(check_in_date, '%Y-%m-%d').date()
-        else:
-            return render(request, 'booking.html', {
-            'error': "Invalid check in date.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
-            }) 
-        if check_out_date:
-            check_out_date = datetime.strptime(check_out_date, '%Y-%m-%d').date()
-        else:
-            return render(request, 'booking.html', {
-            'error': "Invalid check out date.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
-            })   
         if check_in_date and check_out_date:
+            check_in_date = datetime.strptime(check_in_date, '%Y-%m-%d').date()
+            check_out_date = datetime.strptime(check_out_date, '%Y-%m-%d').date()
             if check_in_date > check_out_date:
                 return render(request, 'booking.html', {
-            'error': "Invalid dates.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
-            })
-        
-        
-        checked_rooms = request.POST.getlist('rooms')
-        input_num_guests = request.POST.get('num_guests')
-        if not checked_rooms or not input_num_guests:
+                'error': "Invalid dates.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+                })
+        else:
             return render(request, 'booking.html', {
-            'error': "Please enter all required fields.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
-            })
+            'error': "Invalid check-in/check-out dates.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+            }) 
        
-        max_guests = 0
-        for r in checked_rooms:
-            room_obj = Room.objects.get(room_id=int(r))
-            max_guests = max_guests + room_obj.num_guests
+        if p.shareable == True:
+            print("true")
+            checked_rooms = request.POST.getlist('rooms')
+            num_guests = request.POST.get('num_guests')
+            if not checked_rooms or not num_guests:
+                return render(request, 'booking.html', {
+                'error': "Please enter all required fields.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+                })
+            
+            max_guests = 0
+            for r in checked_rooms:
+                room_obj = Room.objects.get(room_id=int(r))
+                max_guests = max_guests + room_obj.num_guests
 
-        if int(num_guests) > max_guests:
-            return render(request, 'booking.html', {
-            'error': "Exceeded maximum number of guests","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
-            })
-        booking_instance = Booking(user_id=user,start_date=check_in_date, end_date=check_out_date,property_id=p,num_guests=num_guests,num_rooms=len(rooms))
-        booking_instance.save()
-        #make booking
-        #make booking_table
-        for r in checked_rooms:
-            room_obj = Room.objects.get(room_id=int(r))
-            booking_table_instance = BookingTable(room=room_obj,booking=booking_instance)
-            booking_table_instance.save()
+            if int(num_guests) > max_guests:
+                return render(request, 'booking.html', {
+                'error': "Exceeded maximum number of guests","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+                })
+            booking_instance = Booking(user_id=user,start_date=check_in_date, end_date=check_out_date,property_id=p,num_guests=num_guests,num_rooms=len(checked_rooms))
+            booking_instance.save()
+            #make booking
+            #make booking_table
+            for r in checked_rooms:
+                room_obj = Room.objects.get(room_id=int(r))
+                booking_table_instance = BookingTable(room=room_obj,booking=booking_instance)
+                booking_table_instance.save()
 
-        messages.success(request,'Property Booked!')
-        return redirect('home')
+            messages.success(request,'Property Booked!')
+            return redirect('home')
+            
+
+        elif p.shareable == False:
+            print("flse")
+            num_guests = request.POST.get('num_guests')
+            if not num_guests:
+                return render(request, 'booking.html', {
+                'error': "Please enter all required fields.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+                })
+            booking_instance = Booking(user_id=user,start_date=check_in_date, end_date=check_out_date,property_id=p,num_guests=num_guests)
+            booking_instance.save()
+
+            messages.success(request,'Property Booked!')
+            return redirect('home')
+       
+        
     return render(request, 'booking.html', {"property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out })
 
 
