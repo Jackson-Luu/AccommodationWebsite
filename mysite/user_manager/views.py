@@ -8,8 +8,6 @@ from django.contrib.auth.decorators import login_required
 from booking.models import Booking, Property
 from user_manager.models import *
 import json
-from datetime import date
-from django.views.generic.edit import UpdateView
 from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
 
