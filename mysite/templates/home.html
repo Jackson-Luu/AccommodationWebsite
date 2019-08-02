@@ -29,7 +29,7 @@
     <h1 class="display-3">Accommodation Portal</h1>
     <a href="search" class="btn btn-primary btn-lg">Search</a>
     {% if user.is_authenticated %}
-    <a href="{% url 'select_property_type' %}" class="btn btn-primary btn-lg">List a property</a>
+    <a href="{% url 'add_property' %}" class="btn btn-primary btn-lg">List a property</a>
     {% endif%}
     </header>
   

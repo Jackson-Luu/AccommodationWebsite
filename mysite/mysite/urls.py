@@ -23,8 +23,8 @@ urlpatterns = [
 	path('', home_view, name='home'),
 	path('search/', search_view),
 	path('signup/', register_view),
-	path('addshareableproperty/', add_shareable_property_view,name='add_shareable_property'),
-    path('addunshareableproperty/', add_unshareable_property_view,name='add_unshareable_property'),
+	# path('addshareableproperty/', add_shareable_property_view,name='add_shareable_property'),
+    # path('addunshareableproperty/', add_unshareable_property_view,name='add_unshareable_property'),
     path('property/<int:property_id>/', property_view, name='property'),
     path('property/<int:property_id>/<check_in>/<check_out>/', property_view, name='property'),
 	path('', include('django.contrib.auth.urls')),
@@ -34,8 +34,9 @@ urlpatterns = [
     path('addroom/<int:property_id>/', add_room_view, name='add_room'),
     path('profile/myproperties', user_properties_view, name='my_properties'),
     path('profile/mybookings',user_bookings_view, name='my_bookings'),
-    path('selectpropertytype/',select_property_type_view, name='select_property_type'),
+    # path('selectpropertytype/',select_property_type_view, name='select_property_type'),
     path('changeproperty/<int:property_id>/',edit_property_view, name='edit_property'),
+     path('addproperty/',add_property_view, name='add_property'),
 
 
     path('book/<int:property_id>/', booking_view, name='booking'),
