@@ -1,5 +1,8 @@
 {% extends "layout.html" %}
 {% block content %}
+<head>
+	<title>Places in {{ location }} | Accommodation Portal</title>
+</head>
 <style>
     .form-control {
         margin-top: 5px;
@@ -9,6 +12,14 @@
     }
     .share-check {
         margin-left: 5px;
+    }
+    .col-sm-6 {
+        width: 750px;
+        height: 360px;
+        overflow: hidden;
+    }
+    .card-img {
+        height: inherit;
     }
 </style>
 <div class="container">

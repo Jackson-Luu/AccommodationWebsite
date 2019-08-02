@@ -1,2 +1,66 @@
 {% extends "layout.html" %}
-
+{% load crispy_forms_tags %}
+{% block content %}
+<head>
+	<title>Edit profile: {{ user_data.username }} | Accommodation Portal</title>
+</head>
+<div class="container">
+	<form method="POST">
+		{% csrf_token%}
+		<fieldset class="form-group">
+			<legend class="border-bottom mb-4">Profile Edit</legend>
+			{{ form|crispy }}
+		</fieldset>
+		<div class="form-group">
+			<button class="btn btn-outline-info" type="submit" style="float: right">Save</button>
+			<button class="btn btn-outline-info" id="cancel" type="button" >Back to profile</button>
+		</div>
+	</form>
+	<script>
+		{% if user_data.first_name %}
+			const firstNameField = document.getElementById("{{ form.first_name.id_for_label|escapejs }}");
+			firstNameField.value = "{{ user_data.first_name|escapejs }}";
+		{% endif %}
+		
+		{% if user_data.last_name %}
+			const lastNameField = document.getElementById("{{ form.last_name.id_for_label|escapejs }}");
+			lastNameField .value = "{{ user_data.last_name|escapejs }}";
+		{% endif %}
+		
+		{% if user_data.description %}
+			const descField = document.getElementById("{{ form.description.id_for_label|escapejs }}");
+			descField.value = "{{ user_data.description|escapejs }}";
+		{% endif %}
+		
+		{% if user_data.birthday %}
+			const birthdayField = document.getElementById("{{ form.birthday.id_for_label|escapejs }}");
+			let birthDate = {{ user_data.birthday.day|escapejs }};
+			let birthMonth = {{ user_data.birthday.month|escapejs }};
+			let birthYear = {{ user_data.birthday.year|escapejs }};
+			
+			if (birthDate < 10) birthDate = "0" + birthDate;
+			if (birthMonth < 10) birthMonth = "0" + birthMonth;
+			
+			const birthdayString = birthYear + "-" + birthMonth + "-" + birthDate;
+<!--			const birthday = Date.parse(birthdayString);-->
+			birthdayField.setAttribute("value", birthdayString);
+			
+			let today = new Date();
+			let dd = today.getDate();
+			let mm = today.getMonth()+1; //January is 0!
+			let yyyy = today.getFullYear();
+			
+		  if (dd < 10) dd = '0' + dd;
+		  if (mm < 10) mm = '0' + mm;
+			
+			today = yyyy + '-' + mm + '-' + dd;
+			birthdayField.setAttribute("max", today);
+		{% endif %}
+		
+		const cancelButton = document.getElementById("cancel");
+		cancelButton.addEventListener('click', () => {
+			document.location.href = "{% url 'profile' user.user_id %}";
+		});
+	</script>
+</div>
+{% endblock %}

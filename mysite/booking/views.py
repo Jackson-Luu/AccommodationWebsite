@@ -6,13 +6,14 @@ from django.urls import reverse
 from .models import *
 from .forms import *
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
+from datetime import datetime, date
 import json
 import decimal
 from django.forms.models import model_to_dict
 import csv
-from random import random
+from random import random, randint
 from .models import CustomUser
+from review.models import PropertyReviews
 from decimal import Decimal
 from django.db import IntegrityError, DataError
 
@@ -27,32 +28,16 @@ class DecimalEncoder(json.JSONEncoder):
 def load_csv():
     with open('data/listings.csv', newline='', encoding="utf-8") as csvfile:
         datareader = csv.DictReader(csvfile)
-        for idx, row in enumerate(datareader):
-            # Number of properties to parse
-            if idx > 400:
-                break
-            try:
-                user = CustomUser.objects.create_user(username=(row['host_id']+row['host_name']), password='password', first_name=row['host_name'], description=row['host_about'])
-                p = Property(name=row['name'], host_id=user, price=Decimal(row['price'][1:].replace(",", "")), location=row['city'], size=row['accommodates'], description=row['description'], shareable=(random() < 0.5))
-                p.save()
-
-                amenities = row['amenities'][1:-1].split(",")
-                for am in amenities:
-                    try:
-                        aobj = Amenity.objects.get(amenity_name = am)
-                        PropertyAmenities(property=p, amenity=aobj).save()
-                    except Amenity.DoesNotExist:
-                        continue
-
-                PropertyImages(property=p, image=row['picture_url']).save()
-
-            # User already exists
-            except IntegrityError:
+        with open('data/reviews.csv', newline='', encoding="utf-8") as revfile:
+            revreader = csv.DictReader(revfile)
+            review = next(revreader)
+            for idx, row in enumerate(datareader):
+                # Number of properties to parse
+                if idx > 400:
+                    break
                 try:
-                    Property.objects.get(name=row['name'])
-                    continue
-                except Property.DoesNotExist:
-                    p = Property(name=row['name'], host_id=CustomUser.objects.get(username=(row['host_id']+row['host_name'])), price=Decimal(row['price'][1:].replace(",", "")), location=row['city'], size=row['accommodates'], description=row['description'], shareable=(random() < 0.5))
+                    user = CustomUser.objects.create_user(username=(row['host_id']+row['host_name']), password='password', first_name=row['host_name'], description=row['host_about'], birthday=date(randint(1960,1999), 1, 1))
+                    p = Property(name=row['name'], host_id=user, price=Decimal(row['price'][1:].replace(",", "")), location=row['city'], size=int(row['accommodates']), description=row['description'], shareable=(random() < 0.5))
                     p.save()
 
                     amenities = row['amenities'][1:-1].split(",")
@@ -64,8 +49,54 @@ def load_csv():
                             continue
 
                     PropertyImages(property=p, image=row['picture_url']).save()
-            except (DataError, Property.MultipleObjectsReturned):
-                continue
+
+                    if p.shareable:
+                        rooms = room_gen(p.size, int(row['bedrooms']))
+                        if not rooms:
+                            p.shareable = False
+                            p.save()
+                        else:
+                            for r in rooms:
+                                Room(property_id=p, num_guests=r, price=((p.price / p.size) * r), description="Room Description").save()
+
+                    while(review['listing_id'] == row['id']):
+                        try:
+                            u = CustomUser.objects.filter(first_name=review['reviewer_name'])[:1].get()
+                        except CustomUser.DoesNotExist:
+                            u = CustomUser.objects.create_user(username=(review['reviewer_id']+review['reviewer_name']), password='password', first_name=review['reviewer_name'], birthday=date(randint(1960,1999), 1, 1))
+
+                        PropertyReviews(reviewer=u, reviewee=p, rating=randint(3, 5), text=review['comments']).save()
+                        review = next(revreader)
+
+                # User already exists
+                except IntegrityError:
+                    try:
+                        Property.objects.get(name=row['name'])
+                        continue
+                    except Property.DoesNotExist:
+                        p = Property(name=row['name'], host_id=CustomUser.objects.get(username=(row['host_id']+row['host_name'])), price=Decimal(row['price'][1:].replace(",", "")), location=row['city'], size=int(row['accommodates']), description=row['description'], shareable=(random() < 0.5))
+                        p.save()
+
+                        amenities = row['amenities'][1:-1].split(",")
+                        for am in amenities:
+                            try:
+                                aobj = Amenity.objects.get(amenity_name = am)
+                                PropertyAmenities(property=p, amenity=aobj).save()
+                            except Amenity.DoesNotExist:
+                                continue
+
+                        PropertyImages(property=p, image=row['picture_url']).save()
+
+                        if p.shareable:
+                            rooms = room_gen(p.size, int(row['bedrooms']))
+                            if not rooms:
+                                p.shareable = False
+                                p.save()
+                            else:
+                                for r in rooms:
+                                    Room(property_id=p, num_guests=r, price=((p.price / p.size) * r), description="Room Description").save()
+                except (DataError, Property.MultipleObjectsReturned):
+                    continue
 
 # Checks if csv has been loaded yet
 def check_csv():
@@ -78,13 +109,35 @@ def check_csv():
             except Property.DoesNotExist:
                 return False
 
+# Generate rooms for a property
+def room_gen(size, num_rooms):
+    if num_rooms > size or num_rooms == 0:
+        return []
+    rooms = []
+    rands = []
+    r_sum = 0.0
+    for r in range(num_rooms - 1):
+        rand = random()
+        rands.append(rand)
+        r_sum += rand
+    
+    total = size
+    for r in rands:
+        room = int((r / r_sum) * (size - 1))
+        if room == 0:
+            room = 1
+        rooms.append(room)
+        total -= room
+    rooms.append(total) 
+        
+    return rooms
+
 
 def home_view(request,*args, **kwargs):
     # CSV call, comment out to improve homepage performance
     if not check_csv():
         load_csv()
     properties = Property.objects.all()[:4]
-        
 
     # query an image for each property
     imgs = []
@@ -107,10 +160,10 @@ def search_view(request, *args, **kwargs):
             })
 
         if not guests:
-            properties = Property.objects.filter(location=location)
+            properties = Property.objects.filter(location__iexact=location)
             guests = 0
         else:        
-            properties = Property.objects.filter(location=location, size__gte=guests)
+            properties = Property.objects.filter(location__iexact=location, size__gte=guests)
             guests = int(guests)
 
         valid_prop = []
@@ -248,9 +301,25 @@ def add_room_view(request,property_id):
 
 def property_view(request, property_id, check_in=None, check_out=None):
     property = Property.objects.get(property_id=property_id)
+
+    if request.method == 'POST':
+        PropertyReviews(reviewer=request.user, reviewee=property, rating=request.POST['stars'], text=request.POST['reviewText']).save()
+
     rooms = Room.objects.filter(property_id=property_id)
     imgs = list(PropertyImages.objects.filter(property=property_id).values_list('image', flat=True))
-    return render(request, 'property_view.html', {'property':property,'rooms':rooms, 'check_in':check_in, 'check_out':check_out, 'images':imgs})
+
+    amenities = []
+    prop_am = PropertyAmenities.objects.filter(property=property)
+    for am in prop_am:
+        amenities.append(am.amenity.amenity_name)
+
+    reviews = list(PropertyReviews.objects.filter(reviewee=property_id))
+    for i, r in enumerate(reviews):
+        reviews[i] = (reviews[i], r.reviewer.first_name)
+
+    owner = CustomUser.objects.get(username=property.host_id)
+
+    return render(request, 'property_view.html', {'property':property,'rooms':rooms, 'amenities':amenities, 'check_in':check_in, 'check_out':check_out, 'images':imgs, 'reviews':reviews, 'owner':owner})
 
 # @login_required(login_url='/login')
 # def book_property_view(request, property_id, check_in=None, check_out=None):
@@ -325,15 +394,15 @@ def booking_view(request, property_id, check_in=None, check_out=None):
             })
         
         
-        rooms = request.POST.getlist('rooms')
-        num_guests = request.POST.get('num_guests')
-        if not rooms or not num_guests:
+        checked_rooms = request.POST.getlist('rooms')
+        input_num_guests = request.POST.get('num_guests')
+        if not checked_rooms or not input_num_guests:
             return render(request, 'booking.html', {
             'error': "Please enter all required fields.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
             })
        
         max_guests = 0
-        for r in rooms:
+        for r in checked_rooms:
             room_obj = Room.objects.get(room_id=int(r))
             max_guests = max_guests + room_obj.num_guests
 
@@ -345,7 +414,7 @@ def booking_view(request, property_id, check_in=None, check_out=None):
         booking_instance.save()
         #make booking
         #make booking_table
-        for r in rooms:
+        for r in checked_rooms:
             room_obj = Room.objects.get(room_id=int(r))
             booking_table_instance = BookingTable(room=room_obj,booking=booking_instance)
             booking_table_instance.save()
@@ -395,10 +464,11 @@ def get_data_view(request):
     check_in_date = request.GET.get('check_in_data')
     check_out_date = request.GET.get('check_out_data')
     room_ids = json.loads(request.GET.get('room_ids'))
-
-    if check_in_date is not None and check_out_date is not None:
-        check_in = datetime.strptime(check_in_date, '%Y-%m-%d').date()
-        check_out = datetime.strptime(check_out_date, '%Y-%m-%d').date()
+    
+    if check_in_date and check_out_date:
+        
+        check_in = datetime.strptime(str(check_in_date), '%Y-%m-%d').date()
+        check_out = datetime.strptime(str(check_out_date), '%Y-%m-%d').date()
         
         room_attr_list = []
         # room_attr_list template - 

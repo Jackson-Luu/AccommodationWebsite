@@ -1,7 +1,17 @@
-{% extends "layout.html" %}
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<script>
+    <title>Make booking | Accommodation Portal</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+    <!-- Special version of Bootstrap that only affects content wrapped in .bootstrap-iso -->
+    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+
+    <script>
     $(document).ready(function(){
         get_room_availabilities();
         var today = get_today_date();
@@ -68,7 +78,7 @@
             }
         }
     }
-    
+
     function get_today_date(){
         var today = new Date();
         var dd = today.getDate();
@@ -76,59 +86,101 @@
         var yyyy = today.getFullYear();
         if(dd < 10){
             dd ='0'+ dd;
-        } 
+        }
         if(mm < 10){
             mm = '0' + mm;
-        } 
+        }
         today = yyyy + '-' + mm + '-' + dd;
         return today;
     }
-</script>
+    </script>
 
-<style>
-    .jumbotron {
-        position: relative;
-        color: white;
-    }
-        .jumbotron::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80");
-            filter: blur(8px);
+    <style>
+        body {
+            padding-top: 56px;
         }
-    .display-3 {
-        position: relative;
-    }
-    .btn-lg {
-        position: relative;
-    }
-</style>
 
-<!-- Jumbotron Header -->
-<div class="container">
-    <header class="jumbotron my-4">
-        <h1 class="display-3">Book Property</h1>
-        <p class="lead"></p>
-    </header>
-    <div class="booking_form">
-        <form method="post">
-            {% csrf_token %}
-            {% if error %}<p><strong>{{ error }}</strong></p>{% endif %}
-            <div class="form-group lead">
-                <label for="check_in_date">Check In Date:</label>
-                <input type="date" class="form-control" id="check_in_date" name="check_in_date" value={{check_in}}> 
-            </div>
-            <div class="form-group lead">
-                <label for="check_out_date">Check Out Date:</label>
-                <input type="date" class="form-control" id="check_out_date" name="check_out_date"value={{check_out}}> 
-            </div>
-            {% if p.shareable is True %}
-            <div class="form-group lead">
-                <label for="rooms">Select Rooms:</label> 
+        * {
+            margin: 0;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        .wrapper {
+            min-height: 100%;
+            height: auto !important;
+            height: 100%;
+            margin: 0 auto -122px; /* the bottom margin is the negative value of the footer's height */
+        }
+
+        .py-5, .push {
+            height: 122px; /* .push must be the same height as .footer */
+        }
+        .jumbotron {
+            position: relative;
+            color: white;
+        }
+
+            .jumbotron::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-image: url("https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80");
+                filter: blur(8px);
+            }
+
+        .display-3 {
+            position: relative;
+        }
+
+        .btn-lg {
+            position: relative;
+        }
+
+        .bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form {
+            font-family: Arial, Helvetica, sans-serif;
+            color: black
+        }
+
+            .bootstrap-iso form button, .bootstrap-iso form button:hover {
+                color: white !important;
+            }
+
+        .asteriskField {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <br />
+    <!-- Jumbotron Header -->
+    <div class="container">
+        <header class="jumbotron my-4">
+            <h1 class="display-3">Book Property</h1>
+            <p class="lead"></p>
+        </header>
+        <div class="booking_form">
+            <form method="post">
+                {% csrf_token %}
+                {% if error %}<p><strong>{{ error }}</strong></p>{% endif %}
+                <div id="calendar"></div>
+                <div class="form-group lead">
+                    <label for="check_in_date">Check In Date:</label>
+                    <input type="date" class="form-control" id="check_in_date" name="check_in_date" value={{check_in}}>
+                </div>
+                <div class="form-group lead">
+                    <label for="check_out_date">Check Out Date:</label>
+                    <input type="date" class="form-control" id="check_out_date" name="check_out_date" value={{check_out}}>
+                </div>
+                {% if p.shareable is true %}
+                <div class="form-group lead">
+                    <label for="rooms">Select Rooms:</label>
                     <br>
                     {% for r in rooms %}
                     <div class="form-check form-check-inline">
@@ -138,28 +190,52 @@
                             <div>Description: {{r.description}}</div>
                             <div>Size: {{r.num_guests}}</div>
                             <div>Price: ${{r.price}} per night</div>
-                            <div id={{r.room_id}}availability></div>
-                            <a id={{r.room_id}}booked_user_profile></a>
+                            <div id={{r.room_id}} availability></div>
+                            <a id={{r.room_id}} booked_user_profile></a>
                         </label> <br>
                     </div>
                     {% endfor %}
-             {% endif %}   
                 </div>
-            <div class="form-group lead">
-                <label for="num_guests">Number of Guests:</label>
-                <input type="number" class="form-control" id="num_guest" name="num_guests" min="1"> 
-            </div>
-
-            <!-- <div class="lead">
-                <button class= "btn btn-secondary" type="button" id="check_price">Calculate Total Price</button>
-                <div>
+                {% endif %}
+                <div class="form-group lead">
+                    <label for="num_guests">Number of Guests:</label>
+                    <input type="number" class="form-control" id="num_guest" name="num_guests" min="1">
                 </div>
-                <br>
-            </div> -->
 
-            <input type="submit" value="Book" class="btn btn-primary btn-lg"><br><br>
-        </form>
+                <!-- <div class="lead">
+                    <button class= "btn btn-secondary" type="button" id="check_price">Calculate Total Price</button>
+                    <div>
+                    </div>
+                    <br>
+                </div> -->
+
+                <input type="submit" value="Book" class="btn btn-primary btn-lg"><br><br>
+            </form>
+        </div>
+        <!--<div id="date" name="date"> </div>-->
     </div>
-</div>
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+        </div>
+        <!-- /.container -->
+    </footer>
+    <!-- Extra JavaScript/CSS added manually in "Settings" tab -->
+    <!-- Include jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
-{% endblock %}
+    <!-- Include Date Range Picker -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.css" />
+
+    <script>
+        $('#date').datepicker({
+            format: "dd/mm/yyyy",
+            startDate: "now",
+            clearBtn: true,
+            multidate: true,
+            todayHighlight: true
+        });
+    </script>
+</body>
+</html>

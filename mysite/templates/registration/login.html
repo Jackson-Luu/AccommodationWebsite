@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<head>
+	<title>Login | Accommodation Portal</title>
+</head>
 
 <div class="container">
 	{% if form.errors %}
@@ -48,8 +51,8 @@
 		</div>
 	</form>
 	
-	{# Assumes you setup the password_reset view in your URLconf #}
-	<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+<!--	{# Assumes you setup the password_reset view in your URLconf #}-->
+<!--	<p><a href="{% url 'password_reset' %}">Lost password?</a></p>-->
 
 </div>
 {% endblock %}

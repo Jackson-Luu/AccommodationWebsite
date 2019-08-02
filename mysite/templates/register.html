@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+<head>
+	<title>Sign up | Accommodation Portal</title>
+</head>
 <div class="container">
 	<form method="POST">
 		{% csrf_token%}
@@ -8,9 +11,9 @@
 			<legend class="border-bottom mb-4">Sign Up</legend>
 			{{ form|crispy }}
 		</fieldset>
-		<di class="form-group"v>
+		<div class="form-group"v>
 			<button class="btn btn-outline-info" type="submit">Sign Up</button>
-	
+		</div>
 	</form>
 </div>
 	<div class="border-top pt-3">
@@ -18,5 +21,5 @@
 			Already have an account? <a class="ml-2" href="#">Sign In</a>
 		</small>
 	</div>
-</div>
+
 {% endblock %}
