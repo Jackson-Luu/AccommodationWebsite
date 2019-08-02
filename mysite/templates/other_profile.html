@@ -1,14 +1,47 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
+<head>
+	<title>{{ user_data.username }}'s profile | Accommodation Portal</title>
+</head>
 <div class="container">
-    <div style="color:rgb(255, 145, 0);">
-        <h1 style="background:#00FF00 url(http://img.sccnn.com/bimg/338/16513.jpg) repeat 0;">{{ user_data.first_name }}</h1>
-    </div>
-    <p> Name: {{ user_data.first_name }} </p>
-<!--    <p> Age: {{ age }} </p>-->
-    <p> User Description: {{ user_data.description }} </p>
+	<!--    <div style="color:rgb(255, 145, 0);">-->
+	<!--        <h1 style="background:#00FF00 url(http://img.sccnn.com/bimg/338/16513.jpg) repeat 0;">{{ user_data.first_name }}</h1>-->
+	<!--    </div>-->
+	<!--    <p> Name: {{ user_data.first_name }} </p>-->
+	<!--&lt;!&ndash;    <p> Age: {{ age }} </p>&ndash;&gt;-->
+	<!--    <p> User Description: {{ user_data.description }} </p>-->
+	<h1>{{ user_data.username }}</h1>
+	<h1 class="display-1 text-center" id="name"></h1>
+	<h1 class="display-6 text-center" id="age"></h1>
+	<ul class="list-inline text-center">
+		<li class="list-inline-item">
+			<p>Date joined: {{ user_data.date_joined }}</p>
+		</li>
+		<li class="list-inline-item"><p> | </p></li>
+		<li class="list-inline-item">
+			<p>Last active: {{ user_data.last_login }}</p>
+		</li>
+	</ul>
+	<hr>
+	<h1 class="display7">About me:</h1>
+	<p class="lead">{{ user_data.description }}</p>
 </div>
-
+<script>
+	{% if user_data.first_name %}
+		const name = document.getElementById("name");
+		name.innerText = "{{ user_data.first_name }}";
+		{% if user_data.last_name %}
+			name.innerText += " {{ user_data.last_name|escapejs }}";
+		{% endif %}
+	{% endif %}
+	
+	{% if user_data.birthday %}
+	const now = new Date();
+	const age = now.getFullYear() - {{ user_data.birthday.year|escapejs }};
+	const ageElm = document.getElementById("age");
+	ageElm.innerText = "Age: " + age;
+	{% endif %}
+	
+</script>
 {% endblock %}

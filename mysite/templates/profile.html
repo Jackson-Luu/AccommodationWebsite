@@ -1,20 +1,57 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
+<head>
+	<title>My profile | Accommodation Portal</title>
+</head>
 <div class="container">
-<!--	<a href="{% url 'edit_profile' %}">Edit profile</a>-->
-	<div style="color:rgb(255, 145, 0);">
-		<h1 style="background:#00FF00 url(http://img.sccnn.com/bimg/338/16513.jpg) repeat 0;">Welcome {{ request.user.first_name }}</h1>
+	<div class="float-right">
+		<button class="btn btn-outline-info" id="edit" type="button">Edit Profile</button>
+		<button class="btn btn-outline-info" id="pw-change" type="button">Change Password</button>
 	</div>
-	<p style="background:#00FF00 url(http://img.sccnn.com/bimg/338/16513.jpg) repeat 0;"> User Account: {{ request.user.username }}</p>
-	<p> User First Name: {{ request.user.first_name }} </p>
-	<p> User Birthday: {{ request.user.birthday }} </p>
-	<p> User Description: {{ request.user.description }} </p>
-	<button class="btn btn-outline-info" id="edit" type="button">Edit Profile</button>
-	<button class="btn btn-outline-info" id="pw-change" type="button">Change Password</button>
+	<h1>{{ request.user.username }}</h1>
+<!--	<hr>-->
+	<h1 class="display-1 text-center" id="name"></h1>
+	<h1 class="display-6 text-center" id="age"></h1>
+	<ul class="list-inline text-center">
+		<li class="list-inline-item">
+			<p>Date joined: {{ request.user.date_joined }}</p>
+		</li>
+		<li class="list-inline-item"><p> | </p></li>
+		<li class="list-inline-item">
+			<p>Last active: {{ request.user.last_login }}</p>
+		</li>
+	</ul>
+	
+	<hr>
+	<h1 class="display7">About me:</h1>
+	<p class="lead">{{ request.user.description }}</p>
+<!--	<div style="color:rgb(255, 145, 0);">-->
+<!--		<h1 style="background:#00FF00 url(http://img.sccnn.com/bimg/338/16513.jpg) repeat 0;">Welcome {{ request.user.first_name }}</h1>-->
+<!--	</div>-->
+<!--	<p style="background:#00FF00 url(http://img.sccnn.com/bimg/338/16513.jpg) repeat 0;"> User Account: {{ request.user.username }}</p>-->
+<!--	<p> User First Name: {{ request.user.first_name }} </p>-->
+<!--	<p> User Birthday: {{ request.user.birthday }} </p>-->
+<!--	<p> User Description: {{ request.user.description }} </p>-->
+<!--	<button class="btn btn-outline-info" id="edit" type="button">Edit Profile</button>-->
+<!--	<button class="btn btn-outline-info" id="pw-change" type="button">Change Password</button>-->
 </div>
 <script>
+	{% if request.user.first_name %}
+		const name = document.getElementById("name");
+		name.innerText = "{{ request.user.first_name|escapejs }}";
+		{% if request.user.last_name %}
+			name.innerText += " {{ request.user.last_name|escapejs }}";
+		{% endif %}
+	{% endif %}
+	
+	{% if request.user.birthday %}
+	const now = new Date();
+	const age = now.getFullYear() - {{ request.user.birthday.year|escapejs }};
+	const ageElm = document.getElementById("age");
+	ageElm.innerText = "Age: " + age;
+	{% endif %}
+	
 	const editBtn = document.getElementById("edit");
 	editBtn.addEventListener('click', () => {
 		document.location.href = "{% url 'edit_profile' %}";
