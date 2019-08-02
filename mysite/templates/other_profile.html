@@ -26,16 +26,17 @@
 	<p class="lead">{{ user_data.description }}</p>
 </div>
 <script>
-
-	if ("{{ user_data.first_name }}" !== "") {
+	{% if user_data.first_name %}
 		const name = document.getElementById("name");
 		name.innerText = "{{ user_data.first_name }}";
-		if ("{{ user_data.last_name }}" !== "") name.innerText += " {{ user_data.last_name }}";
-	}
+		{% if user_data.last_name %}
+			name.innerText += " {{ user_data.last_name }}";
+		{% endif %}
+	{% endif %}
 	
 	{% if user_data.birthday %}
 	const now = new Date();
-	const age = now.getFullYear() - {{user.birthday.year}};
+	const age = now.getFullYear() - {{ user_data.birthday.year }};
 	const ageElm = document.getElementById("age");
 	ageElm.innerText = "Age: " + age;
 	{% endif %}

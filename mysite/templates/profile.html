@@ -35,12 +35,13 @@
 <!--	<button class="btn btn-outline-info" id="pw-change" type="button">Change Password</button>-->
 </div>
 <script>
-
-	if ("{{ request.user.first_name }}" !== "") {
+	{% if request.user.first_name %}
 		const name = document.getElementById("name");
 		name.innerText = "{{ request.user.first_name }}";
-		if ("{{ request.user.last_name }}" !== "") name.innerText += " {{ request.user.last_name }}";
-	}
+		{% if request.user.last_name %}
+			name.innerText += " {{ request.user.last_name }}";
+		{% endif %}
+	{% endif %}
 	
 	{% if request.user.birthday %}
 	const now = new Date();
