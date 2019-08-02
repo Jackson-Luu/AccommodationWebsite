@@ -13,11 +13,11 @@
 	<h1 class="display-6 text-center" id="age"></h1>
 	<ul class="list-inline text-center">
 		<li class="list-inline-item">
-			<p>Date joined: {{request.user.date_joined}}</p>
+			<p>Date joined: {{ request.user.date_joined }}</p>
 		</li>
 		<li class="list-inline-item"><p> | </p></li>
 		<li class="list-inline-item">
-			<p>Last active: {{request.user.last_login}}</p>
+			<p>Last active: {{ request.user.last_login }}</p>
 		</li>
 	</ul>
 	
@@ -37,15 +37,15 @@
 <script>
 	{% if request.user.first_name %}
 		const name = document.getElementById("name");
-		name.innerText = "{{ request.user.first_name }}";
+		name.innerText = "{{ request.user.first_name|escapejs }}";
 		{% if request.user.last_name %}
-			name.innerText += " {{ request.user.last_name }}";
+			name.innerText += " {{ request.user.last_name|escapejs }}";
 		{% endif %}
 	{% endif %}
 	
 	{% if request.user.birthday %}
 	const now = new Date();
-	const age = now.getFullYear() - {{request.user.birthday.year}};
+	const age = now.getFullYear() - {{ request.user.birthday.year|escapejs }};
 	const ageElm = document.getElementById("age");
 	ageElm.innerText = "Age: " + age;
 	{% endif %}
