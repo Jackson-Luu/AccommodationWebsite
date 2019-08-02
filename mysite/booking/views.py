@@ -299,10 +299,11 @@ def add_property_view(request):
                 checked_amenities = request.POST.getlist('amenities')
             except ValueError:
                 print("enter valid values")
-
-            p = Property(host_id=user,name=property_name,location=property_location,description=property_description,shareable=True)
-            p.save()
-
+            if property_name and property_location and property_description:
+                p = Property(host_id=user,name=property_name,location=property_location,description=property_description,shareable=True)
+                p.save()
+            else:
+                return render(request,'add_property.html',{'error': "Please fill in all required fields",'amenity_list':amenity_list})
             for am in checked_amenities:
                 aobj = Amenity.objects.get(amenity_id=am)
                 PropertyAmenities(property=p, amenity=aobj).save()
@@ -319,10 +320,12 @@ def add_property_view(request):
                 property_size = request.POST.get('property_size')
             except ValueError:
                 print("enter valid values")
+            if property_name and property_location and property_description and property_price and property_size:
+                p = Property(host_id=user,name=property_name,price=property_price,location=property_location,size=property_size,description=property_description,shareable=True)
+                p.save()
+            else:
+                return render(request,'add_property.html',{'error': "Please fill in all required fields",'amenity_list':amenity_list})
 
-            p = Property(host_id=user,name=property_name,price=property_price,location=property_location,size=property_size,description=property_description,shareable=True)
-            p.save()
-        
             for am in checked_amenities:
                 aobj = Amenity.objects.get(amenity_id=am)
                 PropertyAmenities(property=p, amenity=aobj).save()

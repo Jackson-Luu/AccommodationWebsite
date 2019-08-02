@@ -180,13 +180,18 @@
         }
 
         /* Clear floats after the columns */
-        .row:after {
+        /* .row::after {
             content: "";
             display: table;
             clear: both;
-        }
+        } */
         .lead {
             font-weight: 385;
+        }
+        .footer {
+            bottom: 0;
+            position: static;
+            height: 2em;
         }
     </style>
 </head>
@@ -203,8 +208,8 @@
 
         <div class="row">
 
-                <div class="booking_form col-7 column left ">
-                        <form method="post">
+                <div class="booking_form col-7 column  ">
+                        <form method="post" >
                             {% csrf_token %}
                             {% if error %}<p><strong>{{ error }}</strong></p>{% endif %}
                             <div id="calendar"></div>
@@ -216,7 +221,7 @@
                                 <label for="check_out_date">Check Out Date:</label>
                                 <input type="date" class="form-control" id="check_out_date" name="check_out_date" value={{check_out}}>
                             </div>
-                            {% if p.shareable is true %}
+                            {% if property.shareable is true %}
                             <div class="form-group lead">
                                 <label for="rooms">Select Rooms:</label>
                                 <br>
@@ -314,7 +319,7 @@
         <!--<div id="date" name="date"> </div>-->
     </div>
     <!-- Footer -->
-    <footer class="py-5 bg-dark">
+    <footer class="footer py-5 bg-dark fixed">
         <div class="container">
         </div>
         <!-- /.container -->
