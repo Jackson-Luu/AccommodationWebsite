@@ -31,16 +31,46 @@
 		</div>
 	</form>
 	<script>
+		const photoField = document.getElementById("{{ form.photo.id_for_label|escapejs }}");
+		const photoPreview = document.getElementById("photo");
+		
 		{% if user_data.photo %}
-			const photoField = document.getElementById("{{ form.photo.id_for_label|escapejs }}");
 			photoField.value = "{{ user_data.photo|escapejs }}";
-			const photoPreview = document.getElementById("photo");
 			photoPreview.src = "{{ user_data.photo|escapejs }}";
 		{% endif %}
 		
-		// https://jsfiddle.net/EFkW2/
-		$('[id="{{ form.photo.id_for_label|escapejs }}"]').on('change', function() {
-      $('img.img-thumbnail').prop('src', this.value);
+		photoField.addEventListener('blur', () => {
+			if (photoField.value.match(/\.(jpeg|jpg|gif|png)$/)) {
+				photoPreview.src = photoField.value;
+			} else {
+				const warningbox = document.createElement("div");
+				warningbox.className = "alert alert-warning alert-dismissible fade show";
+				warningbox.setAttribute("role", "alert");
+				const boldAlert = document.createElement("b");
+				boldAlert.innerText = "Warning: invalid image";
+				warningbox.appendChild(boldAlert);
+				let br = document.createElement("br");
+				warningbox.appendChild(br);
+				const msg1 = document.createTextNode("We're not going to bother previewing the image.");
+				warningbox.appendChild(msg1);
+				br = document.createElement("br");
+				warningbox.appendChild(br);
+				const msg2 = document.createTextNode("We're also not going to stop you from making this your profile picture, but don't say we didn't warn you.");
+				warningbox.appendChild(msg2);
+				const closeBtn = document.createElement("button");
+				closeBtn.className = "close";
+				closeBtn.setAttribute("data-dismiss", "alert");
+				closeBtn.setAttribute("aria-label", "Close");
+				const ecks = document.createElement("span");
+				ecks.setAttribute("aria-hidden", "true");
+				ecks.innerText = "x";
+				closeBtn.appendChild(ecks);
+				warningbox.appendChild(closeBtn)
+				
+				const divIdPhoto = document.getElementById("div_id_photo");
+				console.log(divIdPhoto.childNodes.length);
+				if (divIdPhoto.childNodes.length === 5) divIdPhoto.appendChild(warningbox);
+			}
 		});
 		
 		{% if user_data.first_name %}
