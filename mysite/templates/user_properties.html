@@ -34,6 +34,14 @@
                                     <br> <br>
                                 </td>
                             </tr>
+                        {% empty %}
+                            <tr>
+                                <td>
+                                    <div class="lead">
+                                        No shareable properties.
+                                    </div>
+                                </td>
+                            </tr>
                         {% endfor %}
                         
                     </tbody>
@@ -49,6 +57,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                    
                         {% for property in user_properties_unshareable %}
                             <tr>
                                 <td>
@@ -62,7 +71,17 @@
                                     <br> <br>
                                 </td>
                             </tr>
-                        {% endfor %}   
+                        {% empty %}
+                        <tr>
+                            <td>
+                                <div class="lead">
+                                    No unshareable properties.
+                                </div>
+                            </td>
+                        </tr>
+                            
+                        {% endfor %} 
+                          
                     </tbody>
                 </table>
             </div>
