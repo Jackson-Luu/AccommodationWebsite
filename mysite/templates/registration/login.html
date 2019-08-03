@@ -41,14 +41,17 @@
 				<input class="form-control" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" type="text" />
 <!--				{{ form.username.errors }}-->
 			</div>
+		</div>
+		<div class="form-group">
 			<label>{{ form.password.label_tag }}</label>
 			<div class="input-group">
 				<input class="form-control" id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}" type="password" />
 <!--				{{ form.password.errors }}-->
 			</div>
-			<button type="submit" class="btn btn-primary">Login</button>
-			<input type="hidden" name="next" value="{{ next }}" />
 		</div>
+		<button type="submit" class="btn btn-primary">Login</button>
+		<input type="hidden" name="next" value="{{ next }}" />
+		
 	</form>
 	
 <!--	{# Assumes you setup the password_reset view in your URLconf #}-->
