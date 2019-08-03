@@ -9,7 +9,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
     <!-- Special version of Bootstrap that only affects content wrapped in .bootstrap-iso -->
-    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+    <!--<link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />-->
 
     <script>
     $(document).ready(function(){
@@ -208,114 +208,114 @@
 
         <div class="row">
 
-                <div class="booking_form col-7 column  ">
-                        <form method="post" >
-                            {% csrf_token %}
-                            {% if error %}<p><strong>{{ error }}</strong></p>{% endif %}
-                            <div id="calendar"></div>
-                            <div class="form-group lead">
-                                <label for="check_in_date">Check In Date:</label>
-                                <input type="date" class="form-control" id="check_in_date" name="check_in_date" value={{check_in}}>
-                            </div>
-                            <div class="form-group lead">
-                                <label for="check_out_date">Check Out Date:</label>
-                                <input type="date" class="form-control" id="check_out_date" name="check_out_date" value={{check_out}}>
-                            </div>
-                            {% if property.shareable is True %}
-                            <div class="form-group lead">
-                                <label for="rooms">Select Rooms:</label>
-                                <br>
-                                {% for r in rooms %}
-                                <div class="custom-control custom-checkbox custom-control-inline">
-                                    <input class="custom-control-input" type="checkbox" id={{r.room_id}} name=rooms value={{r.room_id}}>
-                                    <label class="custom-control-label" for={{r.room_id}}>
-                                        <Strong>Room {{forloop.counter}} </Strong> <br>
-                                        <div>Description: {{r.description}}</div>
-                                        <div>Size: {{r.num_guests}}</div>
-                                        <div>Price: ${{r.price}} per night</div>
-                                        <div id={{r.room_id}} availability></div>
-                                        <a id={{r.room_id}} booked_user_profile></a>
-                                    </label> <br>
-                                </div>
-                                {% endfor %}
-                            </div>
-                            {% endif %}
-                            <div class="form-group lead">
-                                <label for="num_guests">Number of Guests:</label>
-                                <input type="number" class="form-control" id="num_guest" name="num_guests" min="1">
-                            </div>
-            
-                            <!-- <div class="lead">
-                                <button class= "btn btn-secondary" type="button" id="check_price">Calculate Total Price</button>
-                                <div>
-                                </div>
-                                <br>
-                            </div> -->
-            
-                            <input type="submit" value="Book" class="btn btn-primary btn-lg"><br><br>
-                        </form>
+            <div class="booking_form col-7 column  ">
+                <form method="post">
+                    {% csrf_token %}
+                    {% if error %}<p><strong>{{ error }}</strong></p>{% endif %}
+                    <div id="calendar"></div>
+                    <div class="form-group lead">
+                        <label for="check_in_date">Check In Date:</label>
+                        <input type="date" class="form-control" id="check_in_date" name="check_in_date" value={{check_in}}>
+                    </div>
+                    <div class="form-group lead">
+                        <label for="check_out_date">Check Out Date:</label>
+                        <input type="date" class="form-control" id="check_out_date" name="check_out_date" value={{check_out}}>
+                    </div>
+                    {% if property.shareable is True %}
+                    <div class="form-group lead">
+                        <label for="rooms">Select Rooms:</label>
+                        <br>
+                        {% for r in rooms %}
+                        <div class="custom-control custom-checkbox custom-control-inline">
+                            <input class="custom-control-input" type="checkbox" id={{r.room_id}} name=rooms value={{r.room_id}}>
+                            <label class="custom-control-label" for={{r.room_id}}>
+                                <Strong>Room {{forloop.counter}} </Strong> <br>
+                                <div>Description: {{r.description}}</div>
+                                <div>Size: {{r.num_guests}}</div>
+                                <div>Price: ${{r.price}} per night</div>
+                                <div id={{r.room_id}} availability></div>
+                                <a id={{r.room_id}} booked_user_profile></a>
+                            </label> <br>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <div class="form-group lead">
+                        <label for="num_guests">Number of Guests:</label>
+                        <input type="number" class="form-control" id="num_guest" name="num_guests" min="1">
                     </div>
 
-                <div class="jumbotron property-info col-5">
-                        <table class="property-table">
-                            <tr>
-                                <td>
-                                    <h3>{{ property.name }}</h3>
-                                    <b>Capacity:</b> {{ property.size }}
-                                    {% if property.size == 1 %}
-                                    guest
-                                    {% else %}
-                                    guests
-                                    {% endif %}
-                                    <br />
-                                    <b>Location:</b> {{ property.location }}
-                                    <br />
-                                    <b>Amenities:</b>
-                                    {% for am in amenities %}
-                                    {% if not forloop.last %}
-                                    {{ am }},
-                                    {% else %}
-                                    {{ am }}
-                                    {% endif %}
-                                    {% endfor %}
-                                </td>
-                            </tr>
-                        </table>
+                    <!-- <div class="lead">
+                        <button class= "btn btn-secondary" type="button" id="check_price">Calculate Total Price</button>
                         <div>
-                            {% if property.shareable is True %}
-                            <br />
-                            {% for r in rooms %}
-            
-                            <Strong>Room {{forloop.counter}} </Strong>
-                            <br>
-                            <div>Description: {{r.description}}</div>
-                            <div>Size: {{r.num_guests}}</div>
-                            <div>Price: ${{r.price}} per night</div>
-            
-                            {% endfor %} {% endif %}
-                            <br />
                         </div>
-                        <div>
-                            <strong>Property Description:</strong>
-                            <p>{{property.description}}</p>
-                        </div>
-                        <div>
-                            {% if property.shareable is False %}
-                            <strong>Property Price:</strong>
-                            ${{property.price}} per night
-                            <br>
-                            <br>
+                        <br>
+                    </div> -->
+
+                    <input type="submit" value="Book" class="btn btn-primary btn-lg"><br><br>
+                </form>
+            </div>
+
+            <div class="jumbotron property-info col-5">
+                <table class="property-table">
+                    <tr>
+                        <td>
+                            <h3>{{ property.name }}</h3>
+                            <b>Capacity:</b> {{ property.size }}
+                            {% if property.size == 1 %}
+                            guest
+                            {% else %}
+                            guests
                             {% endif %}
-                        </div>
-            
-                        <br>
-                        <br>
-                        <div id="propertyid" value="{{property.property_id}}"></div>
-                    </div>
-        
-                
+                            <br />
+                            <b>Location:</b> {{ property.location }}
+                            <br />
+                            <b>Amenities:</b>
+                            {% for am in amenities %}
+                            {% if not forloop.last %}
+                            {{ am }},
+                            {% else %}
+                            {{ am }}
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+                <div>
+                    {% if property.shareable is True %}
+                    <br />
+                    {% for r in rooms %}
+
+                    <Strong>Room {{forloop.counter}} </Strong>
+                    <br>
+                    <div>Description: {{r.description}}</div>
+                    <div>Size: {{r.num_guests}}</div>
+                    <div>Price: ${{r.price}} per night</div>
+
+                    {% endfor %} {% endif %}
+                    <br />
+                </div>
+                <div>
+                    <strong>Property Description:</strong>
+                    <p>{{property.description}}</p>
+                </div>
+                <div>
+                    {% if property.shareable is False %}
+                    <strong>Property Price:</strong>
+                    ${{property.price}} per night
+                    <br>
+                    <br>
+                    {% endif %}
+                </div>
+
+                <br>
+                <br>
+                <div id="propertyid" value="{{property.property_id}}"></div>
+            </div>
+
+
         </div>
-        
+
         <!--<div id="date" name="date"> </div>-->
     </div>
     <!-- Footer -->
@@ -328,11 +328,13 @@
     <!-- Include jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
-    <!-- Include Date Range Picker -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.css" />
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-    <script>
+    <!-- Include Date Range Picker -->
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.css" />-->
+    <!--<script>
         $('#date').datepicker({
             format: "dd/mm/yyyy",
             startDate: "now",
@@ -340,6 +342,6 @@
             multidate: true,
             todayHighlight: true
         });
-    </script>
+    </script>-->
 </body>
 </html>
