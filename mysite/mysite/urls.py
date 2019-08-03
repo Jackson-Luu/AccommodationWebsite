@@ -22,7 +22,7 @@ urlpatterns = [
 	path('admin/', admin.site.urls),
 	path('', home_view, name='home'),
 	path('search/', search_view),
-	path('signup/', register_view),
+	path('signup/', register_view, name='signup'),
 	# path('addshareableproperty/', add_shareable_property_view,name='add_shareable_property'),
     # path('addunshareableproperty/', add_unshareable_property_view,name='add_unshareable_property'),
     path('property/<int:property_id>/', property_view, name='property'),
