@@ -3,12 +3,26 @@
 {% block content %}
 <head>
 	<title>Edit profile: {{ user_data.username }} | Accommodation Portal</title>
+	<style>
+		.img-thumbnail {
+			border-radius: 50%;
+			width: 200px;
+			height: 200px;
+			object-fit: cover;
+			overflow: hidden;
+			background-color: white;
+		}
+	</style>
 </head>
 <div class="container">
 	<form method="POST">
 		{% csrf_token%}
 		<fieldset class="form-group">
 			<legend class="border-bottom mb-4">Profile Edit</legend>
+			<div class="text-center">
+				<p class="lead">Profile picture preview</p>
+				<img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" class="img-thumbnail" id="photo">
+			</div>
 			{{ form|crispy }}
 		</fieldset>
 		<div class="form-group">
@@ -20,7 +34,14 @@
 		{% if user_data.photo %}
 			const photoField = document.getElementById("{{ form.photo.id_for_label|escapejs }}");
 			photoField.value = "{{ user_data.photo|escapejs }}";
+			const photoPreview = document.getElementById("photo");
+			photoPreview.src = "{{ user_data.photo|escapejs }}";
 		{% endif %}
+		
+		// https://jsfiddle.net/EFkW2/
+		$('[id="{{ form.photo.id_for_label|escapejs }}"]').on('change', function() {
+      $('img.img-thumbnail').prop('src', this.value);
+		});
 		
 		{% if user_data.first_name %}
 			const firstNameField = document.getElementById("{{ form.first_name.id_for_label|escapejs }}");
@@ -47,7 +68,7 @@
 			if (birthMonth < 10) birthMonth = "0" + birthMonth;
 			
 			const birthdayString = birthYear + "-" + birthMonth + "-" + birthDate;
-<!--			const birthday = Date.parse(birthdayString);-->
+			//const birthday = Date.parse(birthdayString);
 			birthdayField.setAttribute("value", birthdayString);
 			
 			let today = new Date();
