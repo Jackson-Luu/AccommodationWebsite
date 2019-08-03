@@ -568,6 +568,29 @@ def edit_property_view(request,property_id):
             edited_form = UnshareablePropertyCreationForm(instance=property)
     return render(request,'edit_property.html',{'edited_form':edited_form, 'user':user, 'owner':owner})
 
+@login_required(login_url='/login')
+def property_rooms_view(request, property_id):
+    rooms = Room.objects.filter(property_id=property_id)
+    property = Property.objects.get(property_id=property_id)
+    return render(request, 'view_rooms.html',{'rooms':rooms,'property':property})
+
+@login_required(login_url='/login')
+def edit_room_view(request, room_id):
+    room = Room.objects.get(room_id=room_id)
+    user = request.user
+    property = room.property_id
+    owner = property.host_id
+
+    if request.method == 'POST':
+        edited_form = RoomCreationForm(request.POST,instance=room)
+        if edited_form.is_valid():
+            edited_form.save()
+            messages.success(request,'Changes Saved!')
+            return redirect('view_rooms',property.property_id)
+    else:
+        edited_form = RoomCreationForm(instance=room)
+    return render(request, 'edit_room.html', {'user':user,'owner':owner,'edited_form':edited_form,})
+
 @login_required(login_url='/login') 
 def get_data_view(request):
 

@@ -2,14 +2,14 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <head>
-	<title>Edit property | Accommodation Portal</title>
+	<title>Edit Room | Accommodation Portal</title>
 </head>
 <div class="container">
     <form method="POST">
         {% csrf_token%}
         <fieldset class="form-group">
             <header class="jumbotron my-4">
-                <h1 class="display-3">Edit Property</h1>
+                <h1 class="display-3">Edit Room</h1>
                 <p class="lead"></p>
             </header>
             {% if owner == user %}
