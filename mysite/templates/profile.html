@@ -1,12 +1,42 @@
-{% extends "layout.html" %}
-
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
     <title>My profile | Accommodation Portal</title>
 
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
     <link rel="stylesheet" href="http://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
+        body {
+            padding-top: 56px;
+        }
+
+        * {
+            margin: 0;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        .wrapper {
+            min-height: 100%;
+            height: auto !important;
+            height: 100%;
+            margin: 0 auto -122px; /* the bottom margin is the negative value of the footer's height */
+        }
+
+        .py-5, .push {
+            height: 122px; /* .push must be the same height as .footer */
+        }
+
         .img-thumbnail {
             border-radius: 50%;
             width: 300px;
@@ -97,173 +127,127 @@
         }
     </style>
 </head>
-<div class="container">
-    <div class="float-right">
-        <button class="btn btn-outline-info" id="edit" type="button">Edit Profile</button>
-        <button class="btn btn-outline-info" id="pw-change" type="button">Change Password</button>
-    </div>
-    <h2>{{ request.user.username }}</h2>
-    <div class="text-center">
-        <img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" class="img-thumbnail" id="photo">
-    </div>
-    <h1 class="display-1 text-center" id="name"></h1>
-    <h1 class="display-6 text-center" id="age"></h1>
-    <ul class="list-inline text-center">
-        <li class="list-inline-item">
-            <p>Date joined: {{ request.user.date_joined }}</p>
-        </li>
-        <li class="list-inline-item"><p> | </p></li>
-        <li class="list-inline-item">
-            <p>Last active: {{ request.user.last_login }}</p>
-        </li>
-    </ul>
-
-    <hr>
-    <h1 class="display7">About me:</h1>
-    <p class="lead">{{ request.user.description }}</p>
-    <!--	<div style="color:rgb(255, 145, 0);">-->
-    <!--		<h1 style="background:#00FF00 url(http://img.sccnn.com/bimg/338/16513.jpg) repeat 0;">Welcome {{ request.user.first_name }}</h1>-->
-    <!--	</div>-->
-    <!--	<p style="background:#00FF00 url(http://img.sccnn.com/bimg/338/16513.jpg) repeat 0;"> User Account: {{ request.user.username }}</p>-->
-    <!--	<p> User First Name: {{ request.user.first_name }} </p>-->
-    <!--	<p> User Birthday: {{ request.user.birthday }} </p>-->
-    <!--	<p> User Description: {{ request.user.description }} </p>-->
-    <!--	<button class="btn btn-outline-info" id="edit" type="button">Edit Profile</button>-->
-    <!--	<button class="btn btn-outline-info" id="pw-change" type="button">Change Password</button>-->
-
+<body>
+    {% include 'navbar.html' %}
     <br />
-    <h4>Reviews</h4>
-    <hr>
-    {% if reviews %}
-    <table id="myTable" class="table table-striped">
-        <thead>
-            <tr>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for r in reviews %}
-            <tr>
-                <td>
-                    <b>{{ r.1 }}</b>
-                    <br />
-                    <i>Rating:</i>
-                    {% if r.0.rating == 5 %}
-                    <label>
-                        <span class="fa fa-star checked icon"></span>
-                        <span class="fa fa-star checked icon"></span>
-                        <span class="fa fa-star checked icon"></span>
-                        <span class="fa fa-star checked icon"></span>
-                        <span class="fa fa-star checked icon"></span>
-                    </label>
-                    {% elif r.0.rating == 4 %}
-                    <label>
-                        <span class="fa fa-star checked icon"></span>
-                        <span class="fa fa-star checked icon"></span>
-                        <span class="fa fa-star checked icon"></span>
-                        <span class="fa fa-star checked icon"></span>
-                        <span class="fa fa-star icon"></span>
-                    </label>
-                    {% elif r.0.rating == 3 %}
-                    <label>
-                        <span class="fa fa-star checked icon"></span>
-                        <span class="fa fa-star checked icon"></span>
-                        <span class="fa fa-star checked icon"></span>
-                        <span class="fa fa-star icon"></span>
-                        <span class="fa fa-star icon"></span>
-                    </label>
-                    {% elif r.0.rating == 2 %}
-                    <label>
-                        <span class="fa fa-star checked icon"></span>
-                        <span class="fa fa-star checked icon"></span>
-                        <span class="fa fa-star icon"></span>
-                        <span class="fa fa-star icon"></span>
-                        <span class="fa fa-star icon"></span>
-                    </label>
-                    {% elif r.0.rating == 1 %}
-                    <label>
-                        <span class="fa fa-star checked icon"></span>
-                        <span class="fa fa-star icon"></span>
-                        <span class="fa fa-star icon"></span>
-                        <span class="fa fa-star icon"></span>
-                        <span class="fa fa-star icon"></span>
-                    </label>
-                    {% endif %}
-                    <br />
-                    {{ r.0.text }}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% endif %}
-    <div id="accordion">
-        <div class="card">
-            <div class="card-header" id="headingOne">
-                <h5 class="mb-0">
-                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Write a review
-                    </button>
-                </h5>
-            </div>
-            <div id="collapseOne" class="collapse hide" aria-labelledby="headingOne" data-parent="#accordion">
-                <br />
-                {% if user.is_authenticated %}
-                <form class="review-form" method="post" id="reviewForm">
-                    {% csrf_token %}
-                    <b>Rating:</b>
-                    <br />
-                    <div class="rating">
-                        <label>
-                            <input type="radio" name="stars" value="1" />
-                            <span class="fa fa-star icon"></span>
-                        </label>
-                        <label>
-                            <input type="radio" name="stars" value="2" />
-                            <span class="fa fa-star icon"></span>
-                            <span class="fa fa-star icon"></span>
-                        </label>
-                        <label>
-                            <input type="radio" name="stars" value="3" />
-                            <span class="fa fa-star icon"></span>
-                            <span class="fa fa-star icon"></span>
-                            <span class="fa fa-star icon"></span>
-                        </label>
-                        <label>
-                            <input type="radio" name="stars" value="4" />
-                            <span class="fa fa-star icon"></span>
-                            <span class="fa fa-star icon"></span>
-                            <span class="fa fa-star icon"></span>
-                            <span class="fa fa-star icon"></span>
-                        </label>
-                        <label>
-                            <input type="radio" name="stars" value="5" />
-                            <span class="fa fa-star icon"></span>
-                            <span class="fa fa-star icon"></span>
-                            <span class="fa fa-star icon"></span>
-                            <span class="fa fa-star icon"></span>
-                            <span class="fa fa-star icon"></span>
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <textarea class="form-control" form="reviewForm" id="reviewText" name="reviewText" placeholder="Enter your review here..." rows="5"></textarea>
-                    </div>
-                    <div align="right">
-                        <button class="btn btn-primary" id="review" type="submit">Submit</button>
-                    </div>
-                </form>
-                {% else %}
-                <div align="center">
-                    <a href="/login">Please login to write a review.</a>
-                </div>
-                {% endif %}
-                <br />
-            </div>
+    <div class="container">
+        <div class="float-right">
+            <button class="btn btn-outline-info" id="edit" type="button">Edit Profile</button>
+            <button class="btn btn-outline-info" id="pw-change" type="button">Change Password</button>
         </div>
+        <h2>{{ request.user.username }}</h2>
+        <div class="text-center">
+            <img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" class="img-thumbnail" id="photo">
+        </div>
+        <h1 class="display-1 text-center" id="name"></h1>
+        <h1 class="display-6 text-center" id="age"></h1>
+        <ul class="list-inline text-center">
+            <li class="list-inline-item">
+                <p>Date joined: {{ request.user.date_joined }}</p>
+            </li>
+            <li class="list-inline-item"><p> | </p></li>
+            <li class="list-inline-item">
+                <p>Last active: {{ request.user.last_login }}</p>
+            </li>
+        </ul>
+
+        <hr>
+        <h1 class="display7">About me:</h1>
+        <p class="lead">{{ request.user.description }}</p>
+        <!--	<div style="color:rgb(255, 145, 0);">-->
+        <!--		<h1 style="background:#00FF00 url(http://img.sccnn.com/bimg/338/16513.jpg) repeat 0;">Welcome {{ request.user.first_name }}</h1>-->
+        <!--	</div>-->
+        <!--	<p style="background:#00FF00 url(http://img.sccnn.com/bimg/338/16513.jpg) repeat 0;"> User Account: {{ request.user.username }}</p>-->
+        <!--	<p> User First Name: {{ request.user.first_name }} </p>-->
+        <!--	<p> User Birthday: {{ request.user.birthday }} </p>-->
+        <!--	<p> User Description: {{ request.user.description }} </p>-->
+        <!--	<button class="btn btn-outline-info" id="edit" type="button">Edit Profile</button>-->
+        <!--	<button class="btn btn-outline-info" id="pw-change" type="button">Change Password</button>-->
+
+        <br />
+        <h4>Reviews</h4>
+        <hr>
+        {% if reviews %}
+        <table id="myTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in reviews %}
+                <tr>
+                    <td>
+                        <b>{{ r.1 }}</b>
+                        <br />
+                        <i>Rating:</i>
+                        {% if r.0.rating == 5 %}
+                        <label>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                        </label>
+                        {% elif r.0.rating == 4 %}
+                        <label>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star icon"></span>
+                        </label>
+                        {% elif r.0.rating == 3 %}
+                        <label>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star icon"></span>
+                            <span class="fa fa-star icon"></span>
+                        </label>
+                        {% elif r.0.rating == 2 %}
+                        <label>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star icon"></span>
+                            <span class="fa fa-star icon"></span>
+                            <span class="fa fa-star icon"></span>
+                        </label>
+                        {% elif r.0.rating == 1 %}
+                        <label>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star icon"></span>
+                            <span class="fa fa-star icon"></span>
+                            <span class="fa fa-star icon"></span>
+                            <span class="fa fa-star icon"></span>
+                        </label>
+                        {% endif %}
+                        <br />
+                        {{ r.0.text }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+        <br />
     </div>
-    <br />
-</div>
-<script>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+        </div>
+        <!-- /.container -->
+    </footer>
+
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Datatables -->
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
 	{% if request.user.first_name %}
 		const name = document.getElementById("name");
 		name.innerText = "{{ request.user.first_name|escapejs }}";
@@ -303,5 +287,6 @@
             "order": [],
         });
     });
-</script>
-{% endblock %}
+    </script>
+</body>
+</html>
