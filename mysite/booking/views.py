@@ -302,6 +302,7 @@ def add_property_view(request):
             if property_name and property_location and property_description:
                 p = Property(host_id=user,name=property_name,location=property_location,description=property_description,shareable=True,bookable=False)
                 p.save()
+                PropertyImages(property=p, image='https://images.unsplash.com/photo-1527030280862-64139fba04ca?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1206&q=80').save()
             else:
                 return render(request,'add_property.html',{'error': "Please fill in all required fields",'amenity_list':amenity_list})
             for am in checked_amenities:
@@ -323,6 +324,8 @@ def add_property_view(request):
             if property_name and property_location and property_description and property_price and property_size:
                 p = Property(host_id=user,name=property_name,price=property_price,location=property_location,size=property_size,description=property_description,shareable=True)
                 p.save()
+                PropertyImages(property=p, image='https://images.unsplash.com/photo-1527030280862-64139fba04ca?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1206&q=80').save()
+
             else:
                 return render(request,'add_property.html',{'error': "Please fill in all required fields",'amenity_list':amenity_list})
 
