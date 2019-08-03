@@ -441,7 +441,6 @@ def booking_view(request, property_id, check_in=None, check_out=None):
             }) 
        
         if p.shareable == True:
-            print("true")
             checked_rooms = request.POST.getlist('rooms')
             num_guests = request.POST.get('num_guests')
             if not checked_rooms or not num_guests:
@@ -456,8 +455,23 @@ def booking_view(request, property_id, check_in=None, check_out=None):
 
             if int(num_guests) > max_guests:
                 return render(request, 'booking.html', {
-                'error': "Exceeded maximum number of guests","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+                'error': "Exceeded maximum number of guests.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
                 })
+
+            # Check pre-existing bookings for property
+            bookings = Booking.objects.filter(property_id=p.property_id)
+            for b in bookings:
+                if b.end_date < check_in_date:
+                    continue
+                elif b.start_date > check_out_date:
+                    continue
+                else:
+                    # Check if booked rooms clashes with selected rooms
+                    booked_rooms = list(BookingTable.objects.filter(booking=b).values_list('room', flat=True))
+                    if not set([int(i) for i in checked_rooms]).isdisjoint(booked_rooms):
+                        return render(request, 'booking.html', {
+                        'error': "Room is unavailable for that period.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out})
+
             booking_instance = Booking(user_id=user,start_date=check_in_date, end_date=check_out_date,property_id=p,num_guests=num_guests,num_rooms=len(checked_rooms))
             booking_instance.save()
             #make booking
@@ -472,12 +486,28 @@ def booking_view(request, property_id, check_in=None, check_out=None):
             
 
         elif p.shareable == False:
-            print("flse")
             num_guests = request.POST.get('num_guests')
             if not num_guests:
                 return render(request, 'booking.html', {
                 'error': "Please enter all required fields.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
                 })
+
+            if int(num_guests) > p.size:
+                return render(request, 'booking.html', {
+                'error': "Exceeded maximum number of guests.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+                })
+
+            # Check pre-existing bookings for property
+            bookings = Booking.objects.filter(property_id=p.property_id)
+            for b in bookings:
+                if b.end_date < check_in_date:
+                    continue
+                elif b.start_date > check_out_date:
+                    continue
+                else:
+                    return render(request, 'booking.html', {
+                    'error': "Property is unavailable for that period.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out})
+
             booking_instance = Booking(user_id=user,start_date=check_in_date, end_date=check_out_date,property_id=p,num_guests=num_guests)
             booking_instance.save()
 
