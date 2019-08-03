@@ -371,8 +371,9 @@ def property_view(request, property_id, check_in=None, check_out=None):
         reviews[i] = (reviews[i], r.reviewer.first_name)
 
     owner = CustomUser.objects.get(username=property.host_id)
+    user = request.user
 
-    return render(request, 'property_view.html', {'property':property,'rooms':rooms, 'amenities':amenities, 'check_in':check_in, 'check_out':check_out, 'images':imgs, 'reviews':reviews, 'owner':owner})
+    return render(request, 'property_view.html', {'property':property,'rooms':rooms, 'amenities':amenities, 'check_in':check_in, 'check_out':check_out, 'images':imgs, 'reviews':reviews, 'owner':owner,'user':user})
 
 # @login_required(login_url='/login')
 # def book_property_view(request, property_id, check_in=None, check_out=None):
@@ -545,14 +546,14 @@ def select_property_type_view(request):
 
 @login_required(login_url='/login')
 def edit_property_view(request,property_id):
-    # property = Property.objects.get(property_id=property_id)
-    # if request.method == 'POST':
-    #     edited_form = UnshareablePropertyCreationForm(request.POST,instance=property)
-    #     if edited_form.is_valid():
-    #         edited_form.save()
-    #         return redirect('home')
-    # else:
-    #     edited_form = UnshareablePropertyCreationForm(instance=property)
+    property = Property.objects.get(property_id=property_id)
+    if request.method == 'POST':
+        edited_form = UnshareablePropertyCreationForm(request.POST,instance=property)
+        if edited_form.is_valid():
+            edited_form.save()
+            return redirect('home')
+    else:
+        edited_form = UnshareablePropertyCreationForm(instance=property)
     return render(request,'edit_property.html',{'edited_form':edited_form})
 
 @login_required(login_url='/login') 

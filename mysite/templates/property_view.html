@@ -216,6 +216,7 @@
                         <img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" id="owner-photo">
                         <p class="host-name">Host: <a href="{% url 'profile' user_id=owner.user_id %}">{{ owner.first_name }}</a></p>
                     </td>
+                    
                 </tr>
             </table>
             <div>
@@ -245,14 +246,24 @@
                 {% endif %}
             </div>
 
-            <a href="{% url 'booking' property.property_id check_in check_out %}" class="btn btn-primary">Book Property</a>
-            <button id="addtofavourites" class="btn btn-primary">Add to Favourites</button>
+
+            {% if owner == user %}
+            <div>
+                own property
+            </div>
+            {% else %}
+                <a href="{% url 'booking' property.property_id check_in check_out %}" class="btn btn-primary">Book Property</a>
+                <button id="addtofavourites" class="btn btn-primary">Add to Favourites</button>
+            {% endif %}
+
+            
             <br>
             <br>
             <div id="propertyid" value="{{property.property_id}}"></div>
         </div>
         <div id="accordion">
             <div class="card">
+                {% if owner != user %}
                 <div class="card-header" id="headingOne">
                     <h5 class="mb-0">
                         <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -260,6 +271,7 @@
                         </button>
                     </h5>
                 </div>
+                {% endif %}
                 <div id="collapseOne" class="collapse hide" aria-labelledby="headingOne" data-parent="#accordion">
                     <br />
                     {% if user.is_authenticated %}
