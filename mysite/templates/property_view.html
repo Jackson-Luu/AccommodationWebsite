@@ -145,12 +145,13 @@
             font-size: 150%;
         }
 
-        .img-thumbnail {
-            border-radius: 50%;
-            width: 75px;
-            height: 75px;
-            object-fit: cover;
-            overflow: hidden;
+        #owner-photo {
+          border-radius: 50%;
+          width: 25px;
+          height: 25px;
+          object-fit: cover;
+          overflow: hidden;
+          background-color: white;
         }
     </style>
 </head>
@@ -212,12 +213,8 @@
                         {% endfor %}
                     </td>
                     <td align="right">
-                        {% if owner.photo %}
-                            <img src="{{ owner.photo }}" class="img-thumbnail" , id="photo">
-                        {% else %}
-                            <img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" class="img-thumbnail" , id="photo">
-                        {% endif %}
-                        <p class="host-name">Host: <a href="{% url 'profile' user_id=owner.user_id %}">{{ owner.first_name }}</a></p>
+                        <p class="host-name">Host: <a href="{% url 'profile' user_id=owner.user_id %}">
+                            <img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" id="owner-photo"> {{ owner.first_name }}</a></p>
                     </td>
                 </tr>
             </table>
@@ -424,6 +421,11 @@
                 "order": [],
             });
         });
+        
+        {% if owner.photo %}
+            const ownerPhoto = document.getElementById("owner-photo");
+            ownerPhoto.src = "{{ owner.photo|escapejs }}";
+        {% endif %}
     </script>
 </body>
 </html>
