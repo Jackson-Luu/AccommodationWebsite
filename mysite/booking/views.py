@@ -322,7 +322,7 @@ def add_property_view(request):
             except ValueError:
                 print("enter valid values")
             if property_name and property_location and property_description and property_price and property_size:
-                p = Property(host_id=user,name=property_name,price=property_price,location=property_location,size=property_size,description=property_description,shareable=True)
+                p = Property(host_id=user,name=property_name,price=property_price,location=property_location,size=property_size,description=property_description,shareable=False)
                 p.save()
                 PropertyImages(property=p, image='https://images.unsplash.com/photo-1527030280862-64139fba04ca?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1206&q=80').save()
 
@@ -543,22 +543,19 @@ def select_property_type_view(request):
             return redirect('home')
     else:
         selection_form = SelectPropertyTypeForm()
-    # selection = selection_form.cleaned_data['shareable']
-    # print(selection)
-   
 
     return render(request, 'select_property_type.html', {'selection_form':selection_form})
 
 @login_required(login_url='/login')
 def edit_property_view(request,property_id):
-    property = Property.objects.get(property_id=property_id)
-    if request.method == 'POST':
-        edited_form = UnshareablePropertyCreationForm(request.POST,instance=property)
-        if edited_form.is_valid():
-            edited_form.save()
-            return redirect('home')
-    else:
-        edited_form = UnshareablePropertyCreationForm(instance=property)
+    # property = Property.objects.get(property_id=property_id)
+    # if request.method == 'POST':
+    #     edited_form = UnshareablePropertyCreationForm(request.POST,instance=property)
+    #     if edited_form.is_valid():
+    #         edited_form.save()
+    #         return redirect('home')
+    # else:
+    #     edited_form = UnshareablePropertyCreationForm(instance=property)
     return render(request,'edit_property.html',{'edited_form':edited_form})
 
 @login_required(login_url='/login') 
@@ -597,8 +594,7 @@ def get_data_view(request):
         
     else:
         room_attr_list = []
-        # print('no dates')
-    # print(room_attr_list)
+
     response_data = {}
     try:
         response_data['result'] = 'Success'

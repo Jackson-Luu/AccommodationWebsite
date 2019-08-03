@@ -1,20 +1,86 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<style>
+        /* * {
+          box-sizing: border-box;
+        } */
+        
+        /* Create two equal columns that floats next to each other */
+        /* .column {
+          float: left;
+          width: 50%;
+          padding: 20px;
+          
+        }
+        
+        /* Clear floats after the columns */
+        /* .row:after {
+          content: "";
+          display: table;
+          clear: both;
+        } */ */
+        </style>
 <head>
 	<title>My properties | Accommodation Portal</title>
 </head>
 <div class="container">
-    <div class="jumbotron">
+    
+    <header class="jumbotron my-4">
+        <h1 class="display-3">My Properties</h1>
+        <p class="lead"> </p>
+    </header>   
+    
+    
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="col-md-12 jumbotron">
+                <h2>Shareable Properties</h2>
+                {% for property in user_properties_shareable %}
+                    <strong>{{property.name}}</strong>
+                    <div>Property Description: {{property.description}}</div>
+                    <div>Rooms: {{property.size}}</div>
+                    <div>Total property price: ${{property.price}}</div> <br>
+                    <!-- <h3>Property Room Details</h3> -->
+                    <a href="{% url 'edit_property' property_id=property.property_id%}" class="btn btn-primary">Edit Property</a>
+                    <a href="{% url 'add_room' property_id=property.property_id %}" class="btn btn-primary">Add Rooms</a>
+                    <a href="{% url 'property' property_id=property.property_id %}" class="btn btn-primary">View Property</a>
+                    <br> <br>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="col-md-12 jumbotron">
+                <h2>Unshareable Properties</h2>
+                {% for property in user_properties_unshareable %}
+                    <strong>{{property.name}}</strong>
+                    <div>Property Description: {{property.description}}</div>
+                    <div>Rooms: {{property.size}}</div>
+                    <div>Total property price: ${{property.price}}</div> <br>
+                    <!-- <h3>Property Room Details</h3> -->
+                    <a href="{% url 'edit_property' property_id=property.property_id%}" class="btn btn-primary">Edit Property</a>
+                    <a href="{% url 'add_room' property_id=property.property_id %}" class="btn btn-primary">Add Rooms</a>
+                    <a href="{% url 'property' property_id=property.property_id %}" class="btn btn-primary">View Property</a>
+                    <br> <br>
+                {% endfor %} 
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- <div class="jumbotron">
         <br>
-        <h3>My Shareable Properties</h3> <br>
+        <h3>Shareable Properties</h3> <br>
             {% for property in user_properties_shareable %}
                 <strong>{{property.name}}</strong>
                 <div>Property Description: {{property.description}}</div>
                 <div>Rooms: {{property.size}}</div>
                 <div>Total property price: ${{property.price}}</div> <br>
                 <!-- <h3>Property Room Details</h3> -->
-                <a href="{% url 'edit_property' property_id=property.property_id%}" class="btn btn-primary">Edit Property</a>
+                <!-- <a href="{% url 'edit_property' property_id=property.property_id%}" class="btn btn-primary">Edit Property</a>
                 <a href="{% url 'add_room' property_id=property.property_id %}" class="btn btn-primary">Add Rooms</a>
                 <a href="{% url 'property' property_id=property.property_id %}" class="btn btn-primary">View Property</a>
                 <br> <br>
@@ -33,9 +99,9 @@
                 <a href="{% url 'add_room' property_id=property.property_id %}" class="btn btn-primary">Add Rooms</a>
                 <a href="{% url 'property' property_id=property.property_id %}" class="btn btn-primary">View Property</a>
                 <br> <br>
-            {% endfor %}  
+            <!-- {% endfor %}  
         </div>
-    {% endif %}    
+    {% endif %}     --> --> -->
 </div>
 
 {% endblock %}
