@@ -468,7 +468,7 @@ def booking_view(request, property_id, check_in=None, check_out=None):
                 booking_table_instance.save()
 
             messages.success(request,'Property Booked!')
-            return redirect('home')
+            return redirect('my_bookings')
             
 
         elif p.shareable == False:
@@ -482,7 +482,7 @@ def booking_view(request, property_id, check_in=None, check_out=None):
             booking_instance.save()
 
             messages.success(request,'Property Booked!')
-            return redirect('home')
+            return redirect('my_bookings')
        
         
     return render(request, 'booking.html', {"property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out })

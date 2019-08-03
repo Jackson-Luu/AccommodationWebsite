@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -144,6 +144,14 @@
         .host-name {
             font-size: 150%;
         }
+
+        .img-thumbnail {
+            border-radius: 50%;
+            width: 75px;
+            height: 75px;
+            object-fit: cover;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -204,6 +212,11 @@
                         {% endfor %}
                     </td>
                     <td align="right">
+                        {% if owner.photo %}
+                            <img src="{{ owner.photo }}" class="img-thumbnail" , id="photo">
+                        {% else %}
+                            <img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" class="img-thumbnail" , id="photo">
+                        {% endif %}
                         <p class="host-name">Host: <a href="{% url 'profile' user_id=owner.user_id %}">{{ owner.first_name }}</a></p>
                     </td>
                 </tr>
