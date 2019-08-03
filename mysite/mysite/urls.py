@@ -35,7 +35,7 @@ urlpatterns = [
     path('profile/myproperties', user_properties_view, name='my_properties'),
     path('profile/mybookings',user_bookings_view, name='my_bookings'),
     # path('selectpropertytype/',select_property_type_view, name='select_property_type'),
-    path('changeproperty/<int:property_id>/',edit_property_view, name='edit_property'),
+    path('<int:property_id>/edit/',edit_property_view, name='edit_property'),
      path('addproperty/',add_property_view, name='add_property'),
 
 
