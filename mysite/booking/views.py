@@ -300,7 +300,7 @@ def add_property_view(request):
             except ValueError:
                 print("enter valid values")
             if property_name and property_location and property_description:
-                p = Property(host_id=user,name=property_name,location=property_location,description=property_description,shareable=True)
+                p = Property(host_id=user,name=property_name,location=property_location,description=property_description,shareable=True,bookable=False)
                 p.save()
             else:
                 return render(request,'add_property.html',{'error': "Please fill in all required fields",'amenity_list':amenity_list})
@@ -346,7 +346,7 @@ def add_room_view(request,property_id):
         new_price = p.price + price
         new_size = p.size + 1
         #updating property total price
-        Property.objects.filter(property_id=property_id).update(price=new_price,size=new_size)
+        Property.objects.filter(property_id=property_id).update(price=new_price,size=new_size,bookable=True)
         return redirect('my_properties') # redirect to user's property list
     else:
         form = RoomCreationForm()
@@ -441,6 +441,12 @@ def booking_view(request, property_id, check_in=None, check_out=None):
             }) 
        
         if p.shareable == True:
+
+            if not p.bookable:
+                return render(request, 'booking.html', {
+                'error': "This property is not available for booking at this time.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+                })
+
             checked_rooms = request.POST.getlist('rooms')
             num_guests = request.POST.get('num_guests')
             if not checked_rooms or not num_guests:

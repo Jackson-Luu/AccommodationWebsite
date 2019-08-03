@@ -21,6 +21,7 @@ class Property(models.Model):
     size = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
     description = models.TextField(null=True, blank=True)
     shareable = models.BooleanField(null=False, blank=False, default=True)
+    bookable = models.BooleanField(null=False, blank=False, default=True)
 
 class Room(models.Model):
     room_id = models.AutoField(primary_key=True)

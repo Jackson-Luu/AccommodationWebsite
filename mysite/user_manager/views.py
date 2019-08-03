@@ -41,6 +41,8 @@ def profile_view(request, user_id):
 			# age = date.today().year - user_data.birthday.year
 			return render(request, 'other_profile.html', {'user_data': user_data})
 			# return render(request, 'other_profile.html', {'user_data': user_data, 'age': age})
+	elif request.method == 'POST':
+		pass
 	else:
 		return True
 
