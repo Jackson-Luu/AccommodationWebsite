@@ -147,8 +147,8 @@
 
         #owner-photo {
           border-radius: 50%;
-          width: 25px;
-          height: 25px;
+          width: 75px;
+          height: 75px;
           object-fit: cover;
           overflow: hidden;
           background-color: white;
@@ -213,8 +213,8 @@
                         {% endfor %}
                     </td>
                     <td align="right">
-                        <p class="host-name">Host: <a href="{% url 'profile' user_id=owner.user_id %}">
-                            <img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" id="owner-photo"> {{ owner.first_name }}</a></p>
+                        <img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" id="owner-photo">
+                        <p class="host-name">Host: <a href="{% url 'profile' user_id=owner.user_id %}">{{ owner.first_name }}</a></p>
                     </td>
                 </tr>
             </table>

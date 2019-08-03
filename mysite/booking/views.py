@@ -36,7 +36,7 @@ def load_csv():
                 if idx > 400:
                     break
                 try:
-                    user = CustomUser.objects.create_user(username=(row['host_id']+row['host_name']), password='password', first_name=row['host_name'], description=row['host_about'], birthday=date(randint(1960,1999), 1, 1))
+                    user = CustomUser.objects.create_user(username=(row['host_id']+row['host_name']), password='password', first_name=row['host_name'], description=row['host_about'], birthday=date(randint(1960,1999), 1, 1), photo=row['host_picture_url'])
                     p = Property(name=row['name'], host_id=user, price=Decimal(row['price'][1:].replace(",", "")), location=row['city'], size=int(row['accommodates']), description=row['description'], shareable=(random() < 0.5))
                     p.save()
 
