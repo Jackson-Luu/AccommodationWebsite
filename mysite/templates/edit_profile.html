@@ -19,47 +19,63 @@
 		{% csrf_token%}
 		<fieldset class="form-group">
 			<legend class="border-bottom mb-4">Profile Edit</legend>
+			<div class="form-group">
+				<button class="btn btn-outline-info" type="submit" style="float: right">Save</button>
+				<button class="btn btn-outline-info" id="cancel" type="button" >Back to profile</button>
+			</div>
 			<div class="text-center">
 				<p class="lead">Profile picture preview</p>
 				<img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" class="img-thumbnail" id="photo">
 			</div>
 <!--			{{ form|crispy }}-->
-			<div class="form-group" id="div_{{ form.photo.id_for_label }}">
-				<label for="{{ form.photo.id_for_label }}">{{ form.photo.label }}</label>
-				<div class="">
-					{{ form.photo }}
-					<small class="form-text text-muted" id="hint_{{ form.photo.id_for_label }}">{{ form.photo.help_text }}</small>
+			<div class="form-row">
+				<div class="col">
+					<div class="form-group" id="div_{{ form.photo.id_for_label }}">
+						<label class="lead" for="{{ form.photo.id_for_label }}">{{ form.photo.label }}</label>
+						<div class="">
+							{{ form.photo }}
+							<small class="form-text text-muted" id="hint_{{ form.photo.id_for_label }}">{{ form.photo.help_text }}</small>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="form-group" id="div_{{ form.first_name.id_for_label }}">
-				<label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
-				<div class="">
-					{{ form.first_name }}
+			<div class="form-row">
+				<div class="col">
+					<div class="form-group" id="div_{{ form.first_name.id_for_label }}">
+						<label class="lead" for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+						<div class="">
+							{{ form.first_name }}
+						</div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="form-group" id="div_{{ form.last_name.id_for_label }}">
+						<label class="lead" for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+						<div class="">
+							{{ form.last_name }}
+						</div>
+					</div>
+				</div>
+				<div class="col-auto">
+					<div class="form-group" id="div_{{ form.birthday.id_for_label }}">
+						<label class="lead" for="{{ form.birthday.id_for_label }}">{{ form.birthday.label }}</label>
+						<div class="">
+							{{ form.birthday }}
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="form-group" id="div_{{ form.last_name.id_for_label }}">
-				<label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
-				<div class="">
-					{{ form.last_name }}
-				</div>
-			</div>
-			<div class="form-group" id="div_{{ form.birthday.id_for_label }}">
-				<label for="{{ form.birthday.id_for_label }}">{{ form.birthday.label }}</label>
-				<div class="">
-					{{ form.birthday }}
-				</div>
-			</div>
-			<div class="form-group" id="div_{{ form.description.id_for_label }}">
-				<label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
-				<div class="">
-					{{ form.description }}
+			<div class="form-row">
+				<div class="col">
+					<div class="form-group" id="div_{{ form.description.id_for_label }}">
+						<label class="lead" for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+						<div class="">
+							{{ form.description }}
+						</div>
+					</div>
 				</div>
 			</div>
 		</fieldset>
-		<div class="form-group">
-			<button class="btn btn-outline-info" type="submit" style="float: right">Save</button>
-			<button class="btn btn-outline-info" id="cancel" type="button" >Back to profile</button>
-		</div>
 	</form>
 	<script>
 		const photoField = document.getElementById("{{ form.photo.id_for_label|escapejs }}");

@@ -39,7 +39,7 @@
 		<div class="form-row justify-content-center">
 			<div class="col-3">
 				<div class="form-group">
-					<label class="lead">{{ form.username.label_tag }}</label>
+					<label class="lead">{{ form.username.label }}</label>
 					<div class="input-group">
 						<input class="form-control" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" type="text" />
 		<!--				{{ form.username.errors }}-->
@@ -50,7 +50,7 @@
 		<div class="form-row justify-content-center">
 			<div class="col-3">
 				<div class="form-group">
-					<label class="lead">{{ form.password.label_tag }}</label>
+					<label class="lead">{{ form.password.label }}</label>
 					<div class="input-group">
 						<input class="form-control" id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}" type="password" />
 		<!--				{{ form.password.errors }}-->
@@ -64,7 +64,12 @@
 				<input type="hidden" name="next" value="{{ next }}" />
 			</div>
 		</div>
-		
+		<div class="form-row justify-content-center">
+			<div class="col-3">
+				<a class="lead">No account?</a>
+				<a class="lead" href="{% url 'signup' %}">Sign up</a>
+			</div>
+		</div>
 	</form>
 	
 <!--	{# Assumes you setup the password_reset view in your URLconf #}-->
