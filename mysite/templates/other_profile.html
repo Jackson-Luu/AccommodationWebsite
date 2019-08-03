@@ -3,6 +3,15 @@
 {% block content %}
 <head>
 	<title>{{ user_data.username }}'s profile | Accommodation Portal</title>
+	<style>
+		.img-thumbnail {
+			border-radius: 50%;
+			width: 300px;
+			height: 300px;
+			object-fit: cover;
+			overflow: hidden;
+		}
+	</style>
 </head>
 <div class="container">
 	<!--    <div style="color:rgb(255, 145, 0);">-->
@@ -12,6 +21,9 @@
 	<!--&lt;!&ndash;    <p> Age: {{ age }} </p>&ndash;&gt;-->
 	<!--    <p> User Description: {{ user_data.description }} </p>-->
 	<h1>{{ user_data.username }}</h1>
+	<div class="text-center">
+		<img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" class="img-thumbnail", id="photo">
+	</div>
 	<h1 class="display-1 text-center" id="name"></h1>
 	<h1 class="display-6 text-center" id="age"></h1>
 	<ul class="list-inline text-center">
@@ -41,6 +53,11 @@
 	const age = now.getFullYear() - {{ user_data.birthday.year|escapejs }};
 	const ageElm = document.getElementById("age");
 	ageElm.innerText = "Age: " + age;
+	{% endif %}
+	
+	{% if user_data.photo %}
+		const photo = document.getElementById("photo");
+		photo.src = "{{ user_data.photo|escapejs }}";
 	{% endif %}
 	
 </script>

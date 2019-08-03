@@ -26,5 +26,6 @@ class CustomUserCreationForm(UserCreationForm):
 class CustomUserProfileEditForm(forms.ModelForm):
 	class Meta(forms.ModelForm):
 		model = CustomUser
-		fields = ['first_name', 'last_name', 'birthday', 'description']
+		fields = ['photo', 'first_name', 'last_name', 'birthday', 'description']
 		widgets = {'birthday': DateInput(),}
+		labels = {'photo': 'Profile picture'}
