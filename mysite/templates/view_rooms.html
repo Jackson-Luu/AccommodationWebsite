@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<head>
+	<title>View Rooms | Accommodation Portal</title>
+</head>
+<div class="container">
+    <div class="row">
+            <div class="col-md-6">
+                <div class="col-md-12 ">
+                    <table id="myTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th><h2 style="text-align:center">Rooms</h2></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            {% for r in rooms %}
+                                <tr>
+                                    <td>
+                                        <h4>Room {{forloop.counter}}</h4>
+                                        <div>Description: {{r.description}}</div>
+                                        <div>Size: {{r.num_guests}}</div>
+                                        <div>Price: ${{r.price}} per night</div>
+                                        <br>
+                                        <a href="{% url 'edit_room' room_id=r.room_id%}" class="btn btn-primary">Edit Room</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>       
+                </div>
+            </div>
+
+    </div>
+    <a href="{% url 'add_room' property_id=property.property_id %}" class="btn btn-primary">Add Room</a>
+    <a href="{% url 'my_properties' %}" class="btn btn-primary">Back to My Properties</a>
+    
+</div>
+
+{% endblock %}

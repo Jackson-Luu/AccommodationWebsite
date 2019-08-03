@@ -249,7 +249,6 @@
 
             {% if owner == user %}
             <div>
-                own property
             </div>
             {% else %}
                 <a href="{% url 'booking' property.property_id check_in check_out %}" class="btn btn-primary">Book Property</a>

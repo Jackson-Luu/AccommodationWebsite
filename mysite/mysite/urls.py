@@ -32,10 +32,13 @@ urlpatterns = [
     # path('bookproperty/<int:property_id>/', book_property_view, name='book_property'),
     # path('bookproperty/<int:property_id>/<check_in><check_out>', book_property_view, name='book_property'),
     path('addroom/<int:property_id>/', add_room_view, name='add_room'),
+    path('viewrooms/<int:property_id>/', property_rooms_view, name='view_rooms'),
     path('profile/myproperties', user_properties_view, name='my_properties'),
     path('profile/mybookings',user_bookings_view, name='my_bookings'),
     # path('selectpropertytype/',select_property_type_view, name='select_property_type'),
-    path('<int:property_id>/edit/',edit_property_view, name='edit_property'),
+    path('<int:property_id>/editproperty/',edit_property_view, name='edit_property'),
+    path('<int:room_id>/editroom/',edit_room_view, name='edit_room'),
+    
      path('addproperty/',add_property_view, name='add_property'),
 
 
