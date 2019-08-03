@@ -39,9 +39,11 @@
 			photoPreview.src = "{{ user_data.photo|escapejs }}";
 		{% endif %}
 		
+		const divIdPhoto = document.getElementById("div_id_photo");
 		photoField.addEventListener('blur', () => {
 			if (photoField.value.match(/\.(jpeg|jpg|gif|png)$/)) {
 				photoPreview.src = photoField.value;
+				if (divIdPhoto.childNodes.length === 6) divIdPhoto.removeChild(divIdPhoto.lastChild);
 			} else {
 				const warningbox = document.createElement("div");
 				warningbox.className = "alert alert-warning alert-dismissible fade show";
@@ -66,8 +68,6 @@
 				ecks.innerText = "x";
 				closeBtn.appendChild(ecks);
 				warningbox.appendChild(closeBtn)
-				
-				const divIdPhoto = document.getElementById("div_id_photo");
 				if (divIdPhoto.childNodes.length === 5) divIdPhoto.appendChild(warningbox);
 			}
 		});
