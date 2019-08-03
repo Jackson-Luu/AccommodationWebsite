@@ -547,6 +547,8 @@ def select_property_type_view(request):
 @login_required(login_url='/login')
 def edit_property_view(request,property_id):
     property = Property.objects.get(property_id=property_id)
+    user = request.user
+    owner = CustomUser.objects.get(username=property.host_id)
     if property.shareable == True:
         print("true")
     if request.method == 'POST':
@@ -564,7 +566,7 @@ def edit_property_view(request,property_id):
             edited_form = ShareablePropertyCreationForm(instance=property)
         elif property.shareable == False:    
             edited_form = UnshareablePropertyCreationForm(instance=property)
-    return render(request,'edit_property.html',{'edited_form':edited_form})
+    return render(request,'edit_property.html',{'edited_form':edited_form, 'user':user, 'owner':owner})
 
 @login_required(login_url='/login') 
 def get_data_view(request):

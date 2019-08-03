@@ -36,72 +36,63 @@
     <div class="row">
 
         <div class="col-md-6">
-            <div class="col-md-12 jumbotron">
-                <h2 style="text-align:center">Shareable Properties</h2><br>
-                
-                {% for property in user_properties_shareable %}
-                    <strong>{{property.name}}</strong>
-                    <div>Property Description: {{property.description}}</div>
-                    <div>Rooms: {{property.size}}</div>
-                    <div>Total property price: ${{property.price}}</div> <br>
-                    <!-- <h3>Property Room Details</h3> -->
-                    <a href="{% url 'edit_property' property_id=property.property_id%}" class="btn btn-primary">Edit Property</a>
-                    <a href="{% url 'add_room' property_id=property.property_id %}" class="btn btn-primary">Add Rooms</a>
-                    <a href="{% url 'property' property_id=property.property_id %}" class="btn btn-primary">View Property</a>
-                    <br> <br>
-                {% endfor %}
+            <div class="col-md-12 ">
+                <table id="myTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th><h2 style="text-align:center">Shareable Properties</h2></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for property in user_properties_shareable %}
+                            <tr>
+                                <td>
+                                    <h4>{{property.name}}</h4>
+                                    <div>Property Description: {{property.description}}</div>
+                                    <div>Rooms: {{property.size}}</div>
+                                    <div>Total property price: ${{property.price}} per night</div> <br>
+                                    <!-- <h3>Property Room Details</h3> -->
+                                    <a href="{% url 'edit_property' property_id=property.property_id%}" class="btn btn-primary">Edit Property</a>
+                                    <a href="{% url 'add_room' property_id=property.property_id %}" class="btn btn-primary">Add Rooms</a>
+                                    <a href="{% url 'property' property_id=property.property_id %}" class="btn btn-primary">View Property</a>
+                                    <br> <br>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>       
             </div>
         </div>
         <div class="col-md-6">
-            <div class="col-md-12 jumbotron">
-                <h2 style="text-align:center">Unshareable Properties</h2><br>
-                {% for property in user_properties_unshareable %}
-                    <strong>{{property.name}}</strong>
-                    <div>Property Description: {{property.description}}</div>
-                    <div>Rooms: {{property.size}}</div>
-                    <div>Total property price: ${{property.price}}</div> <br>
-                    <!-- <h3>Property Room Details</h3> -->
-                    <a href="{% url 'edit_property' property_id=property.property_id%}" class="btn btn-primary">Edit Property</a>
-                    <a href="{% url 'property' property_id=property.property_id %}" class="btn btn-primary">View Property</a>
-                    <br> <br>
-                {% endfor %} 
+            <div class="col-md-12 ">
+                <table id="myTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th><h2 style="text-align:center">Unshareable Properties</h2></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for property in user_properties_unshareable %}
+                            <tr>
+                                <td>
+                                    <h4>{{property.name}}</h4>
+                                    <div>Property Description: {{property.description}}</div>
+                                    <div>Capacity: {{property.size}}</div>
+                                    <div>Property Price: ${{property.price}} per night</div> <br>
+                                    <!-- <h3>Property Room Details</h3> -->
+                                    <a href="{% url 'edit_property' property_id=property.property_id%}" class="btn btn-primary">Edit Property</a>
+                                    <a href="{% url 'property' property_id=property.property_id %}" class="btn btn-primary">View Property</a>
+                                    <br> <br>
+                                </td>
+                            </tr>
+                        {% endfor %}   
+                    </tbody>
+                </table>
             </div>
         </div>
-
     </div>
-
-
-    <!-- <div class="jumbotron">
-        <br>
-        <h3>Shareable Properties</h3> <br>
-            {% for property in user_properties_shareable %}
-                <strong>{{property.name}}</strong>
-                <div>Property Description: {{property.description}}</div>
-                <div>Rooms: {{property.size}}</div>
-                <div>Total property price: ${{property.price}}</div> <br>
-                <!-- <h3>Property Room Details</h3> -->
-                <!-- <a href="{% url 'edit_property' property_id=property.property_id%}" class="btn btn-primary">Edit Property</a>
-                <a href="{% url 'add_room' property_id=property.property_id %}" class="btn btn-primary">Add Rooms</a>
-                <a href="{% url 'property' property_id=property.property_id %}" class="btn btn-primary">View Property</a>
-                <br> <br>
-            {% endfor %}
-    </div>
-    {% if user_properties_unshareable %}
-        <div class="jumbotron">
-            <h3>My Unshareable Properties</h3>
-            {% for property in user_properties_unshareable %}
-                <strong>{{property.name}}</strong>
-                <div><p>{{property.description}}</p></div>
-                <div>Rooms: {{property.size}}</div>
-                <div>Total property price: ${{property.price}}</div> <br>
-                <!-- <h3>Property Room Details</h3> -->
-                <a href="{% url 'edit_property' property_id=property.property_id%}" class="btn btn-primary">Edit Property</a>
-                <a href="{% url 'add_room' property_id=property.property_id %}" class="btn btn-primary">Add Rooms</a>
-                <a href="{% url 'property' property_id=property.property_id %}" class="btn btn-primary">View Property</a>
-                <br> <br>
-            <!-- {% endfor %}  
-        </div>
-    {% endif %}     --> --> -->
 </div>
 
 {% endblock %}
