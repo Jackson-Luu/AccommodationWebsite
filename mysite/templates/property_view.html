@@ -213,7 +213,7 @@
                         {% endfor %}
                     </td>
                     <td align="right">
-                        <img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" id="owner-photo">
+                        <a href="{% url 'profile' user_id=owner.user_id %}"><img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" id="owner-photo"></a>
                         <p class="host-name">Host: <a href="{% url 'profile' user_id=owner.user_id %}">{{ owner.first_name }}</a></p>
                     </td>
                     
