@@ -302,7 +302,6 @@ def add_property_view(request):
             if property_name and property_location and property_description:
                 p = Property(host_id=user,name=property_name,location=property_location,description=property_description,shareable=True,bookable=False)
                 p.save()
-                PropertyImages(property=p, image='https://images.unsplash.com/photo-1527030280862-64139fba04ca?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1206&q=80').save()
             else:
                 return render(request,'add_property.html',{'error': "Please fill in all required fields",'amenity_list':amenity_list})
             for am in checked_amenities:
@@ -324,8 +323,6 @@ def add_property_view(request):
             if property_name and property_location and property_description and property_price and property_size:
                 p = Property(host_id=user,name=property_name,price=property_price,location=property_location,size=property_size,description=property_description,shareable=False)
                 p.save()
-                PropertyImages(property=p, image='https://images.unsplash.com/photo-1527030280862-64139fba04ca?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1206&q=80').save()
-
             else:
                 return render(request,'add_property.html',{'error': "Please fill in all required fields",'amenity_list':amenity_list})
 
@@ -550,13 +547,23 @@ def select_property_type_view(request):
 @login_required(login_url='/login')
 def edit_property_view(request,property_id):
     property = Property.objects.get(property_id=property_id)
+    if property.shareable == True:
+        print("true")
     if request.method == 'POST':
-        edited_form = UnshareablePropertyCreationForm(request.POST,instance=property)
+        if property.shareable == True:
+            print("yes")
+            edited_form = ShareablePropertyCreationForm(request.POST,instance=property)
+        elif property.shareable == False:
+            edited_form = UnshareablePropertyCreationForm(request.POST,instance=property)
         if edited_form.is_valid():
             edited_form.save()
-            return redirect('home')
+            messages.success(request,'Changes Saved!')
+            return redirect('my_properties')
     else:
-        edited_form = UnshareablePropertyCreationForm(instance=property)
+        if property.shareable == True:
+            edited_form = ShareablePropertyCreationForm(instance=property)
+        elif property.shareable == False:    
+            edited_form = UnshareablePropertyCreationForm(instance=property)
     return render(request,'edit_property.html',{'edited_form':edited_form})
 
 @login_required(login_url='/login') 
