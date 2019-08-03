@@ -3,16 +3,102 @@
 {% block content %}
 <head>
 	<title>Sign up | Accommodation Portal</title>
+	<style>
+		.form-group.required .control-label:after {
+			content:"*";
+		}
+	</style>
 </head>
 <div class="container">
+	<h1 class="display-1 text-center">Sign Up</h1>
+	<blockquote class="blockquote text-center">
+		<p class="display-7">Welcome!</p>
+	</blockquote>
+	<br>
 	<form method="POST">
 		{% csrf_token%}
-		<fieldset class="form-group">
-			<legend class="border-bottom mb-4">Sign Up</legend>
-			{{ form|crispy }}
-		</fieldset>
+<!--		<fieldset class="form-group">-->
+<!--			{{ form|crispy }}-->
+<!--		</fieldset>-->
+		<div class="form-row">
+			<div class="col">
+				<div class="form-group" id="div_{{ form.username.id_for_label }}">
+					{{ form.username.errors }}
+					<label class="lead" for="{{ form.username.id_for_label }}">
+						{{ form.username.label }}
+						<span class="asteriskField">*</span>
+					</label>
+					<div class="">
+						{{ form.username }}
+						<small class="form-text text-muted" id="hint_{{ form.username.id_for_label }}">{{ form.username.help_text }}</small>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="form-group" id="div_{{ form.password1.id_for_label }}">
+					{{ form.password1.errors }}
+					<label class="lead" for="{{ form.password1.id_for_label }}">
+						{{ form.password1.label }}
+						<span class="asteriskField">*</span>
+					</label>
+					<div class="">
+						{{ form.password1 }}
+						<small class="form-text text-muted" id="hint_{{ form.password1.id_for_label }}">{{ form.password1.help_text }}</small>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="form-group" id="div_{{ form.password2.id_for_label }}">
+					{{ form.password2.errors }}
+					<label class="lead" for="{{ form.password2.id_for_label }}">
+						{{ form.password2.label }}
+						<span class="asteriskField">*</span>
+					</label>
+					<div class="">
+						{{ form.password2 }}
+						<small class="form-text text-muted" id="hint_{{ form.password2.id_for_label }}">{{ form.password2.help_text }}</small>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="col">
+				<div class="form-group" id="div_{{ form.first_name.id_for_label }}">
+					<label class="lead" for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+					<div class="">
+						{{ form.first_name }}
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="form-group" id="div_{{ form.last_name.id_for_label }}">
+					<label class="lead" for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+					<div class="">
+						{{ form.last_name }}
+					</div>
+				</div>
+			</div>
+			<div class="col-auto">
+				<div class="form-group" id="div_{{ form.birthday.id_for_label }}">
+					<label class="lead" for="{{ form.birthday.id_for_label }}">{{ form.birthday.label }}</label>
+					<div class="">
+						{{ form.birthday }}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="col">
+				<div class="form-group" id="div_{{ form.description.id_for_label }}">
+					<label class="lead" for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+					<div class="">
+						{{ form.description }}
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="form-group">
-			<button class="btn btn-outline-info" type="submit">Sign Up</button>
+			<button class="btn btn-primary" type="submit">Sign Up</button>
 		</div>
 	</form>
 </div>
@@ -21,5 +107,17 @@
 			Already have an account? <a class="ml-2" href="#">Sign In</a>
 		</small>
 	</div>
-
+<script>
+	const birthdayField = document.getElementById("{{ form.birthday.id_for_label|escapejs }}");
+	let today = new Date();
+	let dd = today.getDate();
+	let mm = today.getMonth()+1; //January is 0!
+	let yyyy = today.getFullYear();
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10) mm = '0' + mm;
+	today = yyyy + '-' + mm + '-' + dd;
+	birthdayField.setAttribute("max", today);
+	birthdayField.setAttribute("min", "1000-01-01");
+	
+</script>
 {% endblock %}
