@@ -1,46 +1,305 @@
-{% extends "layout.html" %}
-
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>{{ user_data.username }}'s profile | Accommodation Portal</title>
-	<style>
-		.img-thumbnail {
-			border-radius: 50%;
-			width: 300px;
-			height: 300px;
-			object-fit: cover;
-			overflow: hidden;
-			background-color: white;
-		}
-	</style>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>{{ user_data.username }}'s profile | Accommodation Portal</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            padding-top: 56px;
+        }
+
+        * {
+            margin: 0;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        .wrapper {
+            min-height: 100%;
+            height: auto !important;
+            height: 100%;
+            margin: 0 auto -122px; /* the bottom margin is the negative value of the footer's height */
+        }
+
+        .py-5, .push {
+            height: 122px; /* .push must be the same height as .footer */
+        }
+        .img-thumbnail {
+            border-radius: 50%;
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            overflow: hidden;
+            background-color: white;
+        }
+        .checked {
+            color: orange;
+        }
+
+        .rating {
+            display: inline-block;
+            position: relative;
+            height: 25px;
+            line-height: 25px;
+            font-size: 25px;
+            margin-top: 10px;
+        }
+
+            .rating label {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                cursor: pointer;
+            }
+
+                .rating label:last-child {
+                    position: static;
+                }
+
+                .rating label:nth-child(1) {
+                    z-index: 5;
+                }
+
+                .rating label:nth-child(2) {
+                    z-index: 4;
+                }
+
+                .rating label:nth-child(3) {
+                    z-index: 3;
+                }
+
+                .rating label:nth-child(4) {
+                    z-index: 2;
+                }
+
+                .rating label:nth-child(5) {
+                    z-index: 1;
+                }
+
+                .rating label input {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    opacity: 0;
+                }
+
+                .rating label .icon {
+                    float: left;
+                    color: transparent;
+                }
+
+                .rating label:last-child .icon {
+                    color: #000;
+                }
+
+            .rating:not(:hover) label input:checked ~ .icon,
+            .rating:hover label:hover input ~ .icon {
+                color: #09f;
+            }
+
+            .rating label input:focus:not(:checked) ~ .icon:last-child {
+                color: #000;
+                text-shadow: 0 0 5px #09f;
+            }
+
+        .review-form {
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .dataTables_wrapper table thead {
+            display: none;
+        }
+    </style>
 </head>
-<div class="container">
-	<!--    <div style="color:rgb(255, 145, 0);">-->
-	<!--        <h1 style="background:#00FF00 url(http://img.sccnn.com/bimg/338/16513.jpg) repeat 0;">{{ user_data.first_name }}</h1>-->
-	<!--    </div>-->
-	<!--    <p> Name: {{ user_data.first_name }} </p>-->
-	<!--&lt;!&ndash;    <p> Age: {{ age }} </p>&ndash;&gt;-->
-	<!--    <p> User Description: {{ user_data.description }} </p>-->
-	<h1>{{ user_data.username }}</h1>
-	<div class="text-center">
-		<img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" class="img-thumbnail" id="photo">
-	</div>
-	<h1 class="display-1 text-center" id="name"></h1>
-	<h1 class="display-6 text-center" id="age"></h1>
-	<ul class="list-inline text-center">
-		<li class="list-inline-item">
-			<p>Date joined: {{ user_data.date_joined }}</p>
-		</li>
-		<li class="list-inline-item"><p> | </p></li>
-		<li class="list-inline-item">
-			<p>Last active: {{ user_data.last_login }}</p>
-		</li>
-	</ul>
-	<hr>
-	<h1 class="display7">About me:</h1>
-	<p class="lead">{{ user_data.description }}</p>
-</div>
-<script>
+<body>
+    {% include 'navbar.html' %}
+    <br />
+    <div class="container">
+        <!--    <div style="color:rgb(255, 145, 0);">-->
+        <!--        <h1 style="background:#00FF00 url(http://img.sccnn.com/bimg/338/16513.jpg) repeat 0;">{{ user_data.first_name }}</h1>-->
+        <!--    </div>-->
+        <!--    <p> Name: {{ user_data.first_name }} </p>-->
+        <!--&lt;!&ndash;    <p> Age: {{ age }} </p>&ndash;&gt;-->
+        <!--    <p> User Description: {{ user_data.description }} </p>-->
+        <h1>{{ user_data.username }}</h1>
+        <div class="text-center">
+            <img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" class="img-thumbnail" id="photo">
+        </div>
+        <h1 class="display-1 text-center" id="name"></h1>
+        <h1 class="display-6 text-center" id="age"></h1>
+        <ul class="list-inline text-center">
+            <li class="list-inline-item">
+                <p>Date joined: {{ user_data.date_joined }}</p>
+            </li>
+            <li class="list-inline-item"><p> | </p></li>
+            <li class="list-inline-item">
+                <p>Last active: {{ user_data.last_login }}</p>
+            </li>
+        </ul>
+        <hr>
+        <h1 class="display7">About me:</h1>
+        <p class="lead">{{ user_data.description }}</p>
+
+        <br />
+        <h4>Reviews</h4>
+        <hr>
+        {% if reviews %}
+        <table id="myTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in reviews %}
+                <tr>
+                    <td>
+                        <b>{{ r.1 }}</b>
+                        <br />
+                        <i>Rating:</i>
+                        {% if r.0.rating == 5 %}
+                        <label>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                        </label>
+                        {% elif r.0.rating == 4 %}
+                        <label>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star icon"></span>
+                        </label>
+                        {% elif r.0.rating == 3 %}
+                        <label>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star icon"></span>
+                            <span class="fa fa-star icon"></span>
+                        </label>
+                        {% elif r.0.rating == 2 %}
+                        <label>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star icon"></span>
+                            <span class="fa fa-star icon"></span>
+                            <span class="fa fa-star icon"></span>
+                        </label>
+                        {% elif r.0.rating == 1 %}
+                        <label>
+                            <span class="fa fa-star checked icon"></span>
+                            <span class="fa fa-star icon"></span>
+                            <span class="fa fa-star icon"></span>
+                            <span class="fa fa-star icon"></span>
+                            <span class="fa fa-star icon"></span>
+                        </label>
+                        {% endif %}
+                        <br />
+                        {{ r.0.text }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Write a review
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseOne" class="collapse hide" aria-labelledby="headingOne" data-parent="#accordion">
+                    <br />
+                    {% if user.is_authenticated %}
+                    <form class="review-form" method="post" id="reviewForm">
+                        {% csrf_token %}
+                        <b>Rating:</b>
+                        <br />
+                        <div class="rating">
+                            <label>
+                                <input type="radio" name="stars" value="1" />
+                                <span class="fa fa-star icon"></span>
+                            </label>
+                            <label>
+                                <input type="radio" name="stars" value="2" />
+                                <span class="fa fa-star icon"></span>
+                                <span class="fa fa-star icon"></span>
+                            </label>
+                            <label>
+                                <input type="radio" name="stars" value="3" />
+                                <span class="fa fa-star icon"></span>
+                                <span class="fa fa-star icon"></span>
+                                <span class="fa fa-star icon"></span>
+                            </label>
+                            <label>
+                                <input type="radio" name="stars" value="4" />
+                                <span class="fa fa-star icon"></span>
+                                <span class="fa fa-star icon"></span>
+                                <span class="fa fa-star icon"></span>
+                                <span class="fa fa-star icon"></span>
+                            </label>
+                            <label>
+                                <input type="radio" name="stars" value="5" />
+                                <span class="fa fa-star icon"></span>
+                                <span class="fa fa-star icon"></span>
+                                <span class="fa fa-star icon"></span>
+                                <span class="fa fa-star icon"></span>
+                                <span class="fa fa-star icon"></span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" form="reviewForm" id="reviewText" name="reviewText" placeholder="Enter your review here..." rows="5"></textarea>
+                        </div>
+                        <div align="right">
+                            <button class="btn btn-primary" id="review" type="submit">Submit</button>
+                        </div>
+                    </form>
+                    {% else %}
+                    <div align="center">
+                        <a href="/login">Please login to write a review.</a>
+                    </div>
+                    {% endif %}
+                    <br />
+                </div>
+            </div>
+        </div>
+        <br />
+    </div>
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+        </div>
+        <!-- /.container -->
+    </footer>
+
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Datatables -->
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
 	{% if user_data.first_name %}
 		const name = document.getElementById("name");
 		name.innerText = "{{ user_data.first_name }}";
@@ -48,18 +307,28 @@
 			name.innerText += " {{ user_data.last_name|escapejs }}";
 		{% endif %}
 	{% endif %}
-	
+
 	{% if user_data.birthday %}
 	const now = new Date();
 	const age = now.getFullYear() - {{ user_data.birthday.year|escapejs }};
 	const ageElm = document.getElementById("age");
 	ageElm.innerText = "Age: " + age;
 	{% endif %}
-	
+
 	{% if user_data.photo %}
 		const photo = document.getElementById("photo");
 		photo.src = "{{ user_data.photo|escapejs }}";
 	{% endif %}
-	
-</script>
-{% endblock %}
+
+    $(':radio').change(function () {
+        console.log('New star rating: ' + this.value);
+        $('#fa fa-star').addClass('fa fa-star checked').removeClass('fa fa-star');
+    });
+    $(document).ready(function () {
+        $('#myTable').dataTable({
+            "order": [],
+        });
+    });
+    </script>
+</body>
+</html>

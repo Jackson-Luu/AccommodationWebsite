@@ -10,6 +10,7 @@ from user_manager.models import *
 import json
 from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
+from review.models import UserReviews
 
 
 # Create your views here.
@@ -30,21 +31,29 @@ def register_view(request):
 
 @login_required(login_url='/login')
 def profile_view(request, user_id):
-	if request.method == 'GET':
-		# If viewing the user's own profile
-		if (request.user.user_id == int(user_id)):
-			return render(request, 'profile.html')
-		
-		# Else viewing a stranger's profile
-		else:
-			user_data = CustomUser.objects.get(user_id=user_id)
-			# age = date.today().year - user_data.birthday.year
-			return render(request, 'other_profile.html', {'user_data': user_data})
-			# return render(request, 'other_profile.html', {'user_data': user_data, 'age': age})
-	elif request.method == 'POST':
-		pass
-	else:
-		return True
+    if request.method == 'GET':
+        reviews = list(UserReviews.objects.filter(reviewee=user_id))
+        for (i, r) in enumerate(reviews):
+            reviews[i] = (reviews[i], r.reviewer.first_name)
+        # If viewing the user's own profile
+        if request.user.user_id == int(user_id):
+            return render(request, 'profile.html', {'reviews': reviews})
+
+        # Else viewing a stranger's profile
+        else:
+            user_data = CustomUser.objects.get(user_id=user_id)
+            # age = date.today().year - user_data.birthday.year
+            return render(request, 'other_profile.html', {'user_data': user_data, 'reviews': reviews})
+            # return render(request, 'other_profile.html', {'user_data': user_data, 'age': age})
+    elif request.method == 'POST':
+        UserReviews(reviewer=request.user,reviewee=CustomUser.objects.get(user_id=user_id),rating=request.POST['stars'],text=request.POST['reviewText']).save()
+        user_data = CustomUser.objects.get(user_id=user_id)
+        reviews = list(UserReviews.objects.filter(reviewee=user_id))
+        for (i, r) in enumerate(reviews):
+            reviews[i] = (reviews[i], r.reviewer.first_name)        
+        return render(request, 'other_profile.html', {'user_data': user_data, 'reviews': reviews})
+    else:
+        return True
 
 
 @login_required(login_url='/login')
