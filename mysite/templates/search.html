@@ -33,23 +33,35 @@
 <div class="container">
     <header class="jumbotron my-4">
         <h1 class="display-3">Property Search</h1>
-        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>
+<!--        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>-->
     </header>
 
     <div class="search_form">
         <form method="post">
             {% csrf_token %}
-            <p class="lead">
-                Location:
-                <input type="text" name="location"><br>
-            </p>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Location</label>
+                    <input class="form-control" type="text" name="location">
+                </div>
+                <div class="form-group col">
+                    <label>Number of guests</label>
+                    <input class="form-control" type="number" name="guests" min=1 />
+                </div>
+            </div>
+            
             {% if location_error %}<p><strong>{{ location_error }}</strong></p>{% endif %}
-            <p class="lead">
-                Check-in:
-                <input type="date" name="check_in" id="check_in">
-                Check-out:
-                <input type="date" name="check_out" id="check_out"><br>
-            </p>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Check-in</label>
+                    <input type="date" class="form-control" name="check_in" id="check_in">
+                </div>
+                <div class="form-group col">
+                    <label>Check-out</label>
+                    <input type="date" class="form-control" name="check_out" id="check_out"><br>
+                </div>
+            </div>
+            
 
             <!-- Set minimum check in/out dates to today-->
             <script>
@@ -68,10 +80,6 @@
                 document.getElementById("check_in").setAttribute("min", today);
                 document.getElementById("check_out").setAttribute("min", today);
             </script>
-            <p class="lead">
-                Number of guests:
-                <input type="number" name="guests" min=1 />
-            </p>
             <input type="submit" value="Search" class="btn btn-primary btn-lg"><br><br />
         </form>
     </div>

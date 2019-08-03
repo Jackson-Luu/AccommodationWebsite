@@ -29,4 +29,4 @@ class CustomUserProfileEditForm(forms.ModelForm):
 		fields = ['photo', 'first_name', 'last_name', 'birthday', 'description']
 		widgets = {'birthday': DateInput(),}
 		labels = {'photo': 'Profile picture URL'}
-		# help_texts = {'photo': '.jpeg, .jpg, gif or .png images only'}
+		help_texts = {'photo': '.jpeg, .jpg, gif or .png images only'}
