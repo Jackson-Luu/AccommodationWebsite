@@ -17,6 +17,11 @@
 		</div>
 	</form>
 	<script>
+		{% if user_data.photo %}
+			const photoField = document.getElementById("{{ form.photo.id_for_label|escapejs }}");
+			photoField.value = "{{ user_data.photo|escapejs }}";
+		{% endif %}
+		
 		{% if user_data.first_name %}
 			const firstNameField = document.getElementById("{{ form.first_name.id_for_label|escapejs }}");
 			firstNameField.value = "{{ user_data.first_name|escapejs }}";

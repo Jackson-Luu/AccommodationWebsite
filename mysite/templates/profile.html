@@ -3,6 +3,15 @@
 {% block content %}
 <head>
 	<title>My profile | Accommodation Portal</title>
+	<style>
+		.img-thumbnail {
+			border-radius: 50%;
+			width: 300px;
+			height: 300px;
+			object-fit: cover;
+			overflow: hidden;
+		}
+	</style>
 </head>
 <div class="container">
 	<div class="float-right">
@@ -11,6 +20,9 @@
 	</div>
 	<h1>{{ request.user.username }}</h1>
 <!--	<hr>-->
+	<div class="text-center">
+		<img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" class="img-thumbnail", id="photo">
+	</div>
 	<h1 class="display-1 text-center" id="name"></h1>
 	<h1 class="display-6 text-center" id="age"></h1>
 	<ul class="list-inline text-center">
@@ -46,10 +58,15 @@
 	{% endif %}
 	
 	{% if request.user.birthday %}
-	const now = new Date();
-	const age = now.getFullYear() - {{ request.user.birthday.year|escapejs }};
-	const ageElm = document.getElementById("age");
-	ageElm.innerText = "Age: " + age;
+		const now = new Date();
+		const age = now.getFullYear() - {{ request.user.birthday.year|escapejs }};
+		const ageElm = document.getElementById("age");
+		ageElm.innerText = "Age: " + age;
+	{% endif %}
+	
+	{% if request.user.photo %}
+		const photo = document.getElementById("photo");
+		photo.src = "{{ request.user.photo|escapejs }}";
 	{% endif %}
 	
 	const editBtn = document.getElementById("edit");
