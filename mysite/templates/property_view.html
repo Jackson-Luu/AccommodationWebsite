@@ -144,6 +144,15 @@
         .host-name {
             font-size: 150%;
         }
+        
+        #owner-photo {
+          border-radius: 50%;
+          width: 25px;
+          height: 25px;
+          object-fit: cover;
+          overflow: hidden;
+          background-color: white;
+        }
     </style>
 </head>
 <body>
@@ -204,7 +213,8 @@
                         {% endfor %}
                     </td>
                     <td align="right">
-                        <p class="host-name">Host: <a href="{% url 'profile' user_id=owner.user_id %}">{{ owner.first_name }}</a></p>
+                        <p class="host-name">Host: <a href="{% url 'profile' user_id=owner.user_id %}">
+                            <img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" id="owner-photo"> {{ owner.first_name }}</a></p>
                     </td>
                 </tr>
             </table>
@@ -411,6 +421,11 @@
                 "order": [],
             });
         });
+        
+        {% if owner.photo %}
+            const ownerPhoto = document.getElementById("owner-photo");
+            ownerPhoto.src = "{{ owner.photo|escapejs }}";
+        {% endif %}
     </script>
 </body>
 </html>
