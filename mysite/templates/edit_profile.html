@@ -23,7 +23,38 @@
 				<p class="lead">Profile picture preview</p>
 				<img src="https://www.materialui.co/materialIcons/social/person_grey_192x192.png" class="img-thumbnail" id="photo">
 			</div>
-			{{ form|crispy }}
+<!--			{{ form|crispy }}-->
+			<div class="form-group" id="div_{{ form.photo.id_for_label }}">
+				<label for="{{ form.photo.id_for_label }}">{{ form.photo.label }}</label>
+				<div class="">
+					{{ form.photo }}
+					<small class="form-text text-muted" id="hint_{{ form.photo.id_for_label }}">{{ form.photo.help_text }}</small>
+				</div>
+			</div>
+			<div class="form-group" id="div_{{ form.first_name.id_for_label }}">
+				<label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+				<div class="">
+					{{ form.first_name }}
+				</div>
+			</div>
+			<div class="form-group" id="div_{{ form.last_name.id_for_label }}">
+				<label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+				<div class="">
+					{{ form.last_name }}
+				</div>
+			</div>
+			<div class="form-group" id="div_{{ form.birthday.id_for_label }}">
+				<label for="{{ form.birthday.id_for_label }}">{{ form.birthday.label }}</label>
+				<div class="">
+					{{ form.birthday }}
+				</div>
+			</div>
+			<div class="form-group" id="div_{{ form.description.id_for_label }}">
+				<label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+				<div class="">
+					{{ form.description }}
+				</div>
+			</div>
 		</fieldset>
 		<div class="form-group">
 			<button class="btn btn-outline-info" type="submit" style="float: right">Save</button>
@@ -110,6 +141,7 @@
 			
 			today = yyyy + '-' + mm + '-' + dd;
 			birthdayField.setAttribute("max", today);
+			birthdayField.setAttribute("min", "1000-01-01");
 		{% endif %}
 		
 		const cancelButton = document.getElementById("cancel");
