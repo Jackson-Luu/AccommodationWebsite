@@ -24,19 +24,17 @@ urlpatterns = [
 	path('', home_view, name='home'),
 	path('search/', search_view),
 	path('signup/', register_view, name='signup'),
-	# path('addshareableproperty/', add_shareable_property_view,name='add_shareable_property'),
-    # path('addunshareableproperty/', add_unshareable_property_view,name='add_unshareable_property'),
+
     path('property/<int:property_id>/', property_view, name='property'),
     path('property/<int:property_id>/<check_in>/<check_out>/', property_view, name='property'),
 	path('', include('django.contrib.auth.urls')),
     path('profile/<str:user_id>/', profile_view, name='profile'),
-    # path('bookproperty/<int:property_id>/', book_property_view, name='book_property'),
-    # path('bookproperty/<int:property_id>/<check_in><check_out>', book_property_view, name='book_property'),
+    
     path('addroom/<int:property_id>/', add_room_view, name='add_room'),
     path('viewrooms/<int:property_id>/', property_rooms_view, name='view_rooms'),
     path('profile/myproperties', user_properties_view, name='my_properties'),
     path('profile/mybookings',user_bookings_view, name='my_bookings'),
-    # path('selectpropertytype/',select_property_type_view, name='select_property_type'),
+    
     path('<int:property_id>/editproperty/',edit_property_view, name='edit_property'),
     path('<int:room_id>/editroom/',edit_room_view, name='edit_room'),
     
