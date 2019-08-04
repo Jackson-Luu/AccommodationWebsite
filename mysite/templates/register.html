@@ -97,16 +97,17 @@
 				</div>
 			</div>
 		</div>
-		<div class="form-group">
-			<button class="btn btn-primary" type="submit">Sign Up</button>
+		<div class="form-row">
+			<div class="col">
+				<p class="lead">
+					Already signed up?
+					<a class="lead" href="{% url 'login' %}">Log in</a>
+					<button class="btn btn-primary" type="submit" style="float:right">Sign Up</button>
+				</p>
+			</div>
 		</div>
 	</form>
 </div>
-	<div class="border-top pt-3">
-		<small class="text-muted">
-			Already have an account? <a class="ml-2" href="#">Sign In</a>
-		</small>
-	</div>
 <script>
 	const birthdayField = document.getElementById("{{ form.birthday.id_for_label|escapejs }}");
 	let today = new Date();

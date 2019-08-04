@@ -73,13 +73,13 @@
                 $('#' + room_id).prop("checked", false);
                 $('#' + room_id).attr('disabled', 'disabled')
                 $('#' + room_id + 'availability').text("Not Available")
-                $('#' + room_id + 'booked_user_profile').attr('href','/profile')
-                // TODO
-                $('#' + room_id + 'booked_user_profile').text('profile link')
+                $('#' + room_id + 'booked_user_profile').attr('href','/profile/'+booked_user)
+            
+                $('#' + room_id + 'booked_user_profile').text('Profile Link')
             }
         }
     }
-
+    
     function get_today_date(){
         var today = new Date();
         var dd = today.getDate();
