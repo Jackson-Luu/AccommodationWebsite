@@ -8,7 +8,7 @@ class CustomUser(AbstractUser):
 	birthday = models.DateField(null=True, blank=True)
 	description = models.TextField(null=True, blank=True)
 	user_id = models.AutoField(primary_key=True)
-	photo = models.CharField(max_length=255, blank=True)
+	photo = models.URLField(blank=True)
 
 
 class PropertyOwnership(models.Model):
