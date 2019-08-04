@@ -29,7 +29,39 @@
 	
 	</form>
 	<script>
-	
+		const q = document.querySelectorAll("button[type='submit']");
+		q[0].addEventListener('click', () => {
+			const checkboxes = document.querySelectorAll("input[type='checkbox']");
+			let checkedCounter = 0;
+			for (let item of checkboxes) {
+				if (item.checked) checkedCounter++;
+			}
+			if (checkedCounter == 0) {
+				const amenitiesDiv = document.getElementById("div_id_amenities");
+				const warningbox = document.createElement("div");
+				warningbox.className = "alert alert-warning alert-dismissible fade show";
+				warningbox.setAttribute("role", "alert");
+				const boldAlert = document.createElement("b");
+				boldAlert.innerText = "Warning: no amenities selected";
+				warningbox.appendChild(boldAlert);
+				let br = document.createElement("br");
+				warningbox.appendChild(br);
+				const msg1 = document.createTextNode("Select at least one amenity to continue");
+				warningbox.appendChild(msg1);
+				const closeBtn = document.createElement("button");
+				closeBtn.className = "close";
+				closeBtn.setAttribute("data-dismiss", "alert");
+				closeBtn.setAttribute("aria-label", "Close");
+				const ecks = document.createElement("span");
+				ecks.setAttribute("aria-hidden", "true");
+				ecks.innerText = "x";
+				closeBtn.appendChild(ecks);
+				warningbox.appendChild(closeBtn)
+				if (amenitiesDiv.childNodes.length == 5) amenitiesDiv.appendChild(warningbox);
+				event.preventDefault();
+        event.stopPropagation();
+			}
+		});
 	</script>
 </div>
 {% endblock %}
