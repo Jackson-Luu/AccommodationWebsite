@@ -39,12 +39,14 @@ urlpatterns = [
     path('<int:property_id>/editproperty/',edit_property_view, name='edit_property'),
     path('<int:room_id>/editroom/',edit_room_view, name='edit_room'),
     
-     path('addproperty/',add_property_view, name='add_property'),
-
+    path('addproperty/',add_property_view, name='add_property'),
+    path('mybookingapprovals/',booking_approvals_view, name='booking_approvals'),
 
     path('book/<int:property_id>/', booking_view, name='booking'),
     path('book/<int:property_id>/<check_in>/<check_out>/', booking_view, name='booking'),
     path('getdata/', get_data_view, name='getdata'),
+    path('booking_approval_data/',booking_approval_data, name='booking_approval_data'),
+    path('booking_rejection_data/',booking_rejection_data, name='booking_rejection_data'),
     path('addtofavourites/', add_to_favourites, name='favourites'),
     path('profile/myfavourites',user_favourites_view, name='my_favourites'),
 	path('profile/edit', profile_edit_view, name='edit_profile'),

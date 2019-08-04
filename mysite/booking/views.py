@@ -375,46 +375,20 @@ def property_view(request, property_id, check_in=None, check_out=None):
 
     return render(request, 'property_view.html', {'property':property,'rooms':rooms, 'amenities':amenities, 'check_in':check_in, 'check_out':check_out, 'images':imgs, 'reviews':reviews, 'owner':owner,'user':user})
 
-# @login_required(login_url='/login')
-# def book_property_view(request, property_id, check_in=None, check_out=None):
-#     user = request.user
-#     p = Property.objects.get(property_id=property_id)
-#     room_list = Room.objects.filter(property_id=property_id)
-#     room_ids = []
-#     for r in room_list:
-#         room_ids.append(r.room_id)
-#     room_num = p.size
-#     print(room_num)
-    
-#     if request.method == 'POST':
-        
-#         booking_form = BookingCreationForm(request.POST,room_ids=room_ids,check_in=check_in)
-        
-#         if booking_form.is_valid():    
-        
-#             start_date = booking_form.cleaned_data['start_date']
-#             end_date = booking_form.cleaned_data['end_date']
-#             num_guests = booking_form.cleaned_data['num_guests']
-#             rooms = booking_form.cleaned_data['rooms']
-#             print(rooms)
-#             num_rooms = len(rooms)
 
-#             booking_instance = Booking(user_id=user,start_date=start_date, end_date=end_date,property_id=p,num_guests=num_guests,num_rooms=num_rooms)
-#             booking_instance.save()
-#             #make booking
-#             #make booking_table
-#             for r in rooms:
-#                 room_obj = Room.objects.get(room_id=int(r))
-#                 booking_table_instance = BookingTable(room=room_obj,booking=booking_instance)
-#                 booking_table_instance.save()
-
-#             messages.success(request,'Property Booked!')
-#             return redirect('home')
-
-#     else: 
-#         booking_form = BookingCreationForm(room_ids=room_ids,check_in=check_in)
+@login_required(login_url='/login')
+def booking_approvals_view(request):
+    user = request.user
+    properties = Property.objects.filter(host_id=user.user_id)
+    pending_bookings = []
+    for p in properties:
+        b = Booking.objects.filter(property_id=p.property_id,status='Pending')
+        if b:
+            b_list = list(b)
+            pending_bookings.append(b_list)
         
-#     return render(request, 'property_booking.html', {'booking_form':booking_form})
+    return render(request, 'booking_approvals.html', {'pending_bookings':pending_bookings})
+
 
 @login_required(login_url='/login')
 def booking_view(request, property_id, check_in=None, check_out=None):
@@ -532,7 +506,7 @@ def select_property_type_view(request):
         selection_form = SelectPropertyTypeForm(request.POST)
         if selection_form.is_valid():
             selection = selection_form.cleaned_data['shareable']
-            print(selection)
+            
 
             if selection == 'True':
                 return redirect('add_shareable_property')
@@ -550,10 +524,10 @@ def edit_property_view(request,property_id):
     user = request.user
     owner = CustomUser.objects.get(username=property.host_id)
     if property.shareable == True:
-        print("true")
+        # print("true")
     if request.method == 'POST':
         if property.shareable == True:
-            print("yes")
+            # print("yes")
             edited_form = ShareablePropertyCreationForm(request.POST,instance=property)
         elif property.shareable == False:
             edited_form = UnshareablePropertyCreationForm(request.POST,instance=property)
@@ -613,11 +587,13 @@ def get_data_view(request):
             room_attr = {'room_id':int_id,'availability':True,'booked_user':None}
             room_bookings = BookingTable.objects.filter(room=int_id)
             for rb in room_bookings:
-                b = Booking.objects.get(booking_id=rb.booking.booking_id)
-                if b.end_date < check_in:
-                        continue
+                b = Booking.objects.get(booking_id=rb.booking.booking_id,status='Accepted')
+                if not b:
+                    continue
+                elif b.end_date < check_in:
+                    continue
                 elif b.start_date > check_out:
-                        continue
+                    continue
                 else:
                     booked_user_id = b.user_id.user_id
                     room_attr['availability'] = False
@@ -635,6 +611,49 @@ def get_data_view(request):
     except:
         response_data['result'] = 'Oh no'
         response_data['message'] = 'subprocess module did not run the script correctly'
+    data = json.dumps(response_data)
+    
+    return HttpResponse(data)
+
+
+@login_required(login_url='/login') 
+def booking_approval_data(request):
+
+    response_data = {}
+
+    b_id_str = json.loads(request.GET.get('b_id'))
+    booking_id = int(b_id_str) 
+    booking = Booking.objects.get(booking_id=booking_id)
+    if booking:
+        booking.status = 'Accepted'
+        booking.save()
+        response_data['result'] = 'Success'
+        response_data['message'] = 'Booking approved.'
+    else:
+        response_data['result'] = 'Failure'
+        response_data['message'] = 'Booking not found'
+    
+    data = json.dumps(response_data)
+    
+    return HttpResponse(data)
+
+@login_required(login_url='/login') 
+def booking_rejection_data(request):
+
+    response_data = {}
+
+    b_id_str = json.loads(request.GET.get('b_id'))
+    booking_id = int(b_id_str) 
+    booking = Booking.objects.get(booking_id=booking_id)
+    if booking:
+        booking.status = 'Rejected'
+        booking.save()
+        response_data['result'] = 'Success'
+        response_data['message'] = 'Booking rejected.'
+    else:
+        response_data['result'] = 'Failure'
+        response_data['message'] = 'Booking not found'
+    
     data = json.dumps(response_data)
     
     return HttpResponse(data)

@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> 
+</script> 
+
+<script> 
+    $(document).ready(function() { 
+        $(".booking_approval").click(function(){
+            var b_id = $(this).attr('id');
+
+            $.ajax({
+                type: "GET",
+                url: "/booking_approval_data/",
+                dataType: "json",
+                async: true,
+                data: { csrfmiddlewaretoken: '{{ csrf_token }}',b_id: JSON.stringify(b_id),},
+                success: function(json) {
+                    // update_rooms(json.message)
+                    alert(json.message);
+                    $("tr.table_el_" + b_id).hide();
+                }
+            })
+        });
+
+        $(".booking_rejection").click(function(){
+            var b_id = $(this).attr('id');
+            alert(b_id);
+            $.ajax({
+                type: "GET",
+                url: "/booking_rejection_data/",
+                dataType: "json",
+                async: true,
+                data: { csrfmiddlewaretoken: '{{ csrf_token }}',b_id: JSON.stringify(b_id),},
+                success: function(json) {
+                    // update_rooms(json.message)
+                    alert(json.message);
+                    $("tr.table_el_" + b_id).hide();
+                }
+            })
+        });  
+    }); 
+
+</script>
+
+<head>
+	<title>Bookings Approvals | Accommodation Portal</title>
+</head>
+<div class="container">
+    <header class="jumbotron my-4">
+        <h1 class="display-3">Bookings Approvals</h1>
+        <p class="lead"> </p>
+    </header>   
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-12 ">
+                <table id="myTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th><h2 style="text-align:center"></h2></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for booking in pending_bookings %}
+                        {% for b in booking %}
+                            <div>
+                                <tr class="table_el_{{b.booking_id}}">
+                                    <td >
+                                        <h4>Booking by: {{b.user_id}}</h4>
+                                        <div>{{b.start_date}} to {{b.end_date}}</div>
+                                        <div>Number of rooms: {{b.num_rooms}}</div> 
+                                        <div>Number of guests: {{b.num_guests}}</div>
+                                        <div>Status: {{b.status}}</div>
+                                        <br>
+                                        <div><a class="btn btn-primary" href="/profile/{{b.user_id.user_id}}">User Profile link</a></div><br>
+                                        <div> <button class="booking_approval btn btn-primary" id="{{b.booking_id}}"class="btn btn-primary">Approve Booking</button></div><br>
+                                        <div> <button class="booking_rejection btn btn-primary" id="{{b.booking_id}}"class="btn btn-primary">Reject Booking</button></div><br>
+
+                                    </td>
+                                </tr>
+                            </div>
+                            
+                        {% endfor %}
+                        {% empty %}
+                            <tr>
+                                <td>
+                                    <div class="lead">
+                                        No   bookings.
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>       
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
