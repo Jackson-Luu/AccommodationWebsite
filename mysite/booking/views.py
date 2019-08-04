@@ -523,7 +523,11 @@ def edit_property_view(request,property_id):
     property = Property.objects.get(property_id=property_id)
     user = request.user
     owner = CustomUser.objects.get(username=property.host_id)
-    property_imgs = PropertyImages.objects.get(property_id = property_id)
+    try:
+        property_imgs = PropertyImages.objects.get(property_id = property_id)
+    except:
+        property_imgs = PropertyImages(property_id=property_id)
+        property_imgs.save()
     img_form = PropertyImageURLsForms(request.POST, instance=property_imgs)
     
     if request.method == 'POST':
