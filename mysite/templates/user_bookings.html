@@ -1,26 +1,51 @@
 {% extends "layout.html" %}
-
 {% block content %}
 <head>
-	<title>My bookings | Accommodation Portal</title>
+	<title>My Bookings | Accommodation Portal</title>
 </head>
 <div class="container">
-    <div class="jumbotron">
-        <br>
-        <h2>My Bookings</h2>
-        <br>
-        {% for b in bookings %}
-        <div>
-            <h4>Booking {{forloop.counter}}</h4>
-            <div>{{b.start_date}} to {{b.end_date}}</div>
-            <div>Number of rooms: {{b.num_rooms}}</div> 
-            <div>Number of guests: {{b.num_guests}}</div>
-            <br>
-            <div> <a class="btn btn-primary" href="/property/{{b.property_id.property_id}}">View Property</a></div><br>
+    <header class="jumbotron my-4">
+        <h1 class="display-3">My Bookings</h1>
+        <p class="lead"> </p>
+    </header>   
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-12 ">
+                <table id="myTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th><h2 style="text-align:center"></h2></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for b in bookings %}
+                            <tr>
+                                <td>
+                                    <h4>Booking {{forloop.counter}}</h4>
+                                    <div>{{b.start_date}} to {{b.end_date}}</div>
+                                    <div>Number of rooms: {{b.num_rooms}}</div> 
+                                    <div>Number of guests: {{b.num_guests}}</div>
+                                    <br>
+                                    <div> <a class="btn btn-primary" href="/property/{{b.property_id.property_id}}">View Property</a></div><br>
+                                
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td>
+                                    <div class="lead">
+                                        No bookings.
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>       
+            </div>
         </div>
-    {% endfor %}
+        
     </div>
-    
 </div>
-
 {% endblock %}
