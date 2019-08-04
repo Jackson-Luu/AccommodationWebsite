@@ -525,8 +525,7 @@ def edit_property_view(request,property_id):
     owner = CustomUser.objects.get(username=property.host_id)
     property_imgs = PropertyImages.objects.get(property_id = property_id)
     img_form = PropertyImageURLsForms(request.POST, instance=property_imgs)
-    if property.shareable == True:
-        # print("true")
+    
     if request.method == 'POST':
         if property.shareable == True:
             # print("yes")
