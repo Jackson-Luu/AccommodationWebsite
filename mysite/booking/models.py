@@ -38,6 +38,7 @@ class Booking(models.Model):
     num_guests = models.IntegerField(blank=False, default=1)
     num_rooms = models.IntegerField(blank=False, default=1)
     property_id = models.ForeignKey('Property', to_field='property_id', on_delete=models.CASCADE)
+    status = models.TextField(blank=False, default="Pending")
 
 class BookingTable(models.Model):
     booking = models.ForeignKey('Booking', to_field='booking_id', on_delete=models.CASCADE)

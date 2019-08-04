@@ -100,7 +100,12 @@
                         <h4 class="card-title">{{ p.name }}</h4>
                         <p class="card-text">
                             Location: {{ p.location }}<br />
-                            Room for: {{ p.size }} people<br />
+                            Room for: 
+                            {% if p.size == 1 %}
+                                {{ p.size }} person<br />
+                            {% else %}
+                                {{ p.size }} people<br />
+                            {% endif %}
                             Price: ${{ p.price }}<br />
                             Shareable: 
                             {% if p.shareable == True %}
