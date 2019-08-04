@@ -523,24 +523,29 @@ def edit_property_view(request,property_id):
     property = Property.objects.get(property_id=property_id)
     user = request.user
     owner = CustomUser.objects.get(username=property.host_id)
+    property_imgs = PropertyImages.objects.get(property_id = property_id)
+    img_form = PropertyImageURLsForms(request.POST, instance=property_imgs)
     if property.shareable == True:
         # print("true")
     if request.method == 'POST':
         if property.shareable == True:
             # print("yes")
             edited_form = ShareablePropertyCreationForm(request.POST,instance=property)
-        elif property.shareable == False:
+        else:
             edited_form = UnshareablePropertyCreationForm(request.POST,instance=property)
         if edited_form.is_valid():
             edited_form.save()
+            f = img_form.save(commit=False)
+            f.property_id = property_id
+            f.save()
             messages.success(request,'Changes Saved!')
             return redirect('my_properties')
     else:
         if property.shareable == True:
             edited_form = ShareablePropertyCreationForm(instance=property)
-        elif property.shareable == False:    
+        else:
             edited_form = UnshareablePropertyCreationForm(instance=property)
-    return render(request,'edit_property.html',{'edited_form':edited_form, 'user':user, 'owner':owner})
+    return render(request,'edit_property.html',{'edited_form':edited_form, 'user':user, 'owner':owner, 'img_form': img_form})
 
 @login_required(login_url='/login')
 def property_rooms_view(request, property_id):
