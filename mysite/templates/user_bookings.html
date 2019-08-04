@@ -9,17 +9,17 @@
         <p class="lead"> </p>
     </header>   
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="col-md-12 ">
                 <table id="myTable" class="table table-striped">
                     <thead>
                         <tr>
-                            <th><h2 style="text-align:center"></h2></th>
+                            <th><h2 style="text-align:center">Accepted Bookings</h2></th>
                         </tr>
                     </thead>
                     <tbody>
                         
-                        {% for b in bookings %}
+                        {% for b in accepted_bookings %}
                             <tr>
                                 <td>
                                     <h4>Booking {{forloop.counter}}</h4>
@@ -36,7 +36,7 @@
                             <tr>
                                 <td>
                                     <div class="lead">
-                                        No bookings.
+                                        No accepted bookings.
                                     </div>
                                 </td>
                             </tr>
@@ -46,6 +46,83 @@
                 </table>       
             </div>
         </div>
+
+        <div class="col-md-4">
+            <div class="col-md-12 ">
+                <table id="myTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th><h2 style="text-align:center">Pending Bookings</h2></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for b in pending_bookings %}
+                            <tr>
+                                <td>
+                                    <h4>Booking {{forloop.counter}}</h4>
+                                    <div>{{b.start_date}} to {{b.end_date}}</div>
+                                    <div>Number of rooms: {{b.num_rooms}}</div> 
+                                    <div>Number of guests: {{b.num_guests}}</div>
+                                    <div>Status: {{b.status}}</div>
+                                    <br>
+                                    <div> <a class="btn btn-primary" href="/property/{{b.property_id.property_id}}">View Property</a></div><br>
+                                
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td>
+                                    <div class="lead">
+                                        No pending bookings.
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>       
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="col-md-12 ">
+                <table id="myTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th><h2 style="text-align:center">Rejected Bookings</h2></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for b in rejected_bookings %}
+                            <tr>
+                                <td>
+                                    <h4>Booking {{forloop.counter}}</h4>
+                                    <div>{{b.start_date}} to {{b.end_date}}</div>
+                                    <div>Number of rooms: {{b.num_rooms}}</div> 
+                                    <div>Number of guests: {{b.num_guests}}</div>
+                                    <div>Status: {{b.status}}</div>
+                                    <br>
+                                    <div> <a class="btn btn-primary" href="/property/{{b.property_id.property_id}}">View Property</a></div><br>
+                                
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td>
+                                    <div class="lead">
+                                        No rejected bookings.
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>       
+            </div>
+        </div>
+
         
     </div>
 </div>
