@@ -3,6 +3,33 @@
 <head>
 	<title>My Bookings | Accommodation Portal</title>
 </head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> 
+</script> 
+
+<script> 
+    $(document).ready(function() { 
+        $(".cancel_booking").click(function(){
+            var b_id = $(this).attr('id');
+    
+            $.ajax({
+                type: "GET",
+                url: "/cancel_booking/",
+                dataType: "json",
+                async: true,
+                data: { csrfmiddlewaretoken: '{{ csrf_token }}',b_id: JSON.stringify(b_id),},
+                success: function(json) {
+                    // update_rooms(json.message)
+                    alert(json.message);
+                    $("tr.table_el_" + b_id).hide();
+                }
+            })
+        });
+  
+    }); 
+
+</script>
+
 <div class="container">
     <header class="jumbotron my-4">
         <h1 class="display-3">My Bookings</h1>
@@ -20,15 +47,17 @@
                     <tbody>
                         
                         {% for b in accepted_bookings %}
-                            <tr>
+                            <tr class="table_el_{{b.booking_id}}">
                                 <td>
-                                    <h4>Booking {{forloop.counter}}</h4>
+                                    <h4>Booking for: {{b.property_id.name}}</h4>
                                     <div>{{b.start_date}} to {{b.end_date}}</div>
                                     <div>Number of rooms: {{b.num_rooms}}</div> 
                                     <div>Number of guests: {{b.num_guests}}</div>
                                     <div>Status: {{b.status}}</div>
                                     <br>
-                                    <div> <a class="btn btn-primary" href="/property/{{b.property_id.property_id}}">View Property</a></div><br>
+                                    <div> <a class="btn btn-primary" href="/property/{{b.property_id.property_id}}">View Property</a> 
+                                        <button id="{{b.booking_id}}" class="cancel_booking btn btn-primary">Cancel Booking</button>
+                                    </div><br>
                                 
                                 </td>
                             </tr>
@@ -58,15 +87,17 @@
                     <tbody>
                         
                         {% for b in pending_bookings %}
-                            <tr>
+                            <tr class="table_el_{{b.booking_id}}">
                                 <td>
-                                    <h4>Booking {{forloop.counter}}</h4>
+                                    <h4>Booking for: {{b.property_id.name}}</h4>
                                     <div>{{b.start_date}} to {{b.end_date}}</div>
                                     <div>Number of rooms: {{b.num_rooms}}</div> 
                                     <div>Number of guests: {{b.num_guests}}</div>
                                     <div>Status: {{b.status}}</div>
                                     <br>
-                                    <div> <a class="btn btn-primary" href="/property/{{b.property_id.property_id}}">View Property</a></div><br>
+                                    <div> <a class="btn btn-primary" href="/property/{{b.property_id.property_id}}">View Property</a> 
+                                        <button id="{{b.booking_id}}" class="cancel_booking btn btn-primary">Cancel Booking</button>
+                                    </div><br>
                                 
                                 </td>
                             </tr>
@@ -96,16 +127,18 @@
                     <tbody>
                         
                         {% for b in rejected_bookings %}
-                            <tr>
+                            <tr class="table_el_{{b.booking_id}}">
                                 <td>
-                                    <h4>Booking {{forloop.counter}}</h4>
+                                    <h4>Booking for: {{b.property_id.name}}</h4>
                                     <div>{{b.start_date}} to {{b.end_date}}</div>
                                     <div>Number of rooms: {{b.num_rooms}}</div> 
                                     <div>Number of guests: {{b.num_guests}}</div>
                                     <div>Status: {{b.status}}</div>
                                     <br>
-                                    <div> <a class="btn btn-primary" href="/property/{{b.property_id.property_id}}">View Property</a></div><br>
-                                
+                                    <div> <a class="btn btn-primary" href="/property/{{b.property_id.property_id}}">View Property</a> 
+                                        <button id="{{b.booking_id}}" class="cancel_booking btn btn-primary">Remove</button>
+                                    </div>
+                                    <div> </div><br>
                                 </td>
                             </tr>
                         {% empty %}

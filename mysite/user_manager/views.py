@@ -61,7 +61,7 @@ def user_properties_view(request):
 	user = request.user
 	user_properties_shareable = Property.objects.filter(host_id=user, shareable=True)
 	user_properties_unshareable = Property.objects.filter(host_id=user, shareable=False)
-	print(user.user_id)
+	
 	return render(request, 'user_properties.html', {'user_properties_shareable': user_properties_shareable,
 	                                                'user_properties_unshareable': user_properties_unshareable})
 
@@ -93,8 +93,7 @@ def add_to_favourites(request):
 	
 	property = Property.objects.get(property_id=property_id)
 	user = request.user
-	print('hello')
-	print(type(property))
+
 	favourite = PropertyFavourites(user=user, property=property)
 	favourite.save()
 	

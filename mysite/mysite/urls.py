@@ -42,6 +42,10 @@ urlpatterns = [
     path('addproperty/',add_property_view, name='add_property'),
     path('mybookingapprovals/',booking_approvals_view, name='booking_approvals'),
 
+    path('cancel_booking/',cancel_booking,name='cancel_booking'),
+
+
+    path('propertybookings/<int:property_id>/',property_bookings_view,name='property_bookings'),
     path('book/<int:property_id>/', booking_view, name='booking'),
     path('book/<int:property_id>/<check_in>/<check_out>/', booking_view, name='booking'),
     path('getdata/', get_data_view, name='getdata'),

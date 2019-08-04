@@ -27,9 +27,11 @@
                                     <div>Rooms: {{property.size}}</div>
                                     <div>Total property price: ${{property.price}} per night</div> <br>
                                     <!-- <h3>Property Room Details</h3> -->
-                                    <a href="{% url 'edit_property' property_id=property.property_id%}" class="btn btn-primary">Edit Property</a>
+                                    
                                     <a href="{% url 'view_rooms' property_id=property.property_id %}" class="btn btn-primary">View Rooms</a>
-                                    <a href="{% url 'add_room' property_id=property.property_id %}" class="btn btn-primary">Add Rooms</a>
+                                    <a href="{% url 'add_room' property_id=property.property_id %}" class="btn btn-primary">Add Rooms</a><br><br>
+                                    <a href="{% url 'edit_property' property_id=property.property_id%}" class="btn btn-primary">Edit Property</a>
+                                    <a href="{% url 'property_bookings' property_id=property.property_id %}" class="btn btn-primary">View Bookings</a>
                                     <!-- <a href="{% url 'property' property_id=property.property_id %}" class="btn btn-primary">View Property</a> -->
                                     <br> <br>
                                 </td>
@@ -67,6 +69,7 @@
                                     <div>Property Price: ${{property.price}} per night</div> <br>
                                     <!-- <h3>Property Room Details</h3> -->
                                     <a href="{% url 'edit_property' property_id=property.property_id%}" class="btn btn-primary">Edit Property</a>
+                                    <a href="{% url 'property_bookings' property_id=property.property_id %}" class="btn btn-primary">View Bookings</a>
                                     <!-- <a href="{% url 'property' property_id=property.property_id %}" class="btn btn-primary">View Property</a> -->
                                     <br> <br>
                                 </td>

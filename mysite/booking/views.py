@@ -557,6 +557,13 @@ def property_rooms_view(request, property_id):
     return render(request, 'view_rooms.html',{'rooms':rooms,'property':property})
 
 @login_required(login_url='/login')
+def property_bookings_view(request, property_id):
+
+    bookings = Booking.objects.filter(property_id=property_id,status='Accepted')
+    return render(request, 'property_bookings.html',{'bookings':bookings})
+
+
+@login_required(login_url='/login')
 def edit_room_view(request, room_id):
     room = Room.objects.get(room_id=room_id)
     user = request.user
@@ -572,6 +579,8 @@ def edit_room_view(request, room_id):
     else:
         edited_form = RoomCreationForm(instance=room)
     return render(request, 'edit_room.html', {'user':user,'owner':owner,'edited_form':edited_form,})
+
+
 
 @login_required(login_url='/login') 
 def get_data_view(request):
@@ -658,6 +667,30 @@ def booking_rejection_data(request):
         booking.save()
         response_data['result'] = 'Success'
         response_data['message'] = 'Booking rejected.'
+    else:
+        response_data['result'] = 'Failure'
+        response_data['message'] = 'Booking not found'
+    
+    data = json.dumps(response_data)
+    
+    return HttpResponse(data)
+
+@login_required(login_url='/login') 
+def cancel_booking(request):
+
+    response_data = {}
+
+    b_id_str = json.loads(request.GET.get('b_id'))
+    booking_id = int(b_id_str) 
+    booking = Booking.objects.get(booking_id=booking_id)
+    if booking:
+        bt_entries = BookingTable.objects.filter(booking_id=booking_id)
+        for bt in bt_entries:
+            bt.delete()
+        booking.delete()
+
+        response_data['result'] = 'Success'
+        response_data['message'] = 'Booking removed.'
     else:
         response_data['result'] = 'Failure'
         response_data['message'] = 'Booking not found'

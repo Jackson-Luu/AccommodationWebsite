@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<head>
+	<title>View Property Bookings | Accommodation Portal</title>
+</head>
+<div class="container">
+    <div class="row">
+            <div class="col-md-6">
+                <div class="col-md-12 ">
+                    <table id="myTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th><h2 style="text-align:center">Property Bookings</h2></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            {% for b in accepted_bookings %}
+                                <tr class="table_el_{{b.booking_id}}">
+                                    <td>
+                                        <h4>Booking for: {{b.property_id.name}}</h4>
+                                        <div>{{b.start_date}} to {{b.end_date}}</div>
+                                        <div>Number of rooms: {{b.num_rooms}}</div> 
+                                        <div>Number of guests: {{b.num_guests}}</div>
+                                        <!-- <div>Status: {{b.status}}</div> -->
+                                        <br>
+                                        <!-- <div> <a class="btn btn-primary" href="/property/{{b.property_id.property_id}}">View Property</a> 
+                                            <button id="{{b.booking_id}}" class="cancel_booking btn btn-primary">Cancel Booking</button>
+                                        </div><br> -->
+                                    
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td>
+                                        <div class="lead">
+                                            No bookings for this property.
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>       
+                </div>
+            </div>
+
+    </div>
+    
+    <a href="{% url 'my_properties' %}" class="btn btn-primary">Back to My Properties</a>
+    
+</div>
+
+{% endblock %}
