@@ -16,7 +16,7 @@
                         </thead>
                         <tbody>
                             
-                            {% for b in accepted_bookings %}
+                            {% for b in bookings %}
                                 <tr class="table_el_{{b.booking_id}}">
                                     <td>
                                         <h4>Booking for: {{b.property_id.name}}</h4>

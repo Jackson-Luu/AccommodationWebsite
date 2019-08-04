@@ -132,6 +132,8 @@ def room_gen(size, num_rooms):
         
     return rooms
 
+def about_view(request):
+    return render(request,'about.html',{})
 
 def home_view(request,*args, **kwargs):
     # CSV call, comment out to improve homepage performance
