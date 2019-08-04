@@ -226,62 +226,6 @@ def search_view(request, *args, **kwargs):
         return render(request, 'search_results.html', {'properties':valid_prop, 'location':location, 'amenities':amenities, 'prop_json':prop_json, 'check_in':check_in,'check_out':check_out})
     return render(request, 'search.html', {})
 
-# @login_required(login_url='/login')
-# def add_shareable_property_view(request):
-#     user = request.user
-#     if request.method == 'POST':
-#         form = ShareablePropertyCreationForm(request.POST)
-#         if form.is_valid():
-#             a = form.save(commit=False)
-#             a.host_id = user
-#             a.shareable = True
-#             a.save()
-
-#             for am in form.cleaned_data['amenities']:
-#                 aobj = Amenity.objects.get(amenity_name = am)
-#                 PropertyAmenities(property=a, amenity=aobj).save()
-
-#             #room creation
-#             property_id = a.property_id
-#             # create_rooms(property_id)
-
-#             messages.success(request,'Property listed!')
-#             # add_room_view(request)
-#             return redirect('add_room',property_id)
-
-#     else: 
-#         form = ShareablePropertyCreationForm()
-#     return render(request,'add_property.html',{'form':form})
-
-
-# @login_required(login_url='/login')
-# def add_unshareable_property_view(request):
-#     user = request.user
-#     if request.method == 'POST':
-#         form = UnshareablePropertyCreationForm(request.POST)
-#         if form.is_valid():
-#             a = form.save(commit=False)
-#             a.host_id = user
-#             a.size = form.cleaned_data['size']
-#             a.price = form.cleaned_data['price']
-#             a.shareable = False
-#             a.save()
-
-#             for am in form.cleaned_data['amenities']:
-#                 aobj = Amenity.objects.get(amenity_name = am)
-#                 PropertyAmenities(property=a, amenity=aobj).save()
-
-#             #room creation
-#             property_id = a
-#             # create_rooms(property_id)
-
-#             messages.success(request,'Property listed!')
-#             # add_room_view(request)
-#             return redirect('home')
-
-#     else: 
-#         form = UnshareablePropertyCreationForm()
-#     return render(request,'add_property.html',{'form':form})
 
 @login_required(login_url='/login')
 def add_property_view(request):
