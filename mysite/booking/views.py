@@ -338,6 +338,7 @@ def property_view(request, property_id, check_in=None, check_out=None):
             blist.append(model_to_dict(b, fields=['start_date', 'end_date']))
 
     bookings = json.dumps(blist, cls=DjangoJSONEncoder)
+    print(blist)
 
     return render(request, 'property_view.html', {'property':property,'rooms':rooms, 'amenities':amenities, 'check_in':check_in, 'check_out':check_out, 'images':imgs, 'reviews':reviews, 'owner':owner,'user':user, 'bookings':bookings, 'blist':blist})
 
