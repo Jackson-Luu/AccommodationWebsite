@@ -366,12 +366,41 @@ def booking_approvals_view(request):
 def booking_view(request, property_id, check_in=None, check_out=None):
     user = request.user
     p = Property.objects.get(property_id=property_id)
-    room_list = Room.objects.filter(property_id=property_id)
+    print(p.price)
+    rooms = Room.objects.filter(property_id=property_id)
     if check_in:
         check_in = str(check_in)
     if check_out:
         check_out = str(check_out)
-    
+
+    # Find amenities for the property
+    amenities = []
+    prop_am = PropertyAmenities.objects.filter(property=p)
+    for am in prop_am:
+        amenities.append(am.amenity.amenity_name)
+
+    # Find property bookings
+    bookings = Booking.objects.filter(property_id=property_id)
+    blist = []
+    room_list = list(Room.objects.filter(property_id=property_id).values_list('room_id', flat=True))
+    for b in bookings:
+        if b.status == "Accepted":
+            if p.shareable:
+                room_book = list(BookingTable.objects.filter(booking=b).values_list('room', flat=True))
+                booker_id = str(b.user_id.user_id)
+                booker = b.user_id.first_name
+                for room in room_book:
+                    bdict = model_to_dict(b, fields=['start_date', 'end_date'])
+                    bdict['room'] = room_list.index(room) + 1
+                    bdict['user_id'] = booker_id
+                    bdict['user'] = booker
+                    blist.append(bdict)
+            else:
+                blist.append(model_to_dict(b, fields=['start_date', 'end_date']))
+
+    # Convert bookings for Jscript
+    bookings = json.dumps(blist, cls=DjangoJSONEncoder)
+
     if request.method == 'POST':
         check_in_date = request.POST.get('check_in_date') 
         check_out_date = request.POST.get('check_out_date') 
@@ -380,25 +409,25 @@ def booking_view(request, property_id, check_in=None, check_out=None):
             check_out_date = datetime.strptime(check_out_date, '%Y-%m-%d').date()
             if check_in_date >= check_out_date:
                 return render(request, 'booking.html', {
-                'error': "Invalid dates.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+                'error': "Invalid dates.","property":p, "rooms":rooms, "check_in":check_in, "check_out":check_out, 'blist':blist,'bookings':bookings,'amenities':amenities 
                 })
         else:
             return render(request, 'booking.html', {
-            'error': "Invalid check-in/check-out dates.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+            'error': "Invalid check-in/check-out dates.","property":p, "rooms":rooms, "check_in":check_in, "check_out":check_out,'blist':blist,'bookings':bookings,'amenities':amenities 
             }) 
        
         if p.shareable == True:
 
             if not p.bookable:
                 return render(request, 'booking.html', {
-                'error': "This property is not available for booking at this time.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+                'error': "This property is not available for booking at this time.","property":p, "rooms":rooms, "check_in":check_in, "check_out":check_out,'blist':blist,'bookings':bookings,'amenities':amenities 
                 })
 
             checked_rooms = request.POST.getlist('rooms')
             num_guests = request.POST.get('num_guests')
             if not checked_rooms or not num_guests:
                 return render(request, 'booking.html', {
-                'error': "Please enter all required fields.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+                'error': "Please enter all required fields.","property":p, "rooms":rooms, "check_in":check_in, "check_out":check_out,'blist':blist,'bookings':bookings,'amenities':amenities 
                 })
             
             max_guests = 0
@@ -408,7 +437,7 @@ def booking_view(request, property_id, check_in=None, check_out=None):
 
             if int(num_guests) > max_guests:
                 return render(request, 'booking.html', {
-                'error': "Exceeded maximum number of guests.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+                'error': "Exceeded maximum number of guests.","property":p, "rooms":rooms, "check_in":check_in, "check_out":check_out,'blist':blist,'bookings':bookings,'amenities':amenities 
                 })
 
             # Check pre-existing bookings for property
@@ -424,7 +453,7 @@ def booking_view(request, property_id, check_in=None, check_out=None):
                         booked_rooms = list(BookingTable.objects.filter(booking=b).values_list('room', flat=True))
                         if not set([int(i) for i in checked_rooms]).isdisjoint(booked_rooms):
                             return render(request, 'booking.html', {
-                            'error': "Room is unavailable for that period.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out})
+                            'error': "Room is unavailable for that period.","property":p, "rooms":rooms, "check_in":check_in, "check_out":check_out,'blist':blist,'bookings':bookings,'amenities':amenities})
 
             booking_instance = Booking(user_id=user,start_date=check_in_date, end_date=check_out_date,property_id=p,num_guests=num_guests,num_rooms=len(checked_rooms))
             booking_instance.save()
@@ -443,12 +472,12 @@ def booking_view(request, property_id, check_in=None, check_out=None):
             num_guests = request.POST.get('num_guests')
             if not num_guests:
                 return render(request, 'booking.html', {
-                'error': "Please enter all required fields.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+                'error': "Please enter all required fields.","property":p, "rooms":rooms, "check_in":check_in, "check_out":check_out, 'blist':blist,'bookings':bookings,'amenities':amenities 
                 })
 
             if int(num_guests) > p.size:
                 return render(request, 'booking.html', {
-                'error': "Exceeded maximum number of guests.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
+                'error': "Exceeded maximum number of guests.","property":p, "rooms":rooms, "check_in":check_in, "check_out":check_out,'blist':blist,'bookings':bookings,'amenities':amenities 
                 })
 
             # Check pre-existing bookings for property
@@ -461,7 +490,7 @@ def booking_view(request, property_id, check_in=None, check_out=None):
                         continue
                     else:
                         return render(request, 'booking.html', {
-                        'error': "Property is unavailable for that period.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out})
+                        'error': "Property is unavailable for that period.","property":p, "rooms":rooms, "check_in":check_in, "check_out":check_out, 'blist':blist,'bookings':bookings,'amenities':amenities})
 
             booking_instance = Booking(user_id=user,start_date=check_in_date, end_date=check_out_date,property_id=p,num_guests=num_guests)
             booking_instance.save()
@@ -470,7 +499,7 @@ def booking_view(request, property_id, check_in=None, check_out=None):
             return redirect('my_bookings')
        
         
-    return render(request, 'booking.html', {"property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out })
+    return render(request, 'booking.html', {"property":p, "rooms":rooms, "check_in":check_in, "check_out":check_out, 'blist':blist,'bookings':bookings,'amenities':amenities })
 
 
 @login_required(login_url='/login')

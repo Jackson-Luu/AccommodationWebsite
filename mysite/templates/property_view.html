@@ -293,41 +293,43 @@
                 <div id="collapseOccupants" class="collapse hide" aria-labelledby="headingOccupants" data-parent="#accordion">
                     <br />
                     {% if blist %}
-                    <div id="timeline" class="timeline"></div>
-                    {% if property.shareable %}
-                    <table class="table table-striped book-table">
-                        <thead>
-                            <tr>
-                                <th>Occupant</th>
-                                <th>Room</th>
-                                <th>Dates</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for b in blist %}
-                            <tr>
-                                <td>
-                                    {{ b.user }}
-                                </td>
-                                <td>
-                                    {{ b.room }}
-                                </td>
-                                <td>
-                                    {{ b.start_date }} - {{ b.end_date }}
-                                </td>
-                                <td>
-                                    <a href="{% url 'profile' user_id=b.user_id %}">View Profile</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                    {% endif %}
-                    {% else %}
-                    <div align="center">
-                        This property has not been booked.
-                    </div>
+                        <div id="timeline" class="timeline"></div>
+                        {% if property.shareable %}
+                        
+                        <table class="table table-striped book-table">
+                            <thead>
+                                <tr>
+                                    <th>Occupant</th>
+                                    <th>Room</th>
+                                    <th>Dates</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for b in blist %}
+                                <tr>
+                                    <td>
+                                        {{ b.user }}
+                                    </td>
+                                    <td>
+                                        {{ b.room }}
+                                    </td>
+                                    <td>
+                                        {{ b.start_date }} - {{ b.end_date }}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'profile' user_id=b.user_id %}">View Profile</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% endif %}
+                        
+                        {% else %}
+                        <div align="center">
+                            This property has not been booked.
+                        </div>
                     {% endif %}
                     <br />
                 </div>
