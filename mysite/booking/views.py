@@ -150,17 +150,16 @@ def home_view(request,*args, **kwargs):
         shuffle(seq)
         x = seq.pop()
         p = Property.objects.all()[x]
-        properties.append(p)
+        properties.append(model_to_dict(p))
     # properties = Property.objects.all()[:4]
 
     # query an image for each property
-    imgs = []
-    for p in properties:
+    for idx, p in enumerate(properties):
         try:
-            imgs.append(PropertyImages.objects.filter(property=p.property_id).values_list('image', flat=True)[0])
+            properties[idx]['image'] = PropertyImages.objects.filter(property=p['property_id']).values_list('image', flat=True)[0]
         except IndexError:
-            imgs.append("https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80")
-    return render(request, 'home.html', {'properties':properties, 'images':imgs})
+            properties[idx]['image'] = "https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+    return render(request, 'home.html', {'properties':properties})
 
 def search_view(request, *args, **kwargs):
     if request.method == 'POST':

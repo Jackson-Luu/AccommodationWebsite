@@ -44,11 +44,33 @@
 </script>
 
 <head>
-	<title>Bookings Approvals | Accommodation Portal</title>
+    <title>Bookings Approvals | Accommodation Portal</title>
+    <style>
+        .display-1 {
+            position: relative;
+            color: white;
+        }
+
+        .jumbotron {
+            position: relative;
+            color: white;
+        }
+
+            .jumbotron::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-image: url("https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80");
+                filter: blur(8px);
+            }
+    </style>
 </head>
 <div class="container">
     <header class="jumbotron my-4">
-        <h1 class="display-3">Bookings Approvals</h1>
+        <h1 class="display-1">Bookings Approvals</h1>
         <p class="lead"> </p>
     </header>   
     <div class="row">
