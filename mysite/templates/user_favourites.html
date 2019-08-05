@@ -1,19 +1,60 @@
 {% extends "layout.html" %}
-
 {% block content %}
 <head>
-	<title>My favourites | Accommodation Portal</title>
+	<title>My Favourites | Accommodation Portal</title>
 </head>
+<!-- <style>
+    .text-overflow {
+        display: block;
+        width: 500px;
+        height: 300px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+</style> -->
 <div class="container">
-    <br>
-    <h2>My Favourites</h2>
-    {% for f in favourites %}
-    <div>
-        <strong> {{f.property.name}}</strong>
-        <div> <a href="/property/{{f.property.property_id}}">View Property</a></div><br>
-    </div>
+    <header class="jumbotron my-4">
+        <h1 class="display-3">My Favourites</h1>
+        <p class="lead"> </p>
+    </header>   
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-12 ">
+                <table id="myTable" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th><h2 style="text-align:center"></h2></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        {% for f in favourites %}
+                            <tr>
+                                <td>
+                                    <h4> {{f.property.name}}</h4>
+                                    <!-- <div>Property Description: {{f.property.description}}</div> -->
+                                    <div>Rooms: {{f.property.size}}</div>
+                                    <div>Shareable: {{f.property.shareable}}</div><br>
+                                    <div> <a class="btn btn-primary" href="/property/{{f.property.property_id}}">View Property</a></div><br>
+                                    
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td>
+                                    <div class="lead">
+                                        No favourites.
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>       
+            </div>
+        </div>
         
-    {% endfor %}
+    </div>
 </div>
-
 {% endblock %}

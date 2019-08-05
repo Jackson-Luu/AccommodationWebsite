@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import Property, Booking, Room, Amenity
+from .models import *
 
 class DateInput(forms.DateInput):
 	input_type = 'date'
@@ -10,7 +10,7 @@ class ShareablePropertyCreationForm(forms.ModelForm):
     location = forms.CharField()
     description = forms.CharField(widget=forms.Textarea)
     amenities = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                      choices=zip(list(Amenity.objects.all().values_list('amenity_name', flat=True)), Amenity.objects.all().values_list('amenity_name', flat=True)))
+                      choices=zip(list(Amenity.objects.all().values_list('amenity_name', flat=True)), Amenity.objects.all().values_list('amenity_name', flat=True)), required=True)
     class Meta(forms.ModelForm):
         model = Property
         fields = ['name','location','description']
@@ -22,7 +22,7 @@ class UnshareablePropertyCreationForm(forms.ModelForm):
     size = forms.IntegerField()
     description = forms.CharField(widget=forms.Textarea)
     amenities = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                      choices=zip(list(Amenity.objects.all().values_list('amenity_name', flat=True)), Amenity.objects.all().values_list('amenity_name', flat=True)))
+                      choices=zip(list(Amenity.objects.all().values_list('amenity_name', flat=True)), Amenity.objects.all().values_list('amenity_name', flat=True)), required=True)
     class Meta(forms.ModelForm):
         model = Property
         fields = ['name','location','description']
@@ -69,3 +69,11 @@ class SelectPropertyTypeForm(forms.Form):
     shareable = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES, required=True, label='Do you want this property to be shareable?')
     # def __init__(self,*args,**kwargs):
     #     super(SelectPropertyTypeForm,self).__init__(*args,**kwargs)
+
+class PropertyImageURLsForms(forms.ModelForm):
+	
+	class Meta(forms.ModelForm):
+		model = PropertyImages
+		fields = ['image']
+		labels = {'image': 'Image URL'}
+		
