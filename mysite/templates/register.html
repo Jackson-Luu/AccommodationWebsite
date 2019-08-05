@@ -123,17 +123,20 @@
 	const requiredFields = document.getElementsByClassName("required-field");
 	for (let field of requiredFields) {
 		const input = field.childNodes[1];
+		const help = field.childNodes[3];
 		const helpText = field.childNodes[3].innerText;
 <!--		field.removeChild(field.childNodes[3]);-->
 		input.addEventListener('focus', () => {
-			const infobox = document.createElement("div");
-			infobox.className = "alert alert-info fade show";
-			infobox.setAttribute("role", "alert");
-			infobox.innerText = helpText;
-			field.append(infobox);
+			help.style.display = "contents"
+<!--			const infobox = document.createElement("div");-->
+<!--			infobox.className = "alert alert-info fade show";-->
+<!--			infobox.setAttribute("role", "alert");-->
+<!--			infobox.innerText = helpText;-->
+<!--			field.append(infobox);-->
 		});
 		input.addEventListener('blur', () => {
-			field.removeChild(field.lastChild);
+<!--			field.removeChild(field.lastChild);-->
+			help.style.display = "none";
 		});
 	}
 </script>
