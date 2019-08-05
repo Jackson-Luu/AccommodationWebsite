@@ -11,7 +11,7 @@ import json
 import decimal
 from django.forms.models import model_to_dict
 import csv
-from random import random, randint
+from random import random, randint, shuffle
 from .models import CustomUser
 from review.models import PropertyReviews
 from decimal import Decimal
@@ -140,7 +140,15 @@ def home_view(request,*args, **kwargs):
     # CSV call, comment out to improve homepage performance
     if not check_csv():
         load_csv()
-    properties = Property.objects.all()[:4]
+    seq = list(range(0, Property.objects.all().count()+1))
+    shuffle(seq)
+    properties = []
+    for i in range(0, 4):
+        shuffle(seq)
+        x = seq.pop()
+        p = Property.objects.all()[x]
+        properties.append(p)
+    # properties = Property.objects.all()[:4]
 
     # query an image for each property
     imgs = []
