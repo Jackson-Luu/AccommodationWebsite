@@ -3,13 +3,18 @@
 <head>
 	<title>Accommodation Portal</title>
 </head>
- <style>
+<style>
     .display-3 {
-        position:relative;
-        margin-bottom: 20px;
+      position:relative;
+      margin-bottom: 20px;
     }
     .btn-lg {
-        position:relative; 
+      position:relative;
+    }
+    .card-img-top {
+      object-fit: cover;
+      overflow: hidden;
+      height: 200px;
     }
 
    .card-top {
@@ -40,8 +45,7 @@
 
  </style>
 <!-- Page Content -->
-<div class="container">
-  
+<div class="container">  
     <!-- Jumbotron Header -->
     <header class="jumbotron my-4">
         <h1 class="display-3">Accommodation Portal</h1>
@@ -66,9 +70,7 @@
         </div>
         {% endfor %}  
     </div>
-    <!-- /.row -->
-  
 </div>
 <!-- /.container -->
-  
+
 {% endblock %}

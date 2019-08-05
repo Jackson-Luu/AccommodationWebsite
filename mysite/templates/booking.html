@@ -9,8 +9,8 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
-    <!-- Special version of Bootstrap that only affects content wrapped in .bootstrap-iso -->
-    <!--<link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />-->
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <!-- Datatables -->
     <script type="text/javascript" src="http://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <!-- Graphs -->
@@ -18,178 +18,178 @@
     <script src="http://code.highcharts.com/highcharts.js"></script>
     <script src="http://code.highcharts.com/highcharts-more.js"></script>
     <script src="http://code.highcharts.com/modules/exporting.js"></script>
+
     <script>
-    $(document).ready(function(){
-        get_room_availabilities();
-        var today = get_today_date();
-        $("#check_in_date").attr('min',today)
-        if( $("#check_in_date").val() != '' ) {
-            var checkin = $("#check_in_date").val()
-            $("#check_out_date").attr('min',checkin)
-        } else {
-            $("#check_out_date").attr('min',today)
-        }
-        $("#check_in_date, #check_out_date").change(function(){
+        $(document).ready(function(){
             get_room_availabilities();
+            var today = get_today_date();
+            $("#check_in_date").attr('min',today)
+            if( $("#check_in_date").val() != '' ) {
+                var checkin = $("#check_in_date").val()
+                $("#check_out_date").attr('min',checkin)
+            } else {
+                $("#check_out_date").attr('min',today)
+            }
+            $("#check_in_date, #check_out_date").change(function(){
+                get_room_availabilities();
+            });
         });
-    });
 
-    function get_room_availabilities(){
-        var room_ids = [];
-        room_ids = get_room_ids();
-        var check_in_data = $('#check_in_date').val()
-        var check_out_data = $('#check_out_date').val()
+        function get_room_availabilities(){
+            var room_ids = [];
+            room_ids = get_room_ids();
+            var check_in_data = $('#check_in_date').val()
+            var check_out_data = $('#check_out_date').val()
 
-        $.ajax({
-            type: "GET",
-            url: "/getdata/",
-            dataType: "json",
-            async: true,
-            data: { csrfmiddlewaretoken: '{{ csrf_token }}', check_in_data : check_in_data,
-                        check_out_data : check_out_data, room_ids : JSON.stringify(room_ids),},
-            success: function(json) {
-                update_rooms(json.message)
-            }
-        })
-    }
-
-    function get_room_ids(){
-        //var num_rooms = {{p.size}};
-        var room_ids=[];
-        $(":checkbox").each(function () {
-            var id = $(this).attr("id");
-            room_ids.push(id);
-        });
-        return room_ids
-    }
-
-    function update_rooms(room_attr){
-        var i;
-        for(i = 0; i < room_attr.length; i++) {
-            room_id = room_attr[i].room_id;
-            availability = room_attr[i].availability;
-            if (availability == true) {
-                $('#' + room_id).removeAttr('disabled')
-                $('#' + room_id + 'booked_user_profile').removeAttr('href')
-                $('#' + room_id + 'booked_user_profile').text("")
-                $('#' + room_id + 'availability').text("Available")
-            }
-            else {
-                booked_user = room_attr[i].booked_user;
-                $('#' + room_id).prop("checked", false);
-                $('#' + room_id).attr('disabled', 'disabled')
-                $('#' + room_id + 'availability').text("Not Available")
-                $('#' + room_id + 'booked_user_profile').attr('href','/profile/'+booked_user)
-            
-                $('#' + room_id + 'booked_user_profile').text('Profile Link')
-            }
-        }
-    }
-    
-    function get_today_date(){
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth()+1; //January is 0!
-        var yyyy = today.getFullYear();
-        if(dd < 10){
-            dd ='0'+ dd;
-        }
-        if(mm < 10){
-            mm = '0' + mm;
-        }
-        today = yyyy + '-' + mm + '-' + dd;
-        return today;
-    }
-    // Jscript for date widget
-    var bookings = JSON.parse('{{ bookings|safe }}');
-    var blist = []
-    var i = 0;
-    for (b of bookings) {
-        var start = b.start_date.split("-");
-        var end = b.end_date.split("-");
-        blist.push({stack: b.room, name: b.user, data: [[Date.UTC(start[0],start[1] - 1,start[2]), Date.UTC(end[0],end[1] - 1,end[2])]] });
-        i++;
-    }
-
-    var today = new Date();
-    var maxDate = new Date();
-    maxDate.setDate(today.getDate() + 20);
-
-    // Graph function for date widget
-    $(function () {
-        $('#timeline').highcharts({
-            chart: {
-                inverted: true,
-                type: 'columnrange'
-            },
-            title: {
-                text: ''
-            },
-            tooltip: {
-                enabled: true,
-                useHTML: true,
-                style: {
-                    pointerEvents: 'auto'
-                },
-                formatter: function () {
-                    {% if property.shareable is True %}
-                        var stackName = this.series.userOptions.stack;
-                        var name = this.series.userOptions.name;
-                        return '<b>Room: ' + stackName + '<br/></b>' + name + '<br>' + Highcharts.dateFormat('%d-%m-%Y', this.point.low) + " to " + Highcharts.dateFormat('%d-%m-%Y', this.point.high);
-                    {% else %}
-                        return Highcharts.dateFormat('%d-%m-%Y', this.point.low) + " to " + Highcharts.dateFormat('%d-%m-%Y', this.point.high);
-                    {% endif %}
-                },
-            },
-            xAxis: {
-                labels:
-                {
-                    enabled: false
+            $.ajax({
+                type: "GET",
+                url: "/getdata/",
+                dataType: "json",
+                async: true,
+                data: { csrfmiddlewaretoken: '{{ csrf_token }}', check_in_data : check_in_data,
+                            check_out_data : check_out_data, room_ids : JSON.stringify(room_ids),},
+                success: function(json) {
+                    update_rooms(json.message)
                 }
-            },
-            yAxis: {
-                min: Date.now(),
-                max: maxDate,
-                tickInterval: 3600 * 1000 * 24,
-                type: 'datetime',
-                dateTimeLabelFormats: {
-                    day: '%d-%m-%Y'
+            })
+        }
+
+        function get_room_ids(){
+            //var num_rooms = {{p.size}};
+            var room_ids=[];
+            $(":checkbox").each(function () {
+                var id = $(this).attr("id");
+                room_ids.push(id);
+            });
+            return room_ids
+        }
+
+        function update_rooms(room_attr){
+            var i;
+            for(i = 0; i < room_attr.length; i++) {
+                room_id = room_attr[i].room_id;
+                availability = room_attr[i].availability;
+                if (availability == true) {
+                    $('#' + room_id).removeAttr('disabled')
+                    $('#' + room_id + 'booked_user_profile').removeAttr('href')
+                    $('#' + room_id + 'booked_user_profile').text("")
+                    $('#' + room_id + 'availability').text("Available")
+                }
+                else {
+                    booked_user = room_attr[i].booked_user;
+                    $('#' + room_id).prop("checked", false);
+                    $('#' + room_id).attr('disabled', 'disabled')
+                    $('#' + room_id + 'availability').text("Not Available")
+                    $('#' + room_id + 'booked_user_profile').attr('href','/profile/'+booked_user)
+                
+                    $('#' + room_id + 'booked_user_profile').text('Profile Link')
+                }
+            }
+        }
+        
+        function get_today_date(){
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1; //January is 0!
+            var yyyy = today.getFullYear();
+            if(dd < 10){
+                dd ='0'+ dd;
+            }
+            if(mm < 10){
+                mm = '0' + mm;
+            }
+            today = yyyy + '-' + mm + '-' + dd;
+            return today;
+        }
+        // Jscript for date widget
+        var bookings = JSON.parse('{{ bookings|safe }}');
+        var blist = []
+        var i = 0;
+        for (b of bookings) {
+            var start = b.start_date.split("-");
+            var end = b.end_date.split("-");
+            blist.push({stack: b.room, name: b.user, data: [[Date.UTC(start[0],start[1] - 1,start[2]), Date.UTC(end[0],end[1] - 1,end[2])]] });
+            i++;
+        }
+
+        var today = new Date();
+        var maxDate = new Date();
+        maxDate.setDate(today.getDate() + 20);
+
+        // Graph function for date widget
+        $(function () {
+            $('#timeline').highcharts({
+                chart: {
+                    inverted: true,
+                    type: 'columnrange'
                 },
                 title: {
                     text: ''
                 },
-                scrollbar: {
-                    enabled: true
+                tooltip: {
+                    enabled: true,
+                    useHTML: true,
+                    style: {
+                        pointerEvents: 'auto'
+                    },
+                    formatter: function () {
+                        {% if property.shareable is True %}
+                            var stackName = this.series.userOptions.stack;
+                            var name = this.series.userOptions.name;
+                            return '<b>Room: ' + stackName + '<br/></b>' + name + '<br>' + Highcharts.dateFormat('%d-%m-%Y', this.point.low) + " to " + Highcharts.dateFormat('%d-%m-%Y', this.point.high);
+                        {% else %}
+                            return Highcharts.dateFormat('%d-%m-%Y', this.point.low) + " to " + Highcharts.dateFormat('%d-%m-%Y', this.point.high);
+                        {% endif %}
+                    },
                 },
-            },
-            legend: {
-                enabled: false,
-            },
-            plotOptions: {
-                series: {
-                    stacking: 'true',
+                xAxis: {
+                    labels:
+                    {
+                        enabled: false
+                    }
                 },
-                bar:{
-                    stacking: 'normal',
-                    grouping: false,
-                    shadow: false,
-                    //pointInterval: 24 * 3600 * 1000
-                }
-            },
-            series: blist
+                yAxis: {
+                    min: Date.now(),
+                    max: maxDate,
+                    tickInterval: 3600 * 1000 * 24,
+                    type: 'datetime',
+                    dateTimeLabelFormats: {
+                        day: '%d-%m-%Y'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    scrollbar: {
+                        enabled: true
+                    },
+                },
+                legend: {
+                    enabled: false,
+                },
+                plotOptions: {
+                    series: {
+                        stacking: 'true',
+                    },
+                    bar:{
+                        stacking: 'normal',
+                        grouping: false,
+                        shadow: false,
+                        //pointInterval: 24 * 3600 * 1000
+                    }
+                },
+                series: blist
+            });
         });
-    });
     </script>
 
+    <!-- Custom CSS -->
     <style>
         body {
             padding-top: 56px;
         }
-
         * {
             margin: 0;
         }
-
         html, body {
             height: 100%;
         }
@@ -203,7 +203,6 @@
             height: 100%;
             margin: 0 auto -122px; /* the bottom margin is the negative value of the footer's height */
         }
-
         .py-5, .push {
             height: 122px; /* .push must be the same height as .footer */
         }
@@ -222,61 +221,33 @@
                 background-image: url("https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80");
                 filter: blur(8px);
             } 
-
         .display-3 {
             position: relative;
         }
-
         .btn-lg {
             position: relative;
         }
-
         .bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form {
             font-family: Arial, Helvetica, sans-serif;
             color: black
         }
-
             .bootstrap-iso form button, .bootstrap-iso form button:hover {
                 color: white !important;
             }
-
         .asteriskField {
             color: red;
         }
-
         .property-info {
             padding-top: 30px;
             padding-bottom: 20px;
         }
-
         .property-table {
             width: 100%;
         }
 
-        /* Create two unequal columns that floats next to each other */
-        .column {
-            float: left;
-            padding: 10px;
-        }
-
-        .left {
-            width: 25%;
-        }
-
-        .right {
-            width: 75%;
-        }
-
-        /* Clear floats after the columns */
-        /* .row::after {
-            content: "";
-            display: table;
-            clear: both;
-        } */
         .lead {
             font-weight: 385;
         }
-
         .footer {
             bottom: 0;
             position: static;
@@ -285,15 +256,15 @@
     </style>
 </head>
 <body>
+    <!-- Navigation bar -->
     {% include 'navbar.html' %}
     <br />
-    <!-- Jumbotron Header -->
+    
     <div class="container">
         <header class="jumbotron jumbotron-top my-4">
             <h1 class="display-3">Book Property</h1>
             <p class="lead"></p>
         </header>
-
 
         <!-- Dropdown tab for date widget -->
         <div id="accordion">
@@ -309,51 +280,51 @@
                 {% endif %}
                 <div id="collapseOccupants" class="collapse hide" aria-labelledby="headingOccupants" data-parent="#accordion">
                     <br />
-                {% if blist %}
-                    <div id="timeline" class="timeline"></div>
-                    {% if property.shareable %}
-                    <table class="table table-striped book-table">
-                        <thead>
-                            <tr>
-                                <th>Occupant</th>
-                                <th>Room</th>
-                                <th>Dates</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for b in blist %}
-                            <tr>
-                                <td>
-                                    {{ b.user }}
-                                </td>
-                                <td>
-                                    {{ b.room }}
-                                </td>
-                                <td>
-                                    {{ b.start_date }} - {{ b.end_date }}
-                                </td>
-                                <td>
-                                    <a href="{% url 'profile' user_id=b.user_id %}">View Profile</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    {% if blist %}
+                        <div id="timeline" class="timeline"></div>
+                        {% if property.shareable %}
+                        <table class="table table-striped book-table">
+                            <thead>
+                                <tr>
+                                    <th>Occupant</th>
+                                    <th>Room</th>
+                                    <th>Dates</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for b in blist %}
+                                <tr>
+                                    <td>
+                                        {{ b.user }}
+                                    </td>
+                                    <td>
+                                        {{ b.room }}
+                                    </td>
+                                    <td>
+                                        {{ b.start_date }} - {{ b.end_date }}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'profile' user_id=b.user_id %}">View Profile</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% endif %}
+                        
+                    {% else %}
+                        <div align="center">
+                            This property has not been booked.
+                        </div>
                     {% endif %}
-                    
-                {% else %}
-                    <div align="center">
-                        This property has not been booked.
-                    </div>
-                {% endif %}
                     <br />
                 </div>
             </div>
         </div>
         <br>
         <div class="row">
-
+            <!-- Booking form -->
             <div class="booking_form col-md-7">
                 <div class="col-md-12">
                     <form method="post">
@@ -369,42 +340,44 @@
                         <input type="date" class="form-control" id="check_out_date" name="check_out_date" value={{check_out}}>
                     </div>
                     {% if property.shareable is True %}
-                    <div class="form-group lead">
-                        <label for="rooms">Select Rooms:</label>
+                    <div class="form-group">
+                        <label class= "lead "for="rooms">Select Rooms:</label>
                         <br>
-                        {% for r in rooms %}
-                        <div class="custom-control custom-checkbox custom-control-inline">
-                            <input class="custom-control-input" type="checkbox" id={{r.room_id}} name=rooms value={{r.room_id}}>
-                            <label class="custom-control-label" for={{r.room_id}}>
-                                <Strong>Room {{forloop.counter}} </Strong> <br>
-                                <div>Description: {{r.description}}</div>
-                                <div>Size: {{r.num_guests}}</div>
-                                <div>Price: ${{r.price}} per night</div>
-                                <div id="{{r.room_id}}availability"></div>
-                                <a id="{{r.room_id}}booked_user_profile"></a>
-                            </label> <br>
+                        <div class="custom-control col-md-12">
+                            {% for r in rooms %}
+                            <div class="custom-control custom-checkbox ">
+                                <input class="custom-control-input" type="checkbox" id={{r.room_id}} name=rooms value={{r.room_id}}>
+                                <label class="custom-control-label"  for={{r.room_id}}>
+                                <div class="card text-center" style="width: 15rem;">
+                                    
+                                        <div class="class-body">
+                                            <h5 class="card-title">Room {{forloop.counter}} </h5>
+                                            <p class="card-text">
+                                                Description:    {{r.description}}<br>
+                                                Size:   {{r.num_guests}}<br>
+                                                Price:   ${{r.price}} per night<br>
+                                                <div id="{{r.room_id}}availability"></div>
+                                                <a id="{{r.room_id}}booked_user_profile"></a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </label> <br>
+                            </div>
+                            <br>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
                     </div>
                     {% endif %}
-                    <div class="form-group lead">
-                        <label for="num_guests">Number of Guests:</label>
+                    <div class="form-group">
+                        <label class= "lead" for="num_guests">Number of Guests:</label>
                         <input type="number" class="form-control" id="num_guest" name="num_guests" min="1">
                     </div>
-
-                    <!-- <div class="lead">
-                        <button class= "btn btn-secondary" type="button" id="check_price">Calculate Total Price</button>
-                        <div>
-                        </div>
-                        <br>
-                    </div> -->
-
                     <input type="submit" value="Book" class="btn btn-primary btn-lg"><br><br>
                 </form>
                 </div>
                 
             </div>
-
+            <!-- Property details -->
             <div class="property-info col-md-5">
                 <div class="jumbotron col-md-12">
                         <table class="property-table">
@@ -462,22 +435,13 @@
                             <br>
                             <div id="propertyid" value="{{property.property_id}}"></div>
                 </div>
-                
             </div>
-
-
         </div>
-
-        
-
-
-
-
-
-        <!--<div id="date" name="date"> </div>-->
     </div>
+
     <!-- Footer -->
     {% include 'footer.html' %}
+
     <!-- Extra JavaScript/CSS added manually in "Settings" tab -->
     <!-- Include jQuery -->
     <!-- Bootstrap core JavaScript -->
