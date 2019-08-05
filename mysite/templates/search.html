@@ -4,22 +4,6 @@
 	<title>Search | Accommodation Portal</title>
 </head>
 <style>
-    .jumbotron {
-        position: relative;
-        color: white;
-        padding-bottom: 5px;
-    }
-
-        .jumbotron::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80");
-            filter: blur(8px);
-        }
 
     .display-3 {
         position: relative;
@@ -31,10 +15,10 @@
 </style>
 <!-- Jumbotron Header -->
 <div class="container">
-    <header class="jumbotron my-4">
-        <h1 class="display-3">Property Search</h1>
+    <div class="jumbotron my-4">
+        <h1 class="display-1">Property Search</h1>
 <!--        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>-->
-    </header>
+    </div>
 
     <div class="search_form">
         <form method="post">
@@ -44,14 +28,14 @@
                     <label>Location</label>
                     <input class="form-control" type="text" name="location">
                 </div>
-                <div class="form-group col">
-                    <label>Number of guests</label>
-                    <input class="form-control" type="number" name="guests" min=1 />
-                </div>
             </div>
             
             {% if location_error %}<p><strong>{{ location_error }}</strong></p>{% endif %}
             <div class="form-row">
+                <div class="form-group col">
+                    <label>Number of guests</label>
+                    <input class="form-control" type="number" name="guests" min=1 />
+                </div>
                 <div class="form-group col">
                     <label>Check-in</label>
                     <input type="date" class="form-control" name="check_in" id="check_in">
