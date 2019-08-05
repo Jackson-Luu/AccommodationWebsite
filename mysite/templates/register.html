@@ -28,9 +28,9 @@
 						{{ form.username.label }}
 						<span class="asteriskField">*</span>
 					</label>
-					<div class="">
+					<div class="required-field">
 						{{ form.username }}
-						<small class="form-text text-muted" id="hint_{{ form.username.id_for_label }}">{{ form.username.help_text }}</small>
+						<small class="form-text text-muted" id="hint_{{ form.username.id_for_label }}" style="display: none;">{{ form.username.help_text }}</small>
 					</div>
 				</div>
 			</div>
@@ -41,9 +41,9 @@
 						{{ form.password1.label }}
 						<span class="asteriskField">*</span>
 					</label>
-					<div class="">
+					<div class="required-field">
 						{{ form.password1 }}
-						<small class="form-text text-muted" id="hint_{{ form.password1.id_for_label }}">{{ form.password1.help_text }}</small>
+						<small class="form-text text-muted" id="hint_{{ form.password1.id_for_label }}" style="display: none;">{{ form.password1.help_text }}</small>
 					</div>
 				</div>
 			</div>
@@ -54,9 +54,9 @@
 						{{ form.password2.label }}
 						<span class="asteriskField">*</span>
 					</label>
-					<div class="">
+					<div class="required-field">
 						{{ form.password2 }}
-						<small class="form-text text-muted" id="hint_{{ form.password2.id_for_label }}">{{ form.password2.help_text }}</small>
+						<small class="form-text text-muted" id="hint_{{ form.password2.id_for_label }}" style="display: none;">{{ form.password2.help_text }}</small>
 					</div>
 				</div>
 			</div>
@@ -120,5 +120,21 @@
 	birthdayField.setAttribute("max", today);
 	birthdayField.setAttribute("min", "1000-01-01");
 	
+	const requiredFields = document.getElementsByClassName("required-field");
+	for (let field of requiredFields) {
+		const input = field.childNodes[1];
+		const helpText = field.childNodes[3].innerText;
+<!--		field.removeChild(field.childNodes[3]);-->
+		input.addEventListener('focus', () => {
+			const infobox = document.createElement("div");
+			infobox.className = "alert alert-info fade show";
+			infobox.setAttribute("role", "alert");
+			infobox.innerText = helpText;
+			field.append(infobox);
+		});
+		input.addEventListener('blur', () => {
+			field.removeChild(field.lastChild);
+		});
+	}
 </script>
 {% endblock %}
