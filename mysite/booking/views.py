@@ -60,15 +60,6 @@ def load_csv():
                             for r in rooms:
                                 Room(property_id=p, num_guests=r, price=((p.price / p.size) * r), description="Room Description").save()
 
-                    while(review['listing_id'] == row['id']):
-                        try:
-                            u = CustomUser.objects.filter(first_name=review['reviewer_name'])[:1].get()
-                        except CustomUser.DoesNotExist:
-                            u = CustomUser.objects.create_user(username=(review['reviewer_id']+review['reviewer_name']), password='password', first_name=review['reviewer_name'], birthday=date(randint(1960,1999), 1, 1))
-
-                        PropertyReviews(reviewer=u, reviewee=p, rating=randint(3, 5), text=review['comments']).save()
-                        review = next(revreader)
-
                 # User already exists
                 except IntegrityError:
                     try:
@@ -98,6 +89,18 @@ def load_csv():
                                     Room(property_id=p, num_guests=r, price=((p.price / p.size) * r), description="Room Description").save()
                 except (DataError, Property.MultipleObjectsReturned):
                     continue
+
+                while(int(review['listing_id']) <= int(row['id'])):
+                    if (int(review['listing_id']) == int(row['id'])):
+                        try:
+                            u = CustomUser.objects.filter(first_name=review['reviewer_name'])[:1].get()
+                        except CustomUser.DoesNotExist:
+                            u = CustomUser.objects.create_user(username=(review['reviewer_id']+review['reviewer_name']), password='password', first_name=review['reviewer_name'], birthday=date(randint(1960,1999), 1, 1))
+                        except DataError:
+                            continue
+
+                        PropertyReviews(reviewer=u, reviewee=p, rating=randint(3, 5), text=review['comments']).save()
+                    review = next(revreader)
 
 # Checks if csv has been loaded yet
 def check_csv():
@@ -146,7 +149,7 @@ def home_view(request,*args, **kwargs):
     seq = list(range(0, Property.objects.all().count()))
     shuffle(seq)
     properties = []
-    for i in range(0, 4):
+    for i in range(0, 12):
         shuffle(seq)
         x = seq.pop()
         p = Property.objects.all()[x]
