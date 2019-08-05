@@ -25,7 +25,10 @@ week7
 *link the html page to our database. 
 *implements the corresponding function in view.py
 
-Doing:
 week8
 *Change the Visual Design for ViewPropery page
 *Create a new group to view the details for each room
+
+Week9 & 10
+*Doing the research and writing team report 
+
