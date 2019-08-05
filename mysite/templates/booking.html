@@ -348,13 +348,12 @@
                             <div class="custom-control custom-checkbox ">
                                 <input class="custom-control-input" type="checkbox" id={{r.room_id}} name=rooms value={{r.room_id}}>
                                 <label class="custom-control-label"  for={{r.room_id}}>
-                                <div class="card text-center" style="width: 15rem;">
-                                    
+                                    <div class="card text-center" style="width: 15rem;">
                                         <div class="class-body">
                                             <h5 class="card-title">Room {{forloop.counter}} </h5>
                                             <p class="card-text">
                                                 Description:    {{r.description}}<br>
-                                                Size:   {{r.num_guests}}<br>
+                                                Capacity:   {{r.num_guests}}<br>
                                                 Price:   ${{r.price}} per night<br>
                                                 <div id="{{r.room_id}}availability"></div>
                                                 <a id="{{r.room_id}}booked_user_profile"></a>
@@ -412,7 +411,7 @@
                                 <Strong>Room {{forloop.counter}} </Strong>
                                 <br>
                                 <div>Description: {{r.description}}</div>
-                                <div>Size: {{r.num_guests}}</div>
+                                <div>Capacity: {{r.num_guests}}</div>
                                 <div>Price: ${{r.price}} per night</div>
             
                                 {% endfor %} {% endif %}
