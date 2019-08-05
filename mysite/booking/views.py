@@ -16,6 +16,7 @@ from .models import CustomUser
 from review.models import PropertyReviews
 from decimal import Decimal
 from django.db import IntegrityError, DataError
+from django.core.serializers.json import DjangoJSONEncoder
 
 # Create your views here.
 class DecimalEncoder(json.JSONEncoder):
@@ -373,7 +374,26 @@ def property_view(request, property_id, check_in=None, check_out=None):
     owner = CustomUser.objects.get(username=property.host_id)
     user = request.user
 
-    return render(request, 'property_view.html', {'property':property,'rooms':rooms, 'amenities':amenities, 'check_in':check_in, 'check_out':check_out, 'images':imgs, 'reviews':reviews, 'owner':owner,'user':user})
+    bookings = Booking.objects.filter(property_id=property_id)
+    blist = []
+    room_list = list(Room.objects.filter(property_id=property_id).values_list('room_id', flat=True))
+    for b in bookings:
+        if property.shareable:
+            room_book = list(BookingTable.objects.filter(booking=b).values_list('room', flat=True))
+            booker_id = str(b.user_id.user_id)
+            booker = b.user_id.first_name
+            for room in room_book:
+                bdict = model_to_dict(b, fields=['start_date', 'end_date'])
+                bdict['room'] = room_list.index(room) + 1
+                bdict['user_id'] = booker_id
+                bdict['user'] = booker
+                blist.append(bdict)
+        else:
+            blist.append(model_to_dict(b, fields=['start_date', 'end_date']))
+
+    bookings = json.dumps(blist, cls=DjangoJSONEncoder)
+
+    return render(request, 'property_view.html', {'property':property,'rooms':rooms, 'amenities':amenities, 'check_in':check_in, 'check_out':check_out, 'images':imgs, 'reviews':reviews, 'owner':owner,'user':user, 'bookings':bookings, 'blist':blist})
 
 # @login_required(login_url='/login')
 # def book_property_view(request, property_id, check_in=None, check_out=None):
@@ -432,7 +452,7 @@ def booking_view(request, property_id, check_in=None, check_out=None):
         if check_in_date and check_out_date:
             check_in_date = datetime.strptime(check_in_date, '%Y-%m-%d').date()
             check_out_date = datetime.strptime(check_out_date, '%Y-%m-%d').date()
-            if check_in_date > check_out_date:
+            if check_in_date >= check_out_date:
                 return render(request, 'booking.html', {
                 'error': "Invalid dates.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out 
                 })
