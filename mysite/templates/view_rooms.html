@@ -27,6 +27,14 @@
                                         <a href="{% url 'edit_room' room_id=r.room_id%}" class="btn btn-primary">Edit Room</a>
                                     </td>
                                 </tr>
+                            {% empty %}
+                            <tr>
+                                <td>
+                                    <div class="lead">
+                                        For this property to be bookable, please add at least one room. 
+                                    </div>
+                                </td>
+                            </tr>
                             {% endfor %}
                             
                         </tbody>
@@ -35,8 +43,11 @@
             </div>
 
     </div>
-    <a href="{% url 'add_room' property_id=property.property_id %}" class="btn btn-primary">Add Room</a>
-    <a href="{% url 'my_properties' %}" class="btn btn-primary">Back to My Properties</a>
+    
+        <a href="{% url 'add_room' property_id=property.property_id %}" class="btn btn-primary">Add Room</a>
+        <a href="{% url 'my_properties' %}" class="btn btn-primary">Back to My Properties</a>
+    
+    
     
 </div>
 

@@ -45,6 +45,7 @@
     <!-- Jumbotron Header -->
     <header class="jumbotron my-4">
         <h1 class="display-3">Accommodation Portal</h1>
+        <a href="search" class="btn btn-primary btn-lg">Search for Share Houses and Entire Homes</a>
     </header>
   
     <!-- Page Features -->
@@ -57,7 +58,13 @@
                 </div>
             <div class="card-body">
 	            <h4 class="card-title"><a href="{% url 'property' property_id=p.property_id %}">{{ p.name }}</a></h4>
-                <p class="card-text">{{ p.location }}<br />${{ p.price}}</p>
+                <p class="card-text">{{ p.location }}<br />${{ p.price}}<br>
+                    {% if p.shareable %}
+                        Share House
+                    {% else %}
+                        Entire Home
+                    {% endif %}
+                </p>
             </div>
             </div>
         </div>

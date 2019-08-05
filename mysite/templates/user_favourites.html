@@ -44,10 +44,14 @@
                         {% for f in favourites %}
                             <tr>
                                 <td>
-                                    <h4> {{f.property.name}}</h4>
-                                    <!-- <div>Property Description: {{f.property.description}}</div> -->
-                                    <div>Rooms: {{f.property.size}}</div>
-                                    <div>Shareable: {{f.property.shareable}}</div><br>
+                                    <h4 class="card-title"><a href="{% url 'property' property_id=f.property.property_id %}">{{ f.property.name }}</a></h4>
+                                    <p class="card-text">{{ f.property.location }}<br />${{ f.property.price}}<br>
+                                        {% if f.property.shareable %}
+                                            Share House
+                                        {% else %}
+                                            Entire Home
+                                        {% endif %}
+                                    </p>
                                     <div> <a class="btn btn-primary" href="/property/{{f.property.property_id}}">View Property</a></div><br>
                                     
                                 </td>

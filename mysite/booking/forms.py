@@ -60,6 +60,7 @@ class BookingCreationForm(forms.Form):
 
 
 class RoomCreationForm(forms.ModelForm):
+    num_guests = forms.IntegerField(label='Number of Guests')
     class Meta(forms.ModelForm):
         model = Room
         fields = ['num_guests','price','description']

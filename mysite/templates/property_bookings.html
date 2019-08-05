@@ -19,16 +19,12 @@
                             {% for b in bookings %}
                                 <tr class="table_el_{{b.booking_id}}">
                                     <td>
-                                        <h4>Booking for: {{b.property_id.name}}</h4>
+                                        <h4>Booking for: <a href="{% url 'property' property_id=b.property_id.property_id %}">{{b.property_id.name}}</a></h4>
                                         <div>{{b.start_date}} to {{b.end_date}}</div>
                                         <div>Number of rooms: {{b.num_rooms}}</div> 
                                         <div>Number of guests: {{b.num_guests}}</div>
-                                        <!-- <div>Status: {{b.status}}</div> -->
                                         <br>
-                                        <!-- <div> <a class="btn btn-primary" href="/property/{{b.property_id.property_id}}">View Property</a> 
-                                            <button id="{{b.booking_id}}" class="cancel_booking btn btn-primary">Cancel Booking</button>
-                                        </div><br> -->
-                                    
+                                        
                                     </td>
                                 </tr>
                             {% empty %}
