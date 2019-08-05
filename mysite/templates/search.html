@@ -63,6 +63,22 @@
                 </div>
             </div>
             
+               
+                
+            <div class="form-group">
+                <label class="custom-control custom-checkbox">
+                <input type="checkbox" name="shareable" class="custom-control-input" tabindex="5" >
+                <span class="custom-control-label" for="shareable">Search for Share Houses</span>
+            </div>
+
+            <div class="form-group">
+                <label class="custom-control custom-checkbox">
+                <input type="checkbox" name="unshareable" class="custom-control-input" tabindex="5" >
+                <span class="custom-control-label" for="unshareable">Search for Entire Homes</span>
+            </div>
+            
+            <br>
+             <input type="submit" value="Search" class="btn btn-primary btn-lg"><br><br />
 
             <!-- Set minimum check in/out dates to today-->
             <script>
@@ -81,7 +97,7 @@
                 document.getElementById("check_in").setAttribute("min", today);
                 document.getElementById("check_out").setAttribute("min", today);
             </script>
-            <input type="submit" value="Search" class="btn btn-primary btn-lg"><br><br />
+           
         </form>
     </div>
 </div>

@@ -165,6 +165,8 @@ def search_view(request, *args, **kwargs):
     if request.method == 'POST':
         location = request.POST['location']
         guests = request.POST['guests']
+        shareable = request.POST.get('shareable')
+        unshareable = request.POST.get('unshareable')
         check_in = None	
         check_out = None
         if not location:
@@ -173,10 +175,20 @@ def search_view(request, *args, **kwargs):
             })
 
         if not guests:
-            properties = Property.objects.filter(location__iexact=location)
+            if shareable and unshareable:
+                properties = Property.objects.filter(location__iexact=location)
+            elif shareable:
+                properties = Property.objects.filter(location__iexact=location,shareable=True)
+            else:
+                properties = Property.objects.filter(location__iexact=location,shareable=False)
             guests = 0
-        else:        
-            properties = Property.objects.filter(location__iexact=location, size__gte=guests)
+        else:
+            if shareable and unshareable:
+                properties = Property.objects.filter(location__iexact=location, size__gte=guests)
+            elif shareable:
+                properties = Property.objects.filter(location__iexact=location, size__gte=guests,shareable=True)
+            else:
+                properties = Property.objects.filter(location__iexact=location, size__gte=guests,shareable=False)        
             guests = int(guests)
 
         valid_prop = []
