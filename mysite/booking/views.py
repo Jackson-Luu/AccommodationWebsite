@@ -136,6 +136,9 @@ def room_gen(size, num_rooms):
 def about_view(request):
     return render(request,'about.html',{})
 
+def privacy_view(request):
+    return render(request, 'privacy.html', {})
+
 def home_view(request,*args, **kwargs):
     # CSV call, comment out to improve homepage performance
     if not check_csv():
@@ -239,7 +242,7 @@ def search_view(request, *args, **kwargs):
 @login_required(login_url='/login')
 def add_property_view(request):
     user = request.user
-    amenity_list = Amenity.objects.all()
+    amenity_list = Amenity.objects.all().order_by('amenity_name')
     if request.method == 'POST':
         try:
             shareable = request.POST.get('shareable') 
