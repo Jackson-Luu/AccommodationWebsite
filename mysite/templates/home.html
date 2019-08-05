@@ -57,14 +57,11 @@
         <div class="col-lg-3 col-md-6 mb-4">
             <div class="card h-100">
                 <div class="card-top">
-                    <img class="card-img-top" src="{{ p.image }}" alt="">
+	                <a href="{% url 'property' property_id=p.property_id %}"><img class="card-img-top" src="{{ p.image }}" alt=""></a>
                 </div>
             <div class="card-body">
-                <h4 class="card-title">{{ p.name }}</h4>
+	            <h4 class="card-title"><a href="{% url 'property' property_id=p.property_id %}">{{ p.name }}</a></h4>
                 <p class="card-text">{{ p.location }}<br />${{ p.price}}</p>
-            </div>
-            <div class="card-footer">
-                <a href="{% url 'property' property_id=p.property_id %}" class="btn btn-primary">Find Out More!</a>
             </div>
             </div>
         </div>

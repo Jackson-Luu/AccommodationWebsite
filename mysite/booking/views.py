@@ -146,7 +146,7 @@ def home_view(request,*args, **kwargs):
     # CSV call, comment out to improve homepage performance
     if not check_csv():
         load_csv()
-    seq = list(range(0, Property.objects.all().count()+1))
+    seq = list(range(0, Property.objects.all().count()))
     shuffle(seq)
     properties = []
     for i in range(0, 12):
