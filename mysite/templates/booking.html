@@ -354,8 +354,9 @@
         <br>
         <div class="row">
 
-            <div class="booking_form col-7 column  ">
-                <form method="post">
+            <div class="booking_form col-md-7">
+                <div class="col-md-12">
+                    <form method="post">
                     {% csrf_token %}
                     {% if error %}<p><strong>{{ error }}</strong></p>{% endif %}
                     <div id="calendar"></div>
@@ -400,63 +401,68 @@
 
                     <input type="submit" value="Book" class="btn btn-primary btn-lg"><br><br>
                 </form>
+                </div>
+                
             </div>
 
-            <div class="jumbotron property-info col-5">
-                <table class="property-table">
-                    <tr>
-                        <td>
-                            <h3>{{ property.name }}</h3>
-                            <b>Capacity:</b> {{ property.size }}
-                            {% if property.size == 1 %}
-                            guest
-                            {% else %}
-                            guests
-                            {% endif %}
-                            <br />
-                            <b>Location:</b> {{ property.location }}
-                            <br />
-                            <b>Amenities:</b>
-                            {% for am in amenities %}
-                            {% if not forloop.last %}
-                            {{ am }},
-                            {% else %}
-                            {{ am }}
-                            {% endif %}
-                            {% endfor %}
-                        </td>
-                    </tr>
-                </table>
-                <div>
-                    {% if property.shareable is True %}
-                    <br />
-                    {% for r in rooms %}
-
-                    <Strong>Room {{forloop.counter}} </Strong>
-                    <br>
-                    <div>Description: {{r.description}}</div>
-                    <div>Size: {{r.num_guests}}</div>
-                    <div>Price: ${{r.price}} per night</div>
-
-                    {% endfor %} {% endif %}
-                    <br />
+            <div class="property-info col-md-5">
+                <div class="jumbotron col-md-12">
+                        <table class="property-table">
+                                <tr>
+                                    <td>
+                                        <h3>{{ property.name }}</h3>
+                                        <b>Capacity:</b> {{ property.size }}
+                                        {% if property.size == 1 %}
+                                        guest
+                                        {% else %}
+                                        guests
+                                        {% endif %}
+                                        <br />
+                                        <b>Location:</b> {{ property.location }}
+                                        <br />
+                                        <b>Amenities:</b>
+                                        {% for am in amenities %}
+                                        {% if not forloop.last %}
+                                        {{ am }},
+                                        {% else %}
+                                        {{ am }}
+                                        {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                            </table>
+                            <div>
+                                {% if property.shareable is True %}
+                                <br />
+                                {% for r in rooms %}
+            
+                                <Strong>Room {{forloop.counter}} </Strong>
+                                <br>
+                                <div>Description: {{r.description}}</div>
+                                <div>Size: {{r.num_guests}}</div>
+                                <div>Price: ${{r.price}} per night</div>
+            
+                                {% endfor %} {% endif %}
+                                <br />
+                            </div>
+                            <div>
+                                <strong>Property Description:</strong>
+                                <p>{{property.description}}</p>
+                            </div>
+                            <div>
+                                {% if property.shareable is False %}
+                                <strong>Property Price:</strong>
+                                ${{property.price}} per night
+                                <br>
+                                <br>
+                                {% endif %}
+                            </div>
+            
+                            <br>
+                            <br>
+                            <div id="propertyid" value="{{property.property_id}}"></div>
                 </div>
-                <div>
-                    <strong>Property Description:</strong>
-                    <p>{{property.description}}</p>
-                </div>
-                <div>
-                    {% if property.shareable is False %}
-                    <strong>Property Price:</strong>
-                    ${{property.price}} per night
-                    <br>
-                    <br>
-                    {% endif %}
-                </div>
-
-                <br>
-                <br>
-                <div id="propertyid" value="{{property.property_id}}"></div>
+                
             </div>
 
 
