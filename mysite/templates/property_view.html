@@ -168,10 +168,13 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
+    <!-- Navigation bar -->
     {% include 'navbar.html' %}
     <br />
+
     <div class="container">
+
+        <!-- Property image slideshow -->
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="height:400px">
             <ol class="carousel-indicators">
                 <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -201,6 +204,8 @@
             </a>
         </div>
         <br />
+
+        <!-- Property information section -->
         <div class="jumbotron property-info">
             <table class="property-table">
                 <tr>
@@ -272,6 +277,8 @@
             <br>
             <div id="propertyid" value="{{property.property_id}}"></div>
         </div>
+
+        <!-- Dropdown tab for date widget -->
         <div id="accordion">
             <div class="card">
                 {% if owner != user %}
@@ -286,47 +293,49 @@
                 <div id="collapseOccupants" class="collapse hide" aria-labelledby="headingOccupants" data-parent="#accordion">
                     <br />
                     {% if blist %}
-                        <div id="timeline" class="timeline"></div>
-                        {% if property.shareable %}
-                        <table class="table table-striped book-table">
-                            <thead>
-                                <tr>
-                                    <th>Occupant</th>
-                                    <th>Room</th>
-                                    <th>Dates</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for b in blist %}
-                                <tr>
-                                    <td>
-                                        {{ b.user }}
-                                    </td>
-                                    <td>
-                                        {{ b.room }}
-                                    </td>
-                                    <td>
-                                        {{ b.start_date }} - {{ b.end_date }}
-                                    </td>
-                                    <td>
-                                        <a href="{% url 'profile' user_id=b.user_id %}">View Profile</a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        {% endif %}
+                    <div id="timeline" class="timeline"></div>
+                    {% if property.shareable %}
+                    <table class="table table-striped book-table">
+                        <thead>
+                            <tr>
+                                <th>Occupant</th>
+                                <th>Room</th>
+                                <th>Dates</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for b in blist %}
+                            <tr>
+                                <td>
+                                    {{ b.user }}
+                                </td>
+                                <td>
+                                    {{ b.room }}
+                                </td>
+                                <td>
+                                    {{ b.start_date }} - {{ b.end_date }}
+                                </td>
+                                <td>
+                                    <a href="{% url 'profile' user_id=b.user_id %}">View Profile</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
                     {% else %}
-                        <div align="center">
-                            This property has not been booked.
-                        </div>
+                    <div align="center">
+                        This property has not been booked.
+                    </div>
                     {% endif %}
                     <br />
                 </div>
             </div>
         </div>
         <br>
+
+        <!-- Dropdown tab for review form -->
         <div id="accordion">
             <div class="card">
                 {% if owner != user %}
@@ -394,6 +403,8 @@
             </div>
         </div>
         <br />
+
+        <!-- Table display for property reviews -->
         <h4>Reviews</h4>
         <hr>
         <table id="myTable" class="table table-striped">
@@ -510,6 +521,7 @@
             ownerPhoto.src = "{{ owner.photo|escapejs }}";
         {% endif %}
 
+        // Jscript for date widget
         var bookings = JSON.parse('{{ bookings|safe }}');
         var blist = []
         var i = 0;
@@ -524,6 +536,7 @@
         var maxDate = new Date();
         maxDate.setDate(today.getDate() + 20);
 
+        // Graph function for date widget
         $(function () {
             $('#timeline').highcharts({
                 chart: {

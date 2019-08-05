@@ -308,37 +308,42 @@ def property_view(request, property_id, check_in=None, check_out=None):
     rooms = Room.objects.filter(property_id=property_id)
     imgs = list(PropertyImages.objects.filter(property=property_id).values_list('image', flat=True))
 
+    # Find amenities for the property
     amenities = []
     prop_am = PropertyAmenities.objects.filter(property=property)
     for am in prop_am:
         amenities.append(am.amenity.amenity_name)
 
+    # Find reviews for the property
     reviews = list(PropertyReviews.objects.filter(reviewee=property_id))
     for i, r in enumerate(reviews):
         reviews[i] = (reviews[i], r.reviewer.first_name)
 
+    # Find property host
     owner = CustomUser.objects.get(username=property.host_id)
     user = request.user
 
+    # Find property bookings
     bookings = Booking.objects.filter(property_id=property_id)
     blist = []
     room_list = list(Room.objects.filter(property_id=property_id).values_list('room_id', flat=True))
     for b in bookings:
-        if property.shareable:
-            room_book = list(BookingTable.objects.filter(booking=b).values_list('room', flat=True))
-            booker_id = str(b.user_id.user_id)
-            booker = b.user_id.first_name
-            for room in room_book:
-                bdict = model_to_dict(b, fields=['start_date', 'end_date'])
-                bdict['room'] = room_list.index(room) + 1
-                bdict['user_id'] = booker_id
-                bdict['user'] = booker
-                blist.append(bdict)
-        else:
-            blist.append(model_to_dict(b, fields=['start_date', 'end_date']))
+        if b.status == "Accepted":
+            if property.shareable:
+                room_book = list(BookingTable.objects.filter(booking=b).values_list('room', flat=True))
+                booker_id = str(b.user_id.user_id)
+                booker = b.user_id.first_name
+                for room in room_book:
+                    bdict = model_to_dict(b, fields=['start_date', 'end_date'])
+                    bdict['room'] = room_list.index(room) + 1
+                    bdict['user_id'] = booker_id
+                    bdict['user'] = booker
+                    blist.append(bdict)
+            else:
+                blist.append(model_to_dict(b, fields=['start_date', 'end_date']))
 
+    # Convert bookings for Jscript
     bookings = json.dumps(blist, cls=DjangoJSONEncoder)
-    print(blist)
 
     return render(request, 'property_view.html', {'property':property,'rooms':rooms, 'amenities':amenities, 'check_in':check_in, 'check_out':check_out, 'images':imgs, 'reviews':reviews, 'owner':owner,'user':user, 'bookings':bookings, 'blist':blist})
 
@@ -409,16 +414,17 @@ def booking_view(request, property_id, check_in=None, check_out=None):
             # Check pre-existing bookings for property
             bookings = Booking.objects.filter(property_id=p.property_id)
             for b in bookings:
-                if b.end_date < check_in_date:
-                    continue
-                elif b.start_date > check_out_date:
-                    continue
-                else:
-                    # Check if booked rooms clashes with selected rooms
-                    booked_rooms = list(BookingTable.objects.filter(booking=b).values_list('room', flat=True))
-                    if not set([int(i) for i in checked_rooms]).isdisjoint(booked_rooms):
-                        return render(request, 'booking.html', {
-                        'error': "Room is unavailable for that period.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out})
+                if b.status == "Accepted":
+                    if b.end_date < check_in_date:
+                        continue
+                    elif b.start_date > check_out_date:
+                        continue
+                    else:
+                        # Check if booked rooms clashes with selected rooms
+                        booked_rooms = list(BookingTable.objects.filter(booking=b).values_list('room', flat=True))
+                        if not set([int(i) for i in checked_rooms]).isdisjoint(booked_rooms):
+                            return render(request, 'booking.html', {
+                            'error': "Room is unavailable for that period.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out})
 
             booking_instance = Booking(user_id=user,start_date=check_in_date, end_date=check_out_date,property_id=p,num_guests=num_guests,num_rooms=len(checked_rooms))
             booking_instance.save()
@@ -448,13 +454,14 @@ def booking_view(request, property_id, check_in=None, check_out=None):
             # Check pre-existing bookings for property
             bookings = Booking.objects.filter(property_id=p.property_id)
             for b in bookings:
-                if b.end_date < check_in_date:
-                    continue
-                elif b.start_date > check_out_date:
-                    continue
-                else:
-                    return render(request, 'booking.html', {
-                    'error': "Property is unavailable for that period.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out})
+                if b.status == "Accepted":
+                    if b.end_date < check_in_date:
+                        continue
+                    elif b.start_date > check_out_date:
+                        continue
+                    else:
+                        return render(request, 'booking.html', {
+                        'error': "Property is unavailable for that period.","property":p, "rooms":room_list, "check_in":check_in, "check_out":check_out})
 
             booking_instance = Booking(user_id=user,start_date=check_in_date, end_date=check_out_date,property_id=p,num_guests=num_guests)
             booking_instance.save()
