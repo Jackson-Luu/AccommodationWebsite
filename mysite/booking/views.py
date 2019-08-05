@@ -136,6 +136,9 @@ def room_gen(size, num_rooms):
 def about_view(request):
     return render(request,'about.html',{})
 
+def privacy_view(request):
+    return render(request, 'privacy.html', {})
+
 def home_view(request,*args, **kwargs):
     # CSV call, comment out to improve homepage performance
     if not check_csv():

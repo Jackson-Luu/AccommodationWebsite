@@ -21,6 +21,7 @@ from user_manager.views import *
 urlpatterns = [
 	path('admin/', admin.site.urls),
     path('about/',about_view, name='about'),
+	path('privacy/', privacy_view, name='privacy'),
 	path('', home_view, name='home'),
 	path('search/', search_view),
 	path('signup/', register_view, name='signup'),
