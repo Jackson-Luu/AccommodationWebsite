@@ -15,7 +15,7 @@
             {{ room_creation_form.non_field_errors }} 
             {% for form in room_creation_form %}
                 <head>Room: {{forloop.counter}}</head>
-                {{form|crispy}}
+			<div class="lead">{{form|crispy}}</div>
 
 
 
