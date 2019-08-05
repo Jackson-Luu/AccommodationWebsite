@@ -160,7 +160,9 @@ def home_view(request,*args, **kwargs):
             imgs.append(PropertyImages.objects.filter(property=p.property_id).values_list('image', flat=True)[0])
         except IndexError:
             imgs.append("https://images.unsplash.com/photo-1516156008625-3a9d6067fab5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80")
-    return render(request, 'home.html', {'properties':properties, 'images':imgs})
+    data = zip(properties, imgs)
+    # return render(request, 'home.html', {'properties':properties, 'images':imgs, 'list': data})
+    return render(request, 'home.html', {'list': data})
 
 def search_view(request, *args, **kwargs):
     if request.method == 'POST':
