@@ -35,74 +35,91 @@
 
 <!-- Jumbotron Header -->
 <div class="container">
-    <div class="new_property_form">
-        <form method="post">
-            {% csrf_token %}
-            {% if error %}<p><strong>{{ error }}</strong></p>{% endif %}
-            <header class="jumbotron my-4">
-                <h1 class="display-3">New Property</h1>
-                <p class="lead"></p>
-            </header>
-            
-            <label class="form-check-label lead" for="shareable">Would you like this property to be shareable? *</label>
-            
-            <div id="shareable">
-                <div class="custom-control custom-radio"> 
-                    <input type="radio" class="custom-control-input" id="shareable_yes" name="shareable" value="Yes">
-                    <label class="custom-control-label lead" for="shareable_yes">Yes</label>
-                </div>
-                <div class="custom-control custom-radio">
-                    <input type="radio" class="custom-control-input" id="shareable_no" name="shareable" value="No">
-                    <label class="custom-control-label lead" for="shareable_no">No</label>
-                </div> 
-            </div>
-            <br> 
-                
-            <div class="form-group lead">
-                <label for="property_name">Property Name: *</label>
-                <input type="text" class="form-control" id="property_name" name="property_name" >
-            </div>
-
-            <div class="form-group lead">
-                <label for="property_location">Location: *</label>
-                <input type="text" class="form-control" id="property_location" name="property_location">
-            </div>
-
-            <div class="form-group lead">
-                <label for="property_description">Description: *</label>
-                ​<textarea class="form-control" name="property_description" id="property_description" rows="10" cols="70"></textarea>
-            </div>
-            
-            <div class="form-group lead">
-                <label for="rooms">Amenities:</label>
-                <br>
-                {% for am in amenity_list %}
-                <div class="custom-control custom-checkbox custom-control-inline">
-                    <input class="custom-control-input" type="checkbox" id={{am.amenity_id}} value={{am.amenity_id}} name="amenities">
-                    <label class="custom-control-label" for={{am.amenity_id}}>
-                        {{am.amenity_name}}
-                    </label> <br>
-                </div>
-                {% endfor %}
-            </div>
-            
-            <div class="form-group lead" id="property_price_form" hidden>
-                <label for="property_price">Property Price:</label>
-                ​<input type="number" class="form-control" min="0" step="0.01" name="property_price" id="property_price">
-            </div>
-
-            <div class="form-group lead" id="property_size_form" hidden>
-                <label for="property_size">Property Size:</label>
-                ​<input type="number" class="form-control" id="property_size" name="property_size" min="1">
-            </div>
-
-            <input id="add_rooms"type="submit" value="Add Room" class="btn btn-primary" hidden>
-            
-            
-            <br>
-            <input id="submit_button"type="submit" value="Add Property" class="btn btn-primary btn-lg" disabled="disabled"><br><br>
-        </form>
-    </div>
+	<div class="new_property_form">
+		<form method="post">
+			{% csrf_token %}
+			{% if error %}<p><strong>{{ error }}</strong></p>{% endif %}
+			<div class="jumbotron my-4">
+				<h1 class="display-1">New Property</h1>
+			</div>
+			<div class="form-row">
+				<div class="col-auto">
+					<label class="form-check-label lead" for="shareable">Would you like this property to be shareable? *</label>
+				</div>
+				<div class="col-auto">
+					<div id="shareable">
+						<ul class="list-inline">
+							<li class="list-inline-item">
+								<div class="custom-control custom-radio">
+									<input type="radio" class="custom-control-input" id="shareable_yes" name="shareable" value="Yes">
+									<label class="custom-control-label lead" for="shareable_yes">Yes</label>
+								</div>
+							</li>
+							<li class="list-inline-item">
+								<div class="custom-control custom-radio">
+									<input type="radio" class="custom-control-input" id="shareable_no" name="shareable" value="No">
+									<label class="custom-control-label lead" for="shareable_no">No</label>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group lead col">
+					<label for="property_name">Property Name: *</label>
+					<input type="text" class="form-control" id="property_name" name="property_name" >
+				</div>
+				<div class="form-group lead col">
+					<label for="property_location">Location: *</label>
+					<input type="text" class="form-control" id="property_location" name="property_location">
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group lead col">
+					<label for="property_description">Description: *</label>
+					​<textarea class="form-control" name="property_description" id="property_description" rows="10" cols="70"></textarea>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group lead col">
+					<label for="rooms">Amenities:</label>
+				</div>
+			</div>
+			
+					{% for am in amenity_list %}
+					{% if forloop.first%}
+					<div class="form-row form-group">
+					{% endif %}
+					<div class="custom-control custom-checkbox custom-control-inline lead col-3">
+						<input class="custom-control-input" type="checkbox" id={{am.amenity_id}} value={{am.amenity_id}} name="amenities">
+						<label class="custom-control-label" for={{am.amenity_id}}>
+							{{am.amenity_name}}
+						</label> <br>
+					</div>
+					{% if forloop.counter|divisibleby:"3" %}
+					</div>
+					<div class="form-row form-group">
+					{% endif %}
+					{% if forloop.last %}
+					</div>
+					{% endif %}
+					{% endfor %}
+			<div class="form-row">
+				<div class="form-group lead col" id="property_price_form" hidden>
+					<label for="property_price">Property Price:</label>
+					<input type="number" class="form-control" min="0" step="0.01" name="property_price" id="property_price">
+				</div>
+				<div class="form-group lead col" id="property_size_form" hidden>
+					<label for="property_size">Property Size:</label>
+					<input type="number" class="form-control" id="property_size" name="property_size" min="1">
+				</div>
+			</div>
+			<input id="add_rooms"type="submit" value="Add Room" class="btn btn-primary" hidden>
+			<br>
+			<input id="submit_button"type="submit" value="Add Property" class="btn btn-primary btn-lg" disabled="disabled"><br><br>
+		</form>
+	</div>
 </div>
 
 {% endblock %}

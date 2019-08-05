@@ -242,7 +242,7 @@ def search_view(request, *args, **kwargs):
 @login_required(login_url='/login')
 def add_property_view(request):
     user = request.user
-    amenity_list = Amenity.objects.all()
+    amenity_list = Amenity.objects.all().order_by('amenity_name')
     if request.method == 'POST':
         try:
             shareable = request.POST.get('shareable') 

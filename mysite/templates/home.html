@@ -23,62 +23,62 @@
   
     <!-- Page Features -->
     <div class="row text-center">
-     {% if properties.0 %} 
-    <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card h-100">
-        <img class="card-img-top" src="{{ images.0 }}" alt="">
-        <div class="card-body">
-            <h4 class="card-title">{{ properties.0.name }}</h4>
-            <p class="card-text">{{ properties.0.location }}<br />${{ properties.0.price}}</p>
+        {% if properties.0 %}
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100">
+            <img class="card-img-top" src="{{ images.0 }}" alt="">
+            <div class="card-body">
+                <h4 class="card-title">{{ properties.0.name }}</h4>
+                <p class="card-text">{{ properties.0.location }}<br />${{ properties.0.price}}</p>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'property' property_id=properties.0.property_id %}" class="btn btn-primary">Find Out More!</a>
+            </div>
+            </div>
         </div>
-        <div class="card-footer">
-            <a href="{% url 'property' property_id=properties.0.property_id %}" class="btn btn-primary">Find Out More!</a>
+        {% endif %}
+        {% if properties.1 %}
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100">
+            <img class="card-img-top" src="{{ images.1 }}" alt="">
+            <div class="card-body">
+                <h4 class="card-title">{{ properties.1.name }}</h4>
+                <p class="card-text">{{ properties.1.location }}<br />${{ properties.1.price}}</p>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'property' property_id=properties.1.property_id %}" class="btn btn-primary">Find Out More!</a>
+            </div>
+            </div>
         </div>
+        {% endif %}
+        {% if properties.2 %}
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100">
+            <img class="card-img-top" src="{{ images.2 }}" alt="">
+            <div class="card-body">
+                <h4 class="card-title">{{ properties.2.name }}</h4>
+                <p class="card-text">{{ properties.2.location }}<br />${{ properties.2.price}}</p>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'property' property_id=properties.2.property_id %}" class="btn btn-primary">Find Out More!</a>
+            </div>
+            </div>
         </div>
-    </div>
-    {% endif %}
-    {% if properties.1 %} 
-    <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card h-100">
-        <img class="card-img-top" src="{{ images.1 }}" alt="">
-        <div class="card-body">
-            <h4 class="card-title">{{ properties.1.name }}</h4>
-            <p class="card-text">{{ properties.1.location }}<br />${{ properties.1.price}}</p>
+        {% endif %}
+        {% if properties.3 %}
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100">
+            <img class="card-img-top" src="{{ images.3 }}" alt="">
+            <div class="card-body">
+                <h4 class="card-title">{{ properties.3.name }}</h4>
+                <p class="card-text">{{ properties.3.location }}<br />${{ properties.3.price}}</p>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'property' property_id=properties.3.property_id %}" class="btn btn-primary">Find Out More!</a>
+            </div>
+            </div>
         </div>
-        <div class="card-footer">
-            <a href="{% url 'property' property_id=properties.1.property_id %}" class="btn btn-primary">Find Out More!</a>
-        </div>
-        </div>
-    </div>
-    {% endif %}
-    {% if properties.2 %}
-    <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card h-100">
-        <img class="card-img-top" src="{{ images.2 }}" alt="">
-        <div class="card-body">
-            <h4 class="card-title">{{ properties.2.name }}</h4>
-            <p class="card-text">{{ properties.2.location }}<br />${{ properties.2.price}}</p>
-        </div>
-        <div class="card-footer">
-            <a href="{% url 'property' property_id=properties.2.property_id %}" class="btn btn-primary">Find Out More!</a>
-        </div>
-        </div>
-    </div>
-    {% endif %}
-    {% if properties.3 %}
-    <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card h-100">
-        <img class="card-img-top" src="{{ images.3 }}" alt="">
-        <div class="card-body">
-            <h4 class="card-title">{{ properties.3.name }}</h4>
-            <p class="card-text">{{ properties.3.location }}<br />${{ properties.3.price}}</p>
-        </div>
-        <div class="card-footer">
-            <a href="{% url 'property' property_id=properties.3.property_id %}" class="btn btn-primary">Find Out More!</a>
-        </div>
-        </div>
-    </div>
-    {% endif %}
+        {% endif %}
   
     </div>
     <!-- /.row -->
