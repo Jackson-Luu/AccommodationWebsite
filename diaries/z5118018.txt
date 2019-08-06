@@ -29,13 +29,22 @@
 *	I added login restrictions to some views
 *	I started work on user profiles
 
-
 ========== Week 6 ==========
 
 *	I helped fixed booking not showing rooms
 *	I helped make the user profile page work
 
-
 ========== Week 7 ==========
 
 *	I began work on the form, view and template to edit a user's profile details
+
+========== Week 9 ==========
+*	I finished the profile edit feature
+*	I made website messages dismissable
+*	I finished the password change feature
+*	I added a favicon and brand logo
+*	I added profile pictures for users
+*	I added photo changing for properties
+*	I added randomisation for the home page properties
+*	I modularised the footer
+*	Miscellaneous improvements to templates and forms, refactoring of code
