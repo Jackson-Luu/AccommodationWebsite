@@ -25,3 +25,12 @@ Added filters to property search functionality. Added UI dropdown menu for selec
 Week 7
 
 Added amenities tables to the database. Added amenities selection to the property owner's UI. Added amenities filtering to the search functionality. Added support for parsing Airbnb's data.
+
+Week 8
+Added review functionality, parsed airbnb reviews, added property review display and searching to UI pages.
+
+Week 9
+Added review functionality for other users. Added UI widget that tracks current bookings and availabilities for a property. Added image parsing for user profiles. 
+
+Week 10
+Fixing bugs, polishing UI, code refactoring and tidying up. Prepare for presentation.
