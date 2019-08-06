@@ -58,3 +58,14 @@ Week 7
 	* updated the ui of property view, user bookings, user properties
 	* created bookingsCreationForm
 
+Week 8-10
+	* implemented booking approvals
+	* modified booking form
+	* added room view
+	* added booking view
+	* modified user properties view
+	* added bookable attribute to property model 
+	* finalised UI design
+	* cleaned up code 
+	
+
