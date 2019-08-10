@@ -34,7 +34,7 @@ def load_csv():
             review = next(revreader)
             for idx, row in enumerate(datareader):
                 # Number of properties to parse
-                if idx > 400:
+                if idx > 800:
                     break
                 try:
                     user = CustomUser.objects.create_user(username=(row['host_id']+row['host_name']), password='password', first_name=row['host_name'], description=row['host_about'], birthday=date(randint(1960,1999), 1, 1), photo=row['host_picture_url'])
@@ -149,7 +149,11 @@ def home_view(request,*args, **kwargs):
     seq = list(range(0, Property.objects.all().count()))
     shuffle(seq)
     properties = []
-    for i in range(0, 12):
+    if len(seq) >= 12:
+        display_num = 12
+    else:
+        display_num = len(seq)
+    for i in range(0, display_num):
         shuffle(seq)
         x = seq.pop()
         p = Property.objects.all()[x]
@@ -178,7 +182,7 @@ def search_view(request, *args, **kwargs):
             })
 
         if not guests:
-            if shareable and unshareable:
+            if shareable and unshareable or (not shareable and not unshareable):
                 properties = Property.objects.filter(location__iexact=location)
             elif shareable:
                 properties = Property.objects.filter(location__iexact=location,shareable=True)
@@ -186,7 +190,7 @@ def search_view(request, *args, **kwargs):
                 properties = Property.objects.filter(location__iexact=location,shareable=False)
             guests = 0
         else:
-            if shareable and unshareable:
+            if shareable and unshareable or (not shareable and not unshareable):
                 properties = Property.objects.filter(location__iexact=location, size__gte=guests)
             elif shareable:
                 properties = Property.objects.filter(location__iexact=location, size__gte=guests,shareable=True)

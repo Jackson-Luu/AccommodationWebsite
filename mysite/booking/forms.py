@@ -9,8 +9,8 @@ class ShareablePropertyCreationForm(forms.ModelForm):
     name = forms.CharField(label='Property Name')
     location = forms.CharField()
     description = forms.CharField(widget=forms.Textarea)
-    amenities = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                      choices=zip(list(Amenity.objects.all().values_list('amenity_name', flat=True)), Amenity.objects.all().values_list('amenity_name', flat=True)), required=True)
+    amenities = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+    #                  choices=zip(list(Amenity.objects.all().values_list('amenity_name', flat=True)), Amenity.objects.all().values_list('amenity_name', flat=True)), required=True)
     class Meta(forms.ModelForm):
         model = Property
         fields = ['name','location','description']
@@ -21,8 +21,8 @@ class UnshareablePropertyCreationForm(forms.ModelForm):
     location = forms.CharField()
     size = forms.IntegerField()
     description = forms.CharField(widget=forms.Textarea)
-    amenities = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                      choices=zip(list(Amenity.objects.all().values_list('amenity_name', flat=True)), Amenity.objects.all().values_list('amenity_name', flat=True)), required=True)
+    amenities = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+    #                  choices=zip(list(Amenity.objects.all().values_list('amenity_name', flat=True)), Amenity.objects.all().values_list('amenity_name', flat=True)), required=True)
     class Meta(forms.ModelForm):
         model = Property
         fields = ['name','location','description']
