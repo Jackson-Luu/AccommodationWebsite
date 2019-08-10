@@ -43,7 +43,7 @@ cd capstone-project-uranus1/mysite
 ```Shell
 sudo service postgresql start
 ```
-* Login into the database with psql using the default postgres user
+* Log in into the database with psql using the default postgres user
 ```Shell
 sudo -u postgres psql
 ```
