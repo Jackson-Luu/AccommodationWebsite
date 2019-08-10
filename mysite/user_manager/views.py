@@ -19,12 +19,10 @@ def register_view(request):
 		form = CustomUserCreationForm(request.POST)
 		if form.is_valid():
 			form.save()
-			# username = form.cleaned_data.get('username')
 			messages.success(request, 'Account created!')
 			return redirect('home')
 	
 	else:
-		# print('NOT VALID')
 		form = CustomUserCreationForm()
 	return render(request, 'register.html', {'form': form})
 

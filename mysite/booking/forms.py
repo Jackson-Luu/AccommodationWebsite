@@ -10,7 +10,6 @@ class ShareablePropertyCreationForm(forms.ModelForm):
     location = forms.CharField()
     description = forms.CharField(widget=forms.Textarea)
     amenities = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
-    #                  choices=zip(list(Amenity.objects.all().values_list('amenity_name', flat=True)), Amenity.objects.all().values_list('amenity_name', flat=True)), required=True)
     class Meta(forms.ModelForm):
         model = Property
         fields = ['name','location','description']
@@ -22,13 +21,11 @@ class UnshareablePropertyCreationForm(forms.ModelForm):
     size = forms.IntegerField()
     description = forms.CharField(widget=forms.Textarea)
     amenities = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
-    #                  choices=zip(list(Amenity.objects.all().values_list('amenity_name', flat=True)), Amenity.objects.all().values_list('amenity_name', flat=True)), required=True)
     class Meta(forms.ModelForm):
         model = Property
         fields = ['name','location','description']
 
 class BookingCreationForm(forms.ModelForm):
-    # room_number = forms.IntegerField(label='Room Number')
     num_guests = forms.IntegerField(label='Number of Guests')
     start_date = forms.DateField(label='Start Date', required=True,widget=forms.SelectDateWidget)
     end_date = forms.DateField(label='End Date', required=True,widget=forms.SelectDateWidget)
@@ -46,9 +43,6 @@ class BookingCreationForm(forms.Form):
 			options.append((r,'Room ' + str(i)))
 			i=i+1
            
-        # print(check_in)
-        # print(kwargs)
-        # self.a = 2
 		self.fields['rooms'].choices = options
         
 	rooms = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
@@ -68,8 +62,6 @@ class RoomCreationForm(forms.ModelForm):
 class SelectPropertyTypeForm(forms.Form):
     CHOICES = [('True','Yes'),('False','No')]
     shareable = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES, required=True, label='Do you want this property to be shareable?')
-    # def __init__(self,*args,**kwargs):
-    #     super(SelectPropertyTypeForm,self).__init__(*args,**kwargs)
 
 class PropertyImageURLsForms(forms.ModelForm):
 	
