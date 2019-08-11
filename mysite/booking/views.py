@@ -183,19 +183,19 @@ def search_view(request, *args, **kwargs):
 
         if not guests:
             if shareable and unshareable or (not shareable and not unshareable):
-                properties = Property.objects.filter(location__iexact=location)
+                properties = Property.objects.filter(location__iexact=location,bookable=True)
             elif shareable:
-                properties = Property.objects.filter(location__iexact=location,shareable=True)
+                properties = Property.objects.filter(location__iexact=location,shareable=True,bookable=True)
             else:
-                properties = Property.objects.filter(location__iexact=location,shareable=False)
+                properties = Property.objects.filter(location__iexact=location,shareable=False,bookable=True)
             guests = 0
         else:
             if shareable and unshareable or (not shareable and not unshareable):
-                properties = Property.objects.filter(location__iexact=location, size__gte=guests)
+                properties = Property.objects.filter(location__iexact=location, size__gte=guests,bookable=True)
             elif shareable:
-                properties = Property.objects.filter(location__iexact=location, size__gte=guests,shareable=True)
+                properties = Property.objects.filter(location__iexact=location, size__gte=guests,shareable=True,bookable=True)
             else:
-                properties = Property.objects.filter(location__iexact=location, size__gte=guests,shareable=False)        
+                properties = Property.objects.filter(location__iexact=location, size__gte=guests,shareable=False,bookable=True)        
             guests = int(guests)
 
         valid_prop = []
