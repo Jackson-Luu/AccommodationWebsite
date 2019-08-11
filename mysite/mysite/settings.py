@@ -36,7 +36,6 @@ INSTALLED_APPS = [
 	'crispy_forms',
 	# own apps
 	'booking',
-	'forum',
 	'review',
 	'user_manager',
 ]
