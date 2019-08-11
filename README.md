@@ -24,7 +24,7 @@ The Accommodation Portal can be accessed online [here](http://accommodationwebsi
 
 ### Prerequisites
 
-* A user account with root or admin priveleges
+* A user account with root or admin privileges
 * [Python3](https://www.python.org/downloads/)
 * [Django](https://www.djangoproject.com/download/)
 * [django-crispy-forms](https://django-crispy-forms.readthedocs.io/en/latest/install.html)
