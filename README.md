@@ -2,7 +2,7 @@
 
 # capstone-project-uranus1
 
-Source code for Accommodation Portal. Access live website here: [Accommodation Portal](http://accommodationwebsite.us-east-1.elasticbeanstalk.com/).
+Source code for Accommodation Portal. View the live website here: [Accommodation Portal](http://accommodationwebsite.us-east-1.elasticbeanstalk.com/).
 
 ![Screenshot of landing page](/Accommodation_Portal_screenshot_home.png)
 
