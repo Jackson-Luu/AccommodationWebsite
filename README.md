@@ -8,7 +8,7 @@ Source code for Accommodation Portal. View the live website here: [Accommodation
 
 ## Description
 
-The Accommodation Portal offers a centralised service for people to book other people's properties as accommodation, or lsit their own properties for booking.
+The Accommodation Portal offers a centralised service for people to book other people's properties as accommodation, or list their own properties for booking.
 
 ### Features
 
