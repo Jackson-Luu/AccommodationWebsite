@@ -33,7 +33,7 @@ The Accommodation Portal can be accessed online [here](http://accommodationwebsi
 
 ### Installing
 
-* Make sure all the above prerequesites are met or installed.
+* Make sure all the above prerequisites are met or installed.
 * Clone the repository from [`https://github.com/unsw-cse-comp3900-9900/capstone-project-uranus1`](https://github.com/unsw-cse-comp3900-9900/capstone-project-uranus1)
 * Change into the `mysite` directory
 ```Shell
