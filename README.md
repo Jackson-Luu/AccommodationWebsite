@@ -2,7 +2,7 @@
 
 # capstone-project-uranus1
 
-Source code for Accommodation Portal. View the live website here: [Accommodation Portal](http://accommodationwebsite.us-east-1.elasticbeanstalk.com/).
+Source code for Accommodation Portal.
 
 ![Screenshot of landing page](/Accommodation_Portal_screenshot_home.png)
 
@@ -20,7 +20,7 @@ The Accommodation Portal offers a centralised service for people to book other p
 
 ## Installation
 
-The Accommodation Portal can be accessed online [here](http://accommodationwebsite.us-east-1.elasticbeanstalk.com/). The following is an installation guide for running the Accommodation Portal on your local machine.
+At the time of writing this guide, The Accommodation Portal can be accessed online [here](http://accommodationwebsite.us-east-1.elasticbeanstalk.com/). The following is an installation guide for running the Accommodation Portal on your local machine.
 
 ### Prerequisites
 
